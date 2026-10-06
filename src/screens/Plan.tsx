@@ -1,12 +1,12 @@
-import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
+import { useEffect, useState, type CSSProperties, type ReactNode } from "react";
 import { BudgetChips } from "../components/BudgetChips";
 import { Icon } from "../components/Icon";
 import { RollingNumber } from "../components/RollingNumber";
 import { SplitCard } from "../components/SplitCard";
-import { Gauge, StatusPill, toast } from "../components/ui";
+import { Gauge, StatusPill } from "../components/ui";
 import { calc, carLimit, DAY, fmt, fmtD, isKlShort, k, pct, rates, verdict, type IconName } from "../engine";
 import { go } from "../state/router";
-import { exportBackup, importBackup, useApp, wipeAll } from "../state/store";
+import { useApp, wipeAll } from "../state/store";
 
 /** No name is collected, so the hub greets with a friendly calling, picked once per app launch. */
 const CALLINGS = ["Master", "Boss", "Bos", "Geng", "Kawan", "Champ", "Sifu", "Legend", "Chief", "Bestie"];
@@ -202,10 +202,9 @@ function AffordTile(p: { icon: IconName; title: string; pre: string; val: ReactN
   );
 }
 
-/** Export / import for changing phones, and wipe (two taps within 3 s). */
+/** Wipe everything on this phone (two taps within 3 s). */
 function DataControls() {
   const [armed, setArmed] = useState(false);
-  const file = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (!armed) return;
@@ -221,37 +220,10 @@ function DataControls() {
   };
 
   return (
-    <div className="section" style={{ gap: 24, alignItems: "center" }}>
-      <div className="row" style={{ gap: 16 }}>
-        <button className="link" onClick={exportBackup} style={{ color: "var(--ink-500)", fontSize: 12 }}>
-          Export backup
-        </button>
-        <button className="link" onClick={() => file.current?.click()} style={{ color: "var(--ink-500)", fontSize: 12 }}>
-          Import backup
-        </button>
-        <input
-          ref={file}
-          type="file"
-          accept="application/json,.json"
-          hidden
-          onChange={async (e) => {
-            const f = e.target.files?.[0];
-            e.target.value = "";
-            if (!f) return;
-            try {
-              await importBackup(f);
-              toast("Plan restored from backup");
-            } catch (err) {
-              toast((err as Error).message);
-            }
-          }}
-        />
-      </div>
-      <button className="link" onClick={wipe} style={{ color: armed ? "var(--coral)" : "var(--ink-500)", fontSize: 12 }}>
-        <Icon name="trash" />
-        <span> {armed ? "Tap again to delete everything" : "Delete all my data from this phone"}</span>
-      </button>
-    </div>
+    <button className="link" onClick={wipe} style={{ alignSelf: "center", color: armed ? "var(--coral)" : "var(--ink-500)", fontSize: 12 }}>
+      <Icon name="trash" />
+      <span> {armed ? "Tap again to delete everything" : "Delete all my data from this phone"}</span>
+    </button>
   );
 }
 

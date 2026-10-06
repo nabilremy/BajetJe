@@ -39,8 +39,6 @@ docs/            Product, design system, calculation rules, screens, golden valu
 - Plan is encrypted with AES-GCM (256-bit) and stored in IndexedDB. The key is a
   non-extractable WebCrypto key generated on the device.
 - "Delete all my data from this phone" (two taps within 3 s) clears the data and the key.
-- Export / Import backup (hub footer) moves a plan to a new phone as a JSON file.
-
 ## Notes from the build (prototype vs docs)
 
 The prototype wins where it disagrees with a doc. Decisions so far:
@@ -52,7 +50,7 @@ The prototype wins where it disagrees with a doc. Decisions so far:
    Fixed so the shown maths matches the number.
 4. **Hub greeting**: no name is collected, so it says "Hi, {calling}" with a calling picked at random per
    launch (Master, Boss, Geng, Sifu, ...). The prototype says "Hi there".
-5. **Export / import**: not in the prototype UI. Two links above the delete link on the hub. Plain JSON, no passphrase (decided).
+5. **Export / import**: listed in the `CLAUDE.md` build order but not in the prototype. Built, then removed on request.
 6. **Hub hero spacing**: the prototype renders "RM35" (the space collapses inside the rolling digits).
    Fixed to "RM 35" as in Figma and `docs/screens.md`.
 7. **Fonts**: loaded from Google Fonts like the prototype.
