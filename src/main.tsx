@@ -1,3 +1,4 @@
+import { Capacitor } from "@capacitor/core";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { App } from "./App";
@@ -17,7 +18,8 @@ async function boot() {
   );
   // Newer rates come down from a static URL; nothing personal goes up.
   void loadRates(import.meta.env.VITE_RATES_URL).then(() => setState({}));
-  if ("serviceWorker" in navigator && import.meta.env.PROD) {
+  // The installed app ships its own files, so only the web build needs the offline worker
+  if ("serviceWorker" in navigator && import.meta.env.PROD && !Capacitor.isNativePlatform()) {
     navigator.serviceWorker.register("/sw.js").catch(() => {});
   }
 }
