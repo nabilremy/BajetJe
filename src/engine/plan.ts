@@ -34,8 +34,13 @@ export type Plan = Payroll & {
   debt: number;
   ratio: number;
   debtRatio: number;
-  /** left for you after fixed commitments and savings */
+  /** left after fixed commitments and the 20% savings target (prototype "leftForYou"; used for the savings tip) */
   left: number;
+  /**
+   * Extra money: take-home minus everything listed (needs + wants + savings). Savings the user hasn't filled in
+   * stay here; the 20% target is a suggestion, never a silent deduction.
+   */
+  extra: number;
   daily: number;
   cy: Cycle;
 };
@@ -62,7 +67,9 @@ export function calc(s: PlanInput, now: Date = new Date(), r: Rates = rates()): 
   const debt = s.commitments.filter((c) => c.debt).reduce((a, c) => a + (+c.amt || 0), 0);
   const ratio = net ? (commit / net) * 100 : 0;
   const left = net - commit - savingsOut;
-  const daily = Math.max(0, Math.floor(commit + savC ? left / days : wants / days));
+  const extra = net - commit - savC;
+  // Nothing entered yet: spend the 30% wants share. Otherwise: extra money over the pay cycle.
+  const daily = Math.max(0, Math.floor(commit + savC ? extra / days : wants / days));
   return {
     ...p,
     raw,
@@ -84,6 +91,7 @@ export function calc(s: PlanInput, now: Date = new Date(), r: Rates = rates()): 
     ratio,
     debtRatio: net ? (debt / net) * 100 : 0,
     left,
+    extra,
     daily,
     cy,
   };

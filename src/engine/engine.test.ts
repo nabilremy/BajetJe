@@ -67,12 +67,21 @@ describe("plan (golden)", () => {
       expect(+p.ratio.toFixed(2)).toBe(g.ratioPct);
       expect(+p.debtRatio.toFixed(2)).toBe(g.debtRatioPct);
       expect(p.left).toBe(g.leftForYou);
-      expect(p.daily).toBe(Math.floor(g.leftForYou / p.days));
+      // Product change (extra money): daily comes from take-home minus everything listed, not minus the 20% target
+      expect(p.extra).toBe(g.net - g.fixedCommitments - g.savC);
+      expect(p.daily).toBe(Math.floor(p.extra / p.days));
     });
   }
   it("daily with no amounts = floor(wants / cycle days)", () => {
     const p = calc({ mode: "net", raw: "3090", payday: "25", commitments: [] }, day("2026-10-06"));
     expect(p.daily).toBe(Math.floor(927 / p.days));
+  });
+  it("unfilled savings stay in extra money; listed savings are taken out", () => {
+    const rent = { id: "r", icon: "home" as const, name: "Rent", cat: "Housing", debt: false, bucket: "needs" as const, amt: 1000 };
+    const asb = { id: "a", icon: "shield" as const, name: "ASB", cat: "Investment", debt: false, bucket: "savings" as const, amt: 200 };
+    const now = day("2026-10-06");
+    expect(calc({ mode: "net", raw: "3000", payday: "25", commitments: [rent] }, now).extra).toBe(2000);
+    expect(calc({ mode: "net", raw: "3000", payday: "25", commitments: [rent, asb] }, now).extra).toBe(1800);
   });
   it("daily never goes below zero", () => {
     const big = exampleCommitments().map((c) => ({ ...c, amt: c.amt * 10 }));
@@ -88,7 +97,8 @@ describe("simple mode total (lump rule)", () => {
     expect(p.lump).toBe(1410);
     expect(p.needsC).toBe(1410);
     expect(p.commit).toBe(1410);
-    expect(p.daily).toBe(Math.floor((3090 - 1410 - 618) / p.days));
+    expect(p.extra).toBe(3090 - 1410);
+    expect(p.daily).toBe(Math.floor((3090 - 1410) / p.days));
   });
   it("ignores the typed total once any item has an amount", () => {
     const p = calc({ ...base, commitments: exampleCommitments(), simpleTotal: 9999 }, now);

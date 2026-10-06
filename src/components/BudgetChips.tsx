@@ -31,7 +31,7 @@ export function BudgetChips({ c, style }: { c: Plan; style?: CSSProperties }) {
     setOpen(open === k ? null : k);
   };
 
-  const src: [string, number] = c.commit || c.savC ? [t("tip.srcLeft"), c.left] : [t("tip.srcWants"), c.wants];
+  const src: [string, number] = c.commit || c.savC ? [t("tip.srcLeft"), c.extra] : [t("tip.srcWants"), c.wants];
   const n = open === "week" ? 7 : c.daysLeft;
 
   return (
