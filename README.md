@@ -77,13 +77,16 @@ The prototype wins where it disagrees with a doc. Decisions so far:
     Golden values still pass for every field; only `daily` follows the new rule (`docs/calculation-rules.md`).
 13. **Renaming defaults**: every commitment name is editable ("Room rent" -> "House rent"). A renamed default keeps its
     icon and category and is no longer auto-translated.
+14. **Health layout (product decision)**: answer first. Extra money is the lime hero, then one card with commitment
+    health (%, verdict, gauge) and total commitments. Breakdown, debt-only ratio and the salary waterfall sit behind a
+    tap-to-expand "Where your salary goes" row (height eases 260 ms, chevron turns; closed content is inert).
 
 ### BM strings written for this build (not in docs/strings-en-bm.json, please review)
 `afford.notYet` Belum lagi ·
 `car.emptyTitle` Tengok kesannya pada bulan awak · `car.emptyBody` · `car.emptyLink` Tambah komitmen → ·
 `car.swapAria` · `house.belowLimit` bawah had 30% awak · `house.rateAria` Kadar faedah · `house.na` t/a ·
 `elig.netNote` · `elig.income` (the prototype leaves this reason in English) · `gauge.aria` · `hub.stripAria` ·
-`commit.fallbackName` komitmen · callings in `CALLINGS`. All in `src/i18n/messages.ts`.
+`commit.fallbackName` komitmen · `health.whereHint` · `health.total` · `health.ofTakeHome` · `health.manageLink` · callings in `CALLINGS`. All in `src/i18n/messages.ts`.
 
 ## Polish on top of the prototype
 

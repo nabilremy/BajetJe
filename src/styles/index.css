@@ -281,6 +281,20 @@
     padding: 16px 0 calc(34px + env(safe-area-inset-bottom, 0px));
     background: linear-gradient(transparent, var(--ink-900) 30%);
   }
+  /* Tap-to-expand details (Commitment Health "Where your salary goes"): grouped in one card, height eases open */
+  .disclose { background: var(--ink-800); border-radius: 14px; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035); }
+  .disclose-head {
+    width: 100%; display: flex; align-items: center; gap: 12px; padding: 16px 18px; min-height: 64px; border-radius: 14px;
+    transition: transform 120ms var(--ease);
+  }
+  .disclose-head:active { transform: scale(0.98); }
+  .disclose-head .chev { color: var(--ink-400); transform: rotate(-90deg); transition: transform 260ms var(--ease); }
+  .disclose.open .disclose-head .chev { transform: rotate(90deg); }
+  .disclose-body { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 260ms var(--ease); }
+  .disclose.open .disclose-body { grid-template-rows: 1fr; }
+  .disclose-body > .disclose-inner { overflow: hidden; min-height: 0; display: flex; flex-direction: column; gap: 18px; padding: 0 18px; opacity: 0; transition: opacity 200ms ease, padding 260ms var(--ease); }
+  .disclose.open .disclose-body > .disclose-inner { opacity: 1; padding: 2px 18px 18px; }
+
   /* F2s Simple mode: equation card (take-home − commitments = left) */
   .equation { background: var(--ink-800); border-radius: 16px; padding: 6px 18px; display: flex; flex-direction: column; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035); }
   .equation .ln { display: flex; align-items: center; gap: 10px; padding: 14px 0; border-bottom: 1px solid var(--ink-700); }
