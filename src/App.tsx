@@ -48,6 +48,8 @@ export function App() {
         <section ref={ref} key={nav} className={`screen ${dir === "back" ? "in-back" : "in-fwd"}`} data-screen={name}>
           <Screen />
         </section>
+        {/* Frosted strip behind the phone's status bar, so the clock and icons stay readable while scrolling */}
+        <div className="statusbar" aria-hidden="true" />
         <ToastHost />
         <Splash />
       </main>

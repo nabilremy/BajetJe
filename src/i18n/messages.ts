@@ -196,10 +196,6 @@ export const M = {
   ],
   "hub.wipe": ["Delete all my data from this phone", "Padam semua data saya dari telefon ni"],
   "hub.wipeArmed": ["Tap again to delete everything", "Tekan lagi sekali untuk padam semua"],
-  "hub.export": ["Export backup", "Eksport sandaran"],
-  "hub.import": ["Import backup", "Import sandaran"],
-  "hub.restored": ["Plan restored from backup", "Pelan dipulihkan dari sandaran"],
-  "hub.notBackup": ["That file isn't a BajetJe backup.", "Fail tu bukan sandaran BajetJe."],
 
   /* ---------- F3 Commitments ---------- */
   "commit.title": ["My commitments", "Komitmen saya"],

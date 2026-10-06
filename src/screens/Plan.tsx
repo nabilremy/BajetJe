@@ -1,14 +1,14 @@
-import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
+import { useEffect, useState, type CSSProperties, type ReactNode } from "react";
 import { HEALTH_EMPTY } from "../brand/assets";
 import { BudgetChips } from "../components/BudgetChips";
 import { BrandSvg, Icon } from "../components/Icon";
 import { RollingNumber } from "../components/RollingNumber";
 import { SplitCard } from "../components/SplitCard";
-import { Gauge, LangSwitch, Reaction, StatusPill, toast } from "../components/ui";
+import { Gauge, LangSwitch, Reaction, StatusPill } from "../components/ui";
 import { calc, carLimit, DAY, fmt, fmtD, isKlShort, k, pct, rates, verdict, type IconName } from "../engine";
 import { calling, useLang, useT, type MsgKey } from "../i18n";
 import { go } from "../state/router";
-import { exportBackup, importBackup, useApp, wipeAll } from "../state/store";
+import { useApp, wipeAll } from "../state/store";
 
 /** Hub reveal plays once per session */
 let revealed = false;
@@ -201,11 +201,10 @@ function AffordTile(p: { icon: IconName; title: string; pre: string; val: ReactN
   );
 }
 
-/** Export / import for changing phones, and wipe (two taps within 3 s). Wipe returns to Welcome. */
+/** Wipe everything on this phone (two taps within 3 s), then back to Welcome. */
 function DataControls() {
   const t = useT();
   const [armed, setArmed] = useState(false);
-  const file = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (!armed) return;
@@ -222,37 +221,9 @@ function DataControls() {
   };
 
   return (
-    <div className="section" style={{ gap: 24, alignItems: "center" }}>
-      <div className="row" style={{ gap: 16 }}>
-        <button className="link" onClick={exportBackup} style={{ color: "var(--ink-500)", fontSize: 12 }}>
-          {t("hub.export")}
-        </button>
-        <button className="link" onClick={() => file.current?.click()} style={{ color: "var(--ink-500)", fontSize: 12 }}>
-          {t("hub.import")}
-        </button>
-        <input
-          ref={file}
-          type="file"
-          accept="application/json,.json"
-          hidden
-          onChange={async (e) => {
-            const f = e.target.files?.[0];
-            e.target.value = "";
-            if (!f) return;
-            try {
-              const s = await importBackup(f);
-              document.documentElement.lang = s.lang;
-              toast(t("hub.restored"));
-            } catch {
-              toast(t("hub.notBackup"));
-            }
-          }}
-        />
-      </div>
-      <button className="link" onClick={wipe} style={{ color: armed ? "var(--coral)" : "var(--ink-500)", fontSize: 12 }}>
-        <Icon name="trash" />
-        <span> {t(armed ? "hub.wipeArmed" : "hub.wipe")}</span>
-      </button>
-    </div>
+    <button className="link" onClick={wipe} style={{ alignSelf: "center", color: armed ? "var(--coral)" : "var(--ink-500)", fontSize: 12 }}>
+      <Icon name="trash" />
+      <span> {t(armed ? "hub.wipeArmed" : "hub.wipe")}</span>
+    </button>
   );
 }

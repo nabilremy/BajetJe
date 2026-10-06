@@ -11,6 +11,7 @@ npm run dev        # local dev server
 npm test           # engine tests against docs/golden-values.json
 npm run typecheck
 npm run build      # static build in dist/, deploy to any static host
+npx cap sync android  # copy the build into the Android app (Capacitor), then open android/ in Android Studio
 ```
 
 Optional: set `VITE_RATES_URL` to a static URL serving a newer `rates.json` (same shape as
@@ -18,7 +19,7 @@ Optional: set `VITE_RATES_URL` to a static URL serving a newer `rates.json` (sam
 
 ## Stack
 
-Vite + React + TypeScript + Tailwind v4, Vitest. Installable PWA (hand-written `public/sw.js`,
+Vite + React + TypeScript + Tailwind v4, Vitest. Android app via Capacitor (`android/`). Installable PWA on the web (hand-written `public/sw.js`,
 offline app shell). No backend, no analytics, no runtime font or CDN requests (fonts bundled in
 `public/fonts`, SIL OFL).
 
@@ -29,7 +30,7 @@ src/engine/      Pure TS engine ported from the prototype (payroll, cycle, plan,
                  rates.json = versioned rates; engine.test.ts = golden-value tests
 src/i18n/        EN + BM catalogue (messages.ts, ICU-style placeholders), formatter, useT() hook
 src/brand/       assets.ts generated from brand/ by `node scripts/gen-brand.mjs` (doodle icons, doodles, logo)
-src/state/       store.ts (app state, export/import), storage.ts (encrypted IndexedDB), router.ts
+src/state/       store.ts (app state), storage.ts (encrypted IndexedDB), router.ts
 src/components/  RollingNumber, SplitCard, BudgetChips, CommitmentRow, EligibilityCheck, shared ui
                  (Segmented, LangSwitch, Toggle, ChoiceChips with pop, Reaction, Gauge, Toast)
 src/screens/     F0 Splash, F0b Welcome, F1 Salary, F2 Plan, F3 Commitments, F4 Health, F5 Car, F6 House
@@ -44,7 +45,6 @@ docs/            Product, design system, voice and tone, strings, calculation ru
 - Plan is encrypted with AES-GCM (256-bit) and stored in IndexedDB. The key is a
   non-extractable WebCrypto key generated on the device.
 - "Delete all my data from this phone" (two taps within 3 s) clears the data and the key, then shows Welcome.
-- Export / Import backup (hub footer) moves a plan to a new phone as a JSON file.
 
 ## Notes from the build (prototype vs docs)
 
@@ -57,13 +57,12 @@ The prototype wins where it disagrees with a doc. Decisions so far:
 4. **Hub greeting**: no name is collected, so it says "Hi, {calling}!" / "Hai, {calling}!" with a calling picked
    at random per launch (Master, Boss/Bos, Geng, Sifu, ...). The prototype says "Hey there!" / "Hai!". Decided.
 5. **Hero spacing**: the prototype renders "RM35" (the space collapses inside the rolling digits). Shown as "RM 35".
-6. **Export / import**: not in the prototype UI. Two links above the delete link on the hub. Plain JSON (decided).
+6. **Export / import**: listed in the old `CLAUDE.md` build order but not in the prototype. Built, then removed on request.
 7. **Fonts**: bundled (decided), not loaded from Google Fonts like the prototype.
 8. **Now / After labels**: kept on one line; the prototype wraps "Sekarang RM / 35" in BM.
 
 ### BM strings written for this build (not in docs/strings-en-bm.json, please review)
-`afford.notYet` Belum lagi · `hub.export` Eksport sandaran · `hub.import` Import sandaran ·
-`hub.restored` Pelan dipulihkan dari sandaran · `hub.notBackup` Fail tu bukan sandaran BajetJe. ·
+`afford.notYet` Belum lagi ·
 `car.emptyTitle` Tengok kesannya pada bulan awak · `car.emptyBody` · `car.emptyLink` Tambah komitmen → ·
 `car.swapAria` · `house.belowLimit` bawah had 30% awak · `house.rateAria` Kadar faedah · `house.na` t/a ·
 `elig.netNote` · `elig.income` (the prototype leaves this reason in English) · `gauge.aria` · `hub.stripAria` ·
