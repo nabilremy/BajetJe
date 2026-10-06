@@ -1,6 +1,6 @@
 # Screens, behaviour and acceptance criteria (current)
 
-Flow: F0 Splash -> F0b Welcome (first launch only) -> F1 Salary -> F2 My Plan (hub)
+Flow: F0 Splash -> F0b Welcome (first launch only) -> F1 Salary -> F2 My Plan (hub, Simple mode by default; Detailed on demand)
 F2 -> F3 Commitments -> F4 Commitment Health ; F2 -> F5 Car ; F2 -> F6 Housing (F6b = full-loan check state).
 Returning users with salary + payday open straight on F2. "Delete all my data" returns to F0b.
 Screen transition: push 28 px + fade, 280 ms ease-out strong. Back reverses. All copy exists in EN and BM (see voice-and-tone.md).
@@ -11,6 +11,7 @@ Screen transition: push 28 px + fade, 280 ms ease-out strong. Back reverses. All
 - Sketch B logo: lines appear (scale 0.94 to 1, 420 ms), hatching "colours in" left to right (clip wipe 650 ms from 0.38 s),
   wordmark rises at 0.55 s, tagline "Masuk gaji je, bajet siap." at 0.75 s, "Your salary never leaves this phone" at 0.9 s.
 - Reduced motion: static, fades out after 0.8 s.
+- Prototype only: "Replay intro (splash + welcome)" link in the My Plan footer re-plays both without wiping data. Do NOT ship it.
 
 ## F0b · Welcome (first launch)
 - Top bar: logo mark + wordmark, EN | BM switch (right).
@@ -30,7 +31,22 @@ Screen transition: push 28 px + fade, 280 ms ease-out strong. Back reverses. All
   handwritten note (Caveat Bold 26, doodle arrow) springs up from behind the button to sit fully above it, rotated -6 deg.
   Line = random from the take-home tier pool, never the same twice in a row. Navigate to F2 after 1.3 s (0.5 s reduced motion).
 
-## F2 · My Plan (hub)
+## F2s · My Plan, Simple mode (default)
+- For people who just want three numbers. Header + EN|BM switch, then a Simple | Detailed segmented (sliding thumb, remembered).
+- Switching Simple <-> Detailed moves like the chart view toggle: the thumb slides (also when using "See the full breakdown"),
+  header and switch stay still, everything below fades up 6 px with a 45 ms stagger, bars grow from the left, and the hero
+  number rolls in digit by digit. Scroll returns to top. Reduced motion: instant swap.
+- Equation card: Take-home (edit -> F1)  −  Commitments  =  Left after commitments.
+  - Commitments: if no items are listed, an inline "RM ___" field for the monthly total (updates live); if items exist,
+    shows their total with an edit icon -> F3. A typed total is used until the user lists items (then the list wins).
+  - Result: big lime "RM x" (rolling digits; coral if negative), "≈ RM y a day for N days", health pill "46% committed · Healthy",
+    reaction chip (same tiers as the hub).
+- One bar: commitments vs left (%), labels under it. "List them one by one →" (when no items). Tip card: save 20% first
+  ("You'd still have about RM z a day"). Secondary button "See the full breakdown" -> Detailed. Legal line.
+- Figma: F2s 122:585. BM strings included.
+
+## F2 · My Plan, Detailed mode
+- Same Simple | Detailed switch under the header (Detailed selected).
 - Header: "Hey there!" + "Pay cycle {start} to {end} · N days to payday"; EN | BM switch right.
 - Take-home card with Edit (chip) -> F1.
 - Hero "RM {daily} a day" (lime) + reaction chip with doodle sparkle (tiers in voice-and-tone.md), formula line, pay-cycle month strip.
@@ -68,6 +84,10 @@ Screen transition: push 28 px + fade, 280 ms ease-out strong. Back reverses. All
   Eligible -> 0% maths, price cap RM 500k, timeline hidden, conditions note. Not eligible -> stays 10% with reason.
 
 ## Every control moves (global rule)
+Implementation note for sliding thumbs when a tap re-renders the screen (Simple|Detailed, EN|BM, Gross|Take-home, Rent|Buy, toggle):
+render the new state, then place the thumb at the OLD position with transitions disabled, commit one frame, re-enable
+transitions and set the NEW position on the next frame (double requestAnimationFrame). Without the committed frame the thumb
+snaps. On EN|BM change the header and switch stay still while the rest of the screen fades up (same as Simple|Detailed).
 Buttons press 0.97 (120 ms); segmented + EN/BM thumbs slide from the old option (260 ms ease-out strong, FLIP across re-renders);
 chips press 0.94 and the newly selected one pops (spring 340 ms); toggle knob springs; tiles / icon buttons / links press-scale.
 Reduced motion: no pops, thumbs jump, press feedback stays.

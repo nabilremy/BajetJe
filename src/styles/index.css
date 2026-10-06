@@ -266,6 +266,23 @@
   .doodle-svg .pie { transform-box: fill-box; transform-origin: 50% 50%; animation: spin-in 700ms var(--ease) 500ms both; }
   .doodle-svg .spark { animation: twinkle 2.2s ease-in-out infinite; }
   .disclaimer { display: flex; gap: 12px; align-items: flex-start; background: var(--ink-800); border-radius: 12px; padding: 14px; }
+
+  /* Welcome (F0b): 60 / 20 / 34 padding, sticky CTA (docs/WELCOME_TASK.md). Type follows the prototype and Figma
+     106:355 (Heading/M 24/30, Body/S 13/20); WELCOME_TASK.md says 28/34 and 15/22, flagged in README. */
+  .screen[data-screen="welcome"] { padding-top: calc(60px + env(safe-area-inset-top, 0px)); }
+  .welcome.stack { padding-bottom: 0; }
+  .welcome-title { font-size: 24px; line-height: 30px; font-weight: 600; letter-spacing: -0.01em; text-wrap: balance; }
+  .welcome-lede { font-size: 13px; line-height: 20px; color: var(--ink-400); text-wrap: pretty; }
+  .disclaimer-icon { color: var(--amber); flex: none; display: flex; }
+  .disclaimer-title { font-size: 13px; line-height: 18px; font-weight: 500; }
+  .welcome-cta {
+    position: sticky; bottom: 0; display: flex; flex-direction: column; gap: 12px;
+    /* bottom padding lives here so the 34 px holds whether or not the screen scrolls */
+    padding: 16px 0 calc(34px + env(safe-area-inset-bottom, 0px));
+    background: linear-gradient(transparent, var(--ink-900) 30%);
+  }
+  /* EN | BM change: top bar stays, everything else fades up in the new language */
+  .welcome.lang-swap [data-r]:not(.keep) { animation: swap-in 300ms var(--ease) both; animation-delay: calc(var(--i, 0) * 45ms); }
   .hr { height: 1px; background: var(--ink-700); }
   .sticky {
     position: sticky; bottom: 0; margin: 0 -20px;
@@ -466,6 +483,7 @@
   *, *::before, *::after { animation-duration: 150ms !important; animation-delay: 0ms !important; transition-duration: 0ms !important; }
   .screen.in-fwd, .screen.in-back, .reveal [data-r], .roll > .in, .rise, .rise-fast, .toast { animation-name: fade !important; }
   .reveal .grow-x, .reveal .grow-y, .reveal .today, .marker.sweep > b, .pop, .split-body.swap * { animation: none !important; }
+  .welcome [data-r] { animation: none !important; }
 }
 
 /* Frosted strip under the phone's status bar. Zero height where there is no inset (desktop browsers). */

@@ -17,6 +17,8 @@ Newest first. If you built from an earlier pack, apply everything below; TASKS.m
 - **Salary submit note**: random line per take-home tier, never repeated twice in a row ("Wow, nak sikit?", "Percaya pada rezeki!"...).
 
 ## Screens and flow
+- **Simple mode (new default)** on My Plan: Take-home − Commitments = Left after commitments, one bar, one tip, with an inline
+  total-commitments field. **Detailed** is the full breakdown. Switch (Simple | Detailed) on both, remembered on device; switching animates like the chart view toggle (thumb slides, content fades up, bars grow, hero digits roll).
 - New **F0b Welcome** (first launch): doodle animation, disclaimer card, "I understand, let's start".
 - **F1**: payday is required; CTA has a **Loading** state (doodle loader + "Kira jap...") and the white handwritten note above it.
 - **F2**: split card is one container for all views with a **View toggle** (Bars/Jars/List) in its header; floating picker removed.

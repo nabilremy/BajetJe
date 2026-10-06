@@ -3,6 +3,10 @@
 Read CLAUDE.md first. Work one task at a time; after each, compare with prototype/bajetje-prototype.html and list differences.
 If the project is new, do all tasks. If you already built from an earlier pack, also do the "Migration" items marked (M).
 
+## Priority fix
+- [ ] **Welcome screen (F0b) is missing**: follow docs/WELCOME_TASK.md (routing, layout, motion, acceptance checklist).
+      Reference code in reference/welcome/.
+
 ## 0. Setup
 - [ ] Propose stack + folder structure (mobile-first, TypeScript). Wait for approval before scaffolding.
 - [ ] Import brand/tokens/tokens.css (or map tokens.json into the chosen styling system). Load Geist, JetBrains Mono, Caveat.
@@ -28,6 +32,7 @@ If the project is new, do all tasks. If you already built from an earlier pack, 
 - [ ] Reactions and salary-note pools exactly as docs/voice-and-tone.md (random per tier, no immediate repeat). (M)
 
 ## 5. Screens (match docs/screens.md and the prototype exactly)
+- [ ] F2s Simple mode (M: new, default view) with Simple | Detailed switch on both hub views; simpleTotal lump rule.
 - [ ] F0 Splash -> F0b Welcome (M: new) -> F1 Salary (M: loading CTA + note) -> F2 Hub (M: view toggle in card, tooltips, EN|BM,
       reaction chip, delete-all) -> F3 Commitments (M: buckets, swipe delete, undo) -> F4 Health (M: reaction chip)
       -> F5 Car (M: down payment, jump-to, toggle) -> F6 Housing (M: down payment, eligibility check).

@@ -61,6 +61,10 @@ The prototype wins where it disagrees with a doc. Decisions so far:
 7. **Fonts**: bundled (decided), not loaded from Google Fonts like the prototype.
 8. **Now / After labels**: kept on one line; the prototype wraps "Sekarang RM / 35" in BM.
 
+9. **Welcome (F0b) vs Figma 106:355**: `docs/WELCOME_TASK.md` says headline 28/34 and lede 15/22; the prototype and
+   Figma use 24/30 and 13/20, so those are used. Figma also draws the doodle 350 wide, the info icon white and the privacy
+   line left aligned; the prototype and the task doc both say doodle max 330, amber icon, centred privacy, so those stay.
+
 ### BM strings written for this build (not in docs/strings-en-bm.json, please review)
 `afford.notYet` Belum lagi ·
 `car.emptyTitle` Tengok kesannya pada bulan awak · `car.emptyBody` · `car.emptyLink` Tambah komitmen → ·

@@ -63,3 +63,9 @@ every rule below and exposes them on window.__bajetje; expected outputs are in d
 
 ## Hub reactions (thresholds, copy in docs/voice-and-tone.md)
 - Daily >= 100 / >= 40 / >= 20 / below. Salary submit note tiers by take-home: >= 5,000 / >= 3,000 / >= 2,000 / below.
+
+## Simple mode
+- left = take-home - fixed commitments (savings NOT deducted); per day = floor(left / cycle days); bar % = commitments / take-home.
+- If no commitment items are listed, the typed monthly total (simpleTotal) is used as a single needs commitment everywhere;
+  once any item has an amount, the list replaces it.
+- Tip: savings target = 20% of take-home; "still have about" = floor((left - savings) / cycle days).
