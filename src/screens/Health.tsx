@@ -1,4 +1,6 @@
+import { Icon } from "../components/Icon";
 import { RollingNumber } from "../components/RollingNumber";
+import { savingsTip } from "../components/savingsTip";
 import { Gauge, Navbar, Reaction, StatusPill, toneVar } from "../components/ui";
 import { calc, fmt, pct, verdict } from "../engine";
 import { itemName, useLang, useT } from "../i18n";
@@ -12,7 +14,8 @@ export function Health() {
   const lang = useLang();
   const c = calc(S);
   const [vName, vCol] = verdict(c.ratio, 50, 65);
-  const left = Math.max(0, c.left);
+  // Extra money: take-home minus everything listed (needs, wants and any savings entered)
+  const extra = Math.max(0, c.extra);
   const vKey = vName === "Healthy" ? "healthy" : vName === "Caution" ? "caution" : "high";
 
   const copy =
@@ -41,9 +44,10 @@ export function Health() {
   steps.push(
     [t("wf.takeHome"), "", fmt(c.net), 0, c.net, "var(--ink-400)", true],
     [t("common.commitments"), pct(c.ratio), "− " + fmt(c.commit), c.net - c.commit, c.net, "var(--ink-300)", false],
-    [t("wf.savings"), "20%", "− " + fmt(c.savingsOut), left, left + c.savingsOut, "var(--ink-500)", false],
-    [t("wf.yourself"), t("wf.yourselfSub"), fmt(left), 0, left, "var(--lime)", true],
   );
+  // Savings appear only as what was actually listed; unfilled savings stay in extra money
+  if (c.savC > 0) steps.push([t("wf.savings"), pct((c.savC / (c.net || 1)) * 100), "− " + fmt(c.savC), extra, extra + c.savC, "var(--ink-500)", false]);
+  steps.push([t("wf.yourself"), t("wf.yourselfSub"), fmt(extra), 0, extra, "var(--lime)", true]);
   const yourself = t("wf.yourself");
 
   return (
@@ -119,12 +123,20 @@ export function Health() {
       <div className="section" style={{ gap: 6 }}>
         <div className="over">{t("health.dailyOver")}</div>
         <div className="row" style={{ alignItems: "baseline", gap: 10 }}>
-          <span className="hero">RM {fmt(c.daily)}</span>
-          <span className="h2">{t("common.aDay")}</span>
+          <span className="hero-md" style={c.extra < 0 ? { color: "var(--coral)" } : undefined}>
+            RM {fmt(extra)}
+          </span>
+          <span className="h2">{t("common.perMonth")}</span>
         </div>
-        <p className="body">
-          {t("health.dailyBody", { left: fmt(left), saved: fmt(c.savingsOut), pct: 20 })}
-        </p>
+        <p className="body">{c.extra > 0 ? t("simple.perDay", { v: fmt(c.daily), days: c.days }) : t("simple.overTakeHome")}</p>
+        <div className="disclaimer">
+          <span style={{ color: "var(--lime)", flex: "none", display: "flex" }}>
+            <Icon name="sparkle" />
+          </span>
+          <p className="cap" style={{ color: "var(--ink-300)" }}>
+            {savingsTip(c, t)}
+          </p>
+        </div>
       </div>
 
       <div className="section">

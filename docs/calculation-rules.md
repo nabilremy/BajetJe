@@ -24,9 +24,13 @@ every rule below and exposes them on window.__bajetje; expected outputs are in d
 - Commitments belong to a bucket: needs, wants or savings
 - needsC, wantsC, savC = sums per bucket; fixed commitments = needsC + wantsC
 - savingsOut = max(savings target, savC)
-- leftForYou = net - fixed commitments - savingsOut
+- leftForYou = net - fixed commitments - savingsOut (kept for the savings tip; no longer the headline)
+- **Extra money** (product decision, Oct 2026) = net - fixed commitments - savings the user listed (savC).
+  Savings not filled in stay in extra money; the 20% target is a suggestion, never a silent deduction.
+  The same number is used on Simple, the Detailed hub, Commitment Health, Car and Housing.
 - Daily (no amounts entered) = floor(wants / cycle days)
-- Daily (any amount entered) = max(0, floor(leftForYou / cycle days))
+- Daily (any amount entered) = max(0, floor(extra money / cycle days)), shown as secondary information
+- Savings tip: if savC < 20% target, "save RM (target - savC) more"; you'd still have floor((extra - that) / days) a day
 - Week = daily x 7 ; budget till payday = daily x days left. Always from the floored daily.
 - Bucket over budget is allowed: needs overflow is described as coming out of wants.
 
@@ -68,4 +72,5 @@ every rule below and exposes them on window.__bajetje; expected outputs are in d
 - left = take-home - fixed commitments (savings NOT deducted); per day = floor(left / cycle days); bar % = commitments / take-home.
 - If no commitment items are listed, the typed monthly total (simpleTotal) is used as a single needs commitment everywhere;
   once any item has an amount, the list replaces it.
-- Tip: savings target = 20% of take-home; "still have about" = floor((left - savings) / cycle days).
+- Left = take-home - fixed commitments - savings listed (= extra money, same as every other screen).
+- Tip: see "Savings tip" above.

@@ -71,6 +71,13 @@ The prototype wins where it disagrees with a doc. Decisions so far:
 11. **Rolling digits**: a re-render during a roll used to strip the animation (the prototype redraws by hand, so it never
     hit this). RollingNumber now compares against the previous value, so rolls always finish.
 
+12. **Extra money (product decision)**: the prototype deducts a 20% savings target before "for yourself", so Health could
+    show RM 0 while Simple showed RM 1,000+. Now every screen uses one number: take-home minus everything listed
+    (needs, wants, savings entered). Unfilled savings stay in extra money; the 20% is a tip. Daily = extra / days, secondary.
+    Golden values still pass for every field; only `daily` follows the new rule (`docs/calculation-rules.md`).
+13. **Renaming defaults**: every commitment name is editable ("Room rent" -> "House rent"). A renamed default keeps its
+    icon and category and is no longer auto-translated.
+
 ### BM strings written for this build (not in docs/strings-en-bm.json, please review)
 `afford.notYet` Belum lagi ·
 `car.emptyTitle` Tengok kesannya pada bulan awak · `car.emptyBody` · `car.emptyLink` Tambah komitmen → ·

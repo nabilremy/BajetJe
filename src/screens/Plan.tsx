@@ -134,7 +134,7 @@ function Detailed({ c, lookN }: { c: PlanNumbers; lookN: number }) {
         <Reaction {...r(3)}>{t(dailyReaction(c.daily))}</Reaction>
         <div className="row body" {...r(3)}>
           <span className="sw" style={{ background: "var(--amber)", borderRadius: 99 }} />
-          {anyAmount ? t("hub.formulaLeft", { left: fmt(c.left) }) : t("hub.formulaWants", { wants: fmt(c.wants), days: c.days })}
+          {anyAmount ? t("hub.formulaLeft", { left: fmt(c.extra) }) : t("hub.formulaWants", { wants: fmt(c.wants), days: c.days })}
         </div>
         <div className="strip" {...r(4)} role="img" aria-label={t("hub.stripAria", { today: c.today, days: c.days })}>
           {Array.from({ length: c.days }, (_, i) => (

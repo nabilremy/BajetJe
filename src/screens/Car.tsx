@@ -161,7 +161,7 @@ function CarOutcome({ c, price, t }: { c: Plan; price: number; t: T }) {
   const transport = S.commitments.filter((x) => x.cat === "Transport").reduce((s, x) => s + x.amt, 0);
   const after = c.commit - (S.carSwap ? transport : 0) + a.total;
   const afterPct = (after / (c.net || 1)) * 100;
-  const dailyAfter = (c.net - after - c.savingsOut) / c.days;
+  const dailyAfter = (c.net - after - c.savC) / c.days; // extra money after the car, per day
   const [an, ac] = verdict(afterPct, 50, 65);
 
   const costs: [string, number, string][] = [

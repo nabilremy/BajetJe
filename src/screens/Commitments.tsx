@@ -51,8 +51,9 @@ export function Commitments() {
   const fillExample = () =>
     setState((s) => {
       const list = s.commitments.map((x) => ({ ...x }));
-      PRESETS.forEach((p) => {
-        let row = list.find((x) => x.name === p.name);
+      PRESETS.forEach((p, i) => {
+        // Match the default row by id first, so a renamed default ("House rent") is filled, not duplicated
+        let row = list.find((x) => x.id === "c" + i) ?? list.find((x) => x.name === p.name);
         if (!row) {
           row = { id: uid(), ...p, amt: 0 };
           list.push(row);
