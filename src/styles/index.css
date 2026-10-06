@@ -281,6 +281,24 @@
     padding: 16px 0 calc(34px + env(safe-area-inset-bottom, 0px));
     background: linear-gradient(transparent, var(--ink-900) 30%);
   }
+  /* F2s Simple mode: equation card (take-home − commitments = left) */
+  .equation { background: var(--ink-800); border-radius: 16px; padding: 6px 18px; display: flex; flex-direction: column; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035); }
+  .equation .ln { display: flex; align-items: center; gap: 10px; padding: 14px 0; border-bottom: 1px solid var(--ink-700); }
+  .equation .ln:last-child { border-bottom: 0; }
+  .equation .ln.result { flex-direction: column; align-items: stretch; gap: 6px; padding: 18px 0 16px; }
+  .equation .op { width: 18px; font-family: var(--mono); font-size: 18px; color: var(--ink-500); text-align: center; flex: none; }
+  .amt-in { display: flex; align-items: baseline; gap: 4px; border-bottom: 1.5px dashed var(--ink-600); padding: 2px 0; transition: border-color 150ms; }
+  .amt-in:focus-within { border-bottom-color: var(--lime); }
+  .amt-in input { width: 92px; background: transparent; border: 0; outline: 0; text-align: right; font-family: var(--mono); font-size: 20px; font-weight: 500; color: var(--ink-50); }
+  .amt-in input::placeholder { color: var(--ink-600); }
+  .hero.simple-hero { font-size: 52px; line-height: 60px; }
+  .lbar { display: flex; gap: 3px; height: 12px; }
+  .lbar i { border-radius: 4px; transition: flex-grow 400ms var(--ease); }
+  /* Simple | Detailed (and EN | BM on the hub): header and switch stay, the rest fades up; bars grow from the left */
+  .look-swap [data-r]:not(.keep) { animation: swap-in 300ms var(--ease) both; animation-delay: calc(var(--i, 0) * 45ms); }
+  .look-swap .grow-x, .look-swap .lbar i { transform-origin: left; animation: grow-x 450ms var(--ease) both; animation-delay: 160ms; }
+  .look-swap .lbar i + i { animation-delay: 220ms; }
+
   /* EN | BM change: top bar stays, everything else fades up in the new language */
   .welcome.lang-swap [data-r]:not(.keep) { animation: swap-in 300ms var(--ease) both; animation-delay: calc(var(--i, 0) * 45ms); }
   .hr { height: 1px; background: var(--ink-700); }
@@ -484,6 +502,7 @@
   .screen.in-fwd, .screen.in-back, .reveal [data-r], .roll > .in, .rise, .rise-fast, .toast { animation-name: fade !important; }
   .reveal .grow-x, .reveal .grow-y, .reveal .today, .marker.sweep > b, .pop, .split-body.swap * { animation: none !important; }
   .welcome [data-r] { animation: none !important; }
+  .look-swap * { animation: none !important; }
 }
 
 /* Frosted strip under the phone's status bar. Zero height where there is no inset (desktop browsers). */

@@ -37,13 +37,16 @@ export function RollingNumber({
   animateOnMount?: boolean;
   className?: string;
 }) {
-  // null = first paint, nothing animates
-  const prev = useRef<Map<string, string> | null>(animateOnMount ? new Map() : null);
+  // What the digits are compared against: the previous *value*, not the previous render, so a re-render
+  // in the middle of a roll keeps the animation instead of stripping it. null = first paint, nothing animates.
+  const base = useRef<Map<string, string> | null>(animateOnMount ? new Map() : null);
+  const last = useRef(value);
+  if (last.current !== value) {
+    base.current = new Map(toSlots(last.current, anchor).map((x) => [x.slot, x.ch]));
+    last.current = value;
+  }
+  const prev = base;
   const slots = toSlots(value, anchor);
-
-  useEffect(() => {
-    prev.current = new Map(slots.map((s) => [s.slot, s.ch]));
-  });
 
   let order = 0;
   return (

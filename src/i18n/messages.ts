@@ -197,6 +197,35 @@ export const M = {
   "hub.wipe": ["Delete all my data from this phone", "Padam semua data saya dari telefon ni"],
   "hub.wipeArmed": ["Tap again to delete everything", "Tekan lagi sekali untuk padam semua"],
 
+  /* ---------- F2s Simple mode ---------- */
+  "look.label": ["View mode", "Mod paparan"],
+  "look.simple": ["Simple", "Ringkas"],
+  "look.detailed": ["Detailed", "Terperinci"],
+  "simple.takeHome": ["Take-home", "Gaji bersih"],
+  "simple.commitments": ["Commitments", "Komitmen"],
+  "simple.itemsListed": ["{n, plural, one {# item listed} other {# items listed}}", "{n} perkara disenaraikan"],
+  "simple.inTotal": ["In total: rent, loans, bills, family...", "Jumlah semua: sewa, pinjaman, bil, keluarga..."],
+  "simple.totalAria": ["Total monthly commitments", "Jumlah komitmen bulanan"],
+  "simple.editSalary": ["Edit salary", "Ubah gaji"],
+  "simple.editCommitments": ["Edit commitments", "Ubah komitmen"],
+  "simple.left": ["Left after commitments", "Baki lepas komitmen"],
+  "simple.perDay": ["≈ RM {v} a day for {days} days", "≈ RM {v} sehari untuk {days} hari"],
+  "simple.overTakeHome": ["Your commitments are more than your take-home.", "Komitmen awak lebih dari gaji bersih."],
+  "simple.addToSee": ["Add your commitments to see what is left.", "Isi komitmen untuk tengok baki."],
+  "simple.committed": ["{pct}% committed · {verdict}", "{pct}% terikat · {verdict}"],
+  "simple.barCommit": ["Commitments {pct}%", "Komitmen {pct}%"],
+  "simple.barLeft": ["Left {pct}%", "Baki {pct}%"],
+  "simple.listThem": ["List them one by one →", "Senaraikan satu-satu →"],
+  "simple.tipSave": [
+    "Tip: save RM {save} (20%) of what's left first. You'd still have about RM {daily} a day.",
+    "Tip: simpan RM {save} (20%) dulu daripada baki ni. Masih ada lebih kurang RM {daily} sehari.",
+  ],
+  "simple.tipHalf": [
+    "Tip: try to keep commitments under half your take-home (RM {needs}).",
+    "Tip: cuba kekalkan komitmen bawah separuh gaji bersih (RM {needs}).",
+  ],
+  "simple.full": ["See the full breakdown", "Tengok pecahan penuh"],
+
   /* ---------- F3 Commitments ---------- */
   "commit.title": ["My commitments", "Komitmen saya"],
   "commit.heading": ["What do you pay every month?", "Apa yang awak bayar setiap bulan?"],
@@ -205,6 +234,10 @@ export const M = {
     "Jumlah tetap je, ikut pecahan 50/30/20. Leret ke kiri untuk padam.",
   ],
   "commit.example": ["Fill with an example", "Isi dengan contoh"],
+  "commit.simpleNote": [
+    "You entered RM {v} in total in Simple mode. List items here to replace it.",
+    "Awak isi jumlah RM {v} dalam mod Ringkas. Senaraikan di sini untuk ganti.",
+  ],
   "commit.hintNeeds": ["Rent, transport, bills, loans, family", "Sewa, pengangkutan, bil, pinjaman, keluarga"],
   "commit.hintWants": ["Subscriptions, gym, hobbies", "Langganan, gim, hobi"],
   "commit.hintSavings": ["ASB, Tabung Haji, emergency fund", "ASB, Tabung Haji, dana kecemasan"],

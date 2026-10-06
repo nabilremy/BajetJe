@@ -4,6 +4,7 @@ import { loadEncrypted, saveEncrypted, wipeStorage } from "./storage";
 
 export type SplitView = "bars" | "jars" | "ledger";
 export type Lang = "en" | "ms";
+export type Look = "simple" | "detailed";
 
 export type AppState = {
   schema: 1;
@@ -21,6 +22,10 @@ export type AppState = {
   elig: Elig;
   eligOpen: boolean;
   lang: Lang;
+  /** My Plan view: Simple (default) or Detailed */
+  look: Look;
+  /** Commitments total typed in Simple mode */
+  simpleTotal: number;
   /** saw the Welcome screen (first launch only) */
   welcomed: boolean;
 };
@@ -41,6 +46,8 @@ export const fresh = (): AppState => ({
   elig: { first: null, citizen: null, age: null },
   eligOpen: false,
   lang: "en",
+  look: "simple",
+  simpleTotal: 0,
   welcomed: false,
 });
 
@@ -56,6 +63,8 @@ export function normalise(x: unknown): AppState {
   }));
   s.elig = { ...fresh().elig, ...s.elig };
   if (s.lang !== "ms") s.lang = "en";
+  if (s.look !== "detailed") s.look = "simple";
+  s.simpleTotal = Math.max(0, Math.floor(+s.simpleTotal || 0));
   return s;
 }
 

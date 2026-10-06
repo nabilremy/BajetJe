@@ -1,14 +1,15 @@
-import { useEffect, useState, type CSSProperties, type ReactNode } from "react";
+import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import { HEALTH_EMPTY } from "../brand/assets";
 import { BudgetChips } from "../components/BudgetChips";
 import { BrandSvg, Icon } from "../components/Icon";
 import { RollingNumber } from "../components/RollingNumber";
 import { SplitCard } from "../components/SplitCard";
-import { Gauge, LangSwitch, Reaction, StatusPill } from "../components/ui";
-import { calc, carLimit, DAY, fmt, fmtD, isKlShort, k, pct, rates, verdict, type IconName } from "../engine";
+import { Gauge, LangSwitch, Reaction, Segmented, StatusPill } from "../components/ui";
+import { calc, carLimit, DAY, fmt, fmtD, isKlShort, k, pct, rates, verdict, type IconName, type Plan as PlanNumbers } from "../engine";
 import { calling, useLang, useT, type MsgKey } from "../i18n";
 import { go } from "../state/router";
-import { useApp, wipeAll } from "../state/store";
+import { setState, useApp, wipeAll, type Look } from "../state/store";
+import { Simple } from "./Simple";
 
 /** Hub reveal plays once per session */
 let revealed = false;
@@ -21,20 +22,24 @@ const VERDICT_KEY = { Healthy: "common.healthy", Caution: "common.caution", High
 /** Daily budget reaction tiers: >= 100 / >= 40 / >= 20 / below */
 const dailyReaction = (d: number): MsgKey => (d >= 100 ? "react.daily100" : d >= 40 ? "react.daily40" : d >= 20 ? "react.daily20" : "react.dailyLow");
 
-/** F2 · My Plan (hub) */
+type R = (i: number, extra?: CSSProperties) => { "data-r": string; style: CSSProperties };
+const r: R = (i, extra) => ({ "data-r": "", style: { "--i": i, ...extra } as CSSProperties });
+
+/**
+ * F2 · My Plan (hub). Simple mode by default, Detailed on demand.
+ * The header and the Simple | Detailed switch stay mounted so the thumb slides; on a view or language change
+ * everything below them fades up (45 ms stagger) and, for a view change, the hero number rolls in.
+ */
 export function Plan() {
   const S = useApp();
   const t = useT();
   const lang = useLang();
   const c = calc(S);
-  const has = c.commit > 0;
-  const anyAmount = c.commit + c.savC > 0;
-  const [vName, vCol] = verdict(c.ratio, 50, 65);
-  const kl = isKlShort(c.needs);
-  const carSafe = carLimit(c.net, rates().car.comfortableShare, S.carDown);
-  const rent = c.net * rates().home.share;
   const [reveal] = useState(() => !revealed);
   const [revealing, setRevealing] = useState(reveal);
+  const [swapping, setSwapping] = useState(false);
+  const [lookN, setLookN] = useState(0);
+  const prev = useRef({ look: S.look, lang });
 
   useEffect(() => {
     revealed = true;
@@ -43,18 +48,62 @@ export function Plan() {
     return () => clearTimeout(id);
   }, [reveal]);
 
-  const r = (i: number, extra?: CSSProperties) => ({ "data-r": "", style: { "--i": i, ...extra } as CSSProperties });
+  useLayoutEffect(() => {
+    const p = prev.current;
+    if (p.look === S.look && p.lang === lang) return;
+    if (p.look !== S.look) {
+      setLookN((n) => n + 1);
+      document.querySelector(".screen")?.scrollTo(0, 0);
+    }
+    prev.current = { look: S.look, lang };
+    setRevealing(false);
+    setSwapping(false);
+    const raf = requestAnimationFrame(() => setSwapping(true));
+    const id = setTimeout(() => setSwapping(false), 1000);
+    return () => {
+      cancelAnimationFrame(raf);
+      clearTimeout(id);
+    };
+  }, [S.look, lang]);
 
   return (
-    <div className={`stack${revealing ? " reveal" : ""}`}>
-      <div className="row" {...r(0)}>
+    <div className={`stack${revealing ? " reveal" : ""}${swapping ? " look-swap" : ""}`}>
+      <div className="row keep" {...r(0)}>
         <div className="grow">
           <h1 className="h2">{t("hub.greeting", { calling: calling(lang) })}</h1>
           <p className="body">{t("hub.cycle", { start: fmtD(c.cy.prev), end: fmtD(new Date(+c.cy.next - DAY)), days: c.daysLeft })}</p>
         </div>
         <LangSwitch />
       </div>
+      <div className="keep" {...r(1)}>
+        <Segmented<Look>
+          label={t("look.label")}
+          value={S.look}
+          options={[
+            ["simple", t("look.simple")],
+            ["detailed", t("look.detailed")],
+          ]}
+          onChange={(look) => setState({ look })}
+        />
+      </div>
+      {S.look === "detailed" ? <Detailed c={c} lookN={lookN} /> : <Simple c={c} lookN={lookN} />}
+    </div>
+  );
+}
 
+/** F2 · Detailed: the full breakdown */
+function Detailed({ c, lookN }: { c: PlanNumbers; lookN: number }) {
+  const S = useApp();
+  const t = useT();
+  const has = c.commit > 0;
+  const anyAmount = c.commit + c.savC > 0;
+  const [vName, vCol] = verdict(c.ratio, 50, 65);
+  const kl = isKlShort(c.needs);
+  const carSafe = carLimit(c.net, rates().car.comfortableShare, S.carDown);
+  const rent = c.net * rates().home.share;
+
+  return (
+    <>
       <div className="card" {...r(1, { flexDirection: "row", alignItems: "center", padding: "14px 12px 14px 16px" })}>
         <div className="grow">
           <div className="over">{t("hub.takeHomePay")}</div>
@@ -78,7 +127,7 @@ export function Plan() {
         </div>
         <div className="row" {...r(2, { alignItems: "baseline", gap: 10 })}>
           <span className="hero lime">
-            <RollingNumber value={"RM " + fmt(Math.max(0, c.daily))} anchor="end" />
+            <RollingNumber key={lookN} value={"RM " + fmt(Math.max(0, c.daily))} anchor="end" stagger={30} animateOnMount={lookN > 0} />
           </span>
           <span className="h2">{t("common.aDay")}</span>
         </div>
@@ -166,7 +215,7 @@ export function Plan() {
         {t("hub.legal")}
       </p>
       <DataControls />
-    </div>
+    </>
   );
 }
 

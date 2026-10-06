@@ -33,7 +33,8 @@ src/brand/       assets.ts generated from brand/ by `node scripts/gen-brand.mjs`
 src/state/       store.ts (app state), storage.ts (encrypted IndexedDB), router.ts
 src/components/  RollingNumber, SplitCard, BudgetChips, CommitmentRow, EligibilityCheck, shared ui
                  (Segmented, LangSwitch, Toggle, ChoiceChips with pop, Reaction, Gauge, Toast)
-src/screens/     F0 Splash, F0b Welcome, F1 Salary, F2 Plan, F3 Commitments, F4 Health, F5 Car, F6 House
+src/screens/     F0 Splash, F0b Welcome, F1 Salary, F2 Plan (Simple.tsx = F2s, Detailed in Plan.tsx),
+                 F3 Commitments, F4 Health, F5 Car, F6 House
 src/styles/      Tokens (brand/tokens, Tailwind @theme) + component CSS and motion
 brand/           Handover brand kit (logo, doodles, icons, tokens, generators)
 prototype/       The reference prototype (source of truth)
@@ -64,6 +65,11 @@ The prototype wins where it disagrees with a doc. Decisions so far:
 9. **Welcome (F0b) vs Figma 106:355**: `docs/WELCOME_TASK.md` says headline 28/34 and lede 15/22; the prototype and
    Figma use 24/30 and 13/20, so those are used. Figma also draws the doodle 350 wide, the info icon white and the privacy
    line left aligned; the prototype and the task doc both say doodle max 330, amber icon, centred privacy, so those stay.
+
+10. **Simple mode (F2s)**: the default hub view, as in the prototype. Like the prototype, "Delete all my data" is only
+    in Detailed, and the prototype's "Replay intro" link is not shipped (screens.md says so).
+11. **Rolling digits**: a re-render during a roll used to strip the animation (the prototype redraws by hand, so it never
+    hit this). RollingNumber now compares against the previous value, so rolls always finish.
 
 ### BM strings written for this build (not in docs/strings-en-bm.json, please review)
 `afford.notYet` Belum lagi ·
