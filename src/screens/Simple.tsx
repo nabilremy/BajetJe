@@ -1,6 +1,7 @@
 import type { CSSProperties } from "react";
 import { Icon } from "../components/Icon";
 import { RollingNumber, useSettled } from "../components/RollingNumber";
+import { savingsTip } from "../components/savingsTip";
 import { Reaction, StatusPill } from "../components/ui";
 import { fmt, verdict, type Plan } from "../engine";
 import { useT, type MsgKey } from "../i18n";
@@ -12,8 +13,8 @@ const VERDICT_KEY = { Healthy: "common.healthy", Caution: "common.caution", High
 const dailyReaction = (d: number): MsgKey => (d >= 100 ? "react.daily100" : d >= 40 ? "react.daily40" : d >= 20 ? "react.daily20" : "react.dailyLow");
 
 /**
- * F2s · My Plan, Simple mode (default): Take-home − Commitments = Left after commitments.
- * Savings are not deducted here; the tip suggests saving 20% of what's left first (docs/calculation-rules.md).
+ * F2s · My Plan, Simple mode (default): Take-home − Commitments (− Savings you listed) = Extra money.
+ * Unfilled savings stay in extra money; the 20% target is a tip, never a silent deduction.
  */
 export function Simple({ c, lookN }: { c: Plan; lookN: number }) {
   const S = useApp();
@@ -23,10 +24,12 @@ export function Simple({ c, lookN }: { c: Plan; lookN: number }) {
   const typing = settledTotal !== S.simpleTotal;
   const view = typing ? { ...c, ...shown(c, settledTotal) } : c;
 
-  const left = view.net - view.commit;
+  const left = view.net - view.commit - c.savC;
   const perDay = Math.max(0, Math.floor(left / c.days));
   const [vName, vCol] = verdict(view.ratio, 50, 65);
   const cp = c.net ? Math.min(100, (view.commit / c.net) * 100) : 0;
+  const sp = c.net ? Math.min(100 - cp, (c.savC / c.net) * 100) : 0;
+  const ep = Math.max(0, 100 - cp - sp);
   const itemCount = S.commitments.filter((x) => x.amt > 0).length;
 
   return (
@@ -74,6 +77,21 @@ export function Simple({ c, lookN }: { c: Plan; lookN: number }) {
             </label>
           )}
         </div>
+        {c.savC > 0 && (
+          <div className="ln">
+            <span className="op">−</span>
+            <div className="grow">
+              <div className="lbl soft">{t("simple.savings")}</div>
+              <div className="cap">{t("simple.savingsSub")}</div>
+            </div>
+            <span className="mono" style={{ fontSize: 20, fontWeight: 500 }}>
+              RM {fmt(c.savC)}
+            </span>
+            <button className="iconbtn" aria-label={t("simple.editSavings")} onClick={() => go("commit")} style={{ width: 32, height: 32, background: "none", color: "var(--ink-400)" }}>
+              <Icon name="pen" />
+            </button>
+          </div>
+        )}
         <div className="ln result">
           <div className="row">
             <span className="op">=</span>
@@ -85,19 +103,25 @@ export function Simple({ c, lookN }: { c: Plan; lookN: number }) {
           <div className="hero lime simple-hero" style={left < 0 ? { color: "var(--coral)" } : undefined}>
             <RollingNumber key={lookN} value={"RM " + fmt(Math.max(0, left))} anchor="end" stagger={30} animateOnMount={lookN > 0} />
           </div>
-          <p className="body">{left > 0 ? t("simple.perDay", { v: fmt(perDay), days: c.days }) : t(view.commit ? "simple.overTakeHome" : "simple.addToSee")}</p>
+          <p className="body">{left > 0 ? t("simple.perDay", { v: fmt(perDay), days: c.days }) : t(view.commit + c.savC ? "simple.overTakeHome" : "simple.addToSee")}</p>
           {view.commit > 0 && <Reaction>{t(dailyReaction(perDay))}</Reaction>}
         </div>
       </div>
 
       <div className="section" {...r(3, { gap: 8 })}>
-        <div className="lbar" role="img" aria-label={`${t("simple.barCommit", { pct: Math.round(cp) })}, ${t("simple.barLeft", { pct: Math.round(100 - cp) })}`}>
+        <div
+          className="lbar"
+          role="img"
+          aria-label={[t("simple.barCommit", { pct: Math.round(cp) }), sp > 0 ? t("simple.barSave", { pct: Math.round(sp) }) : "", t("simple.barLeft", { pct: Math.round(ep) })].filter(Boolean).join(", ")}
+        >
           <i style={{ flexGrow: cp || 0.001, background: "var(--ink-400)" }} />
-          <i style={{ flexGrow: Math.max(0.001, 100 - cp), background: "var(--lime)" }} />
+          {sp > 0 && <i style={{ flexGrow: sp, background: "var(--ink-600)" }} />}
+          <i style={{ flexGrow: Math.max(0.001, ep), background: "var(--lime)" }} />
         </div>
         <div className="row between cap">
           <span>{t("simple.barCommit", { pct: Math.round(cp) })}</span>
-          <span>{t("simple.barLeft", { pct: Math.round(100 - cp) })}</span>
+          {sp > 0 && <span>{t("simple.barSave", { pct: Math.round(sp) })}</span>}
+          <span>{t("simple.barLeft", { pct: Math.round(ep) })}</span>
         </div>
       </div>
 
@@ -112,7 +136,7 @@ export function Simple({ c, lookN }: { c: Plan; lookN: number }) {
           <Icon name="sparkle" />
         </span>
         <p className="cap" style={{ color: "var(--ink-300)" }}>
-          {left > c.savings ? t("simple.tipSave", { save: fmt(c.savings), daily: fmt(Math.floor((left - c.savings) / c.days)) }) : t("simple.tipHalf", { needs: fmt(c.needs) })}
+          {savingsTip(c, t)}
         </p>
       </div>
 

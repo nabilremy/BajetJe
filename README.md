@@ -71,12 +71,27 @@ The prototype wins where it disagrees with a doc. Decisions so far:
 11. **Rolling digits**: a re-render during a roll used to strip the animation (the prototype redraws by hand, so it never
     hit this). RollingNumber now compares against the previous value, so rolls always finish.
 
+12. **Extra money (product decision)**: the prototype deducts a 20% savings target before "for yourself", so Health could
+    show RM 0 while Simple showed RM 1,000+. Now every screen uses one number: take-home minus everything listed
+    (needs, wants, savings entered). Unfilled savings stay in extra money; the 20% is a tip. Daily = extra / days, secondary.
+    Golden values still pass for every field; only `daily` follows the new rule (`docs/calculation-rules.md`).
+13. **Renaming defaults**: every commitment name is editable ("Room rent" -> "House rent"). A renamed default keeps its
+    icon and category and is no longer auto-translated.
+14. **Health layout (product decision)**: answer first. Extra money is the lime hero, then one card with commitment
+    health (%, verdict, gauge) and total commitments. Breakdown, debt-only ratio and the salary waterfall sit behind a
+    tap-to-expand "Where your salary goes" row (height eases 260 ms, chevron turns; closed content is inert).
+15. **Marker yellow (product decision)**: "Extra money" on Health gets a sketched underline in `--marker` (amber/300,
+    #FFD066), drawn on with a clip wipe (420 ms, then a 300 ms return pass). Reaching Healthy fires doodle confetti from
+    the verdict pill (40 pieces, about 2 s, never blocks taps): on the first Healthy visit per session, and again only
+    after a visit that wasn't Healthy. Marker yellow is decoration only, never a status. Both are off under reduced motion.
+    Generators: `brand/generators/underline.js`, `brand/generators/confetti.js` (CommonJS, run like the others).
+
 ### BM strings written for this build (not in docs/strings-en-bm.json, please review)
 `afford.notYet` Belum lagi ·
 `car.emptyTitle` Tengok kesannya pada bulan awak · `car.emptyBody` · `car.emptyLink` Tambah komitmen → ·
 `car.swapAria` · `house.belowLimit` bawah had 30% awak · `house.rateAria` Kadar faedah · `house.na` t/a ·
 `elig.netNote` · `elig.income` (the prototype leaves this reason in English) · `gauge.aria` · `hub.stripAria` ·
-`commit.fallbackName` komitmen · callings in `CALLINGS`. All in `src/i18n/messages.ts`.
+`commit.fallbackName` komitmen · `health.whereHint` · `health.extraLead` / `health.extraTail` (split of the old Health label) · `health.total` · `health.ofTakeHome` · `health.manageLink` · callings in `CALLINGS`. All in `src/i18n/messages.ts`.
 
 ## Polish on top of the prototype
 

@@ -113,19 +113,17 @@ export function CommitmentRow({
           <Icon name={c.icon} />
         </span>
         <div className="grow">
-          {c.custom ? (
-            <input
-              ref={name}
-              value={c.name}
-              placeholder={t("commit.namePlaceholder")}
-              aria-label={t("commit.nameAria")}
-              maxLength={28}
-              onChange={(e) => onChange({ name: e.target.value.slice(0, 28) })}
-              style={{ background: "none", border: 0, outline: 0, fontSize: 13, fontWeight: 500, width: "100%" }}
-            />
-          ) : (
-            <div className="lbl">{shown}</div>
-          )}
+          {/* Every name is editable, defaults included ("Room rent" -> "House rent"). A renamed default keeps its
+              icon and category, and is no longer auto-translated. */}
+          <input
+            ref={name}
+            className="name-in"
+            value={c.custom ? c.name : shown}
+            placeholder={t("commit.namePlaceholder")}
+            aria-label={t("commit.nameAria")}
+            maxLength={28}
+            onChange={(e) => onChange({ name: e.target.value.slice(0, 28), custom: true })}
+          />
           <div className="row" style={{ gap: 6 }}>
             <span className="cap">{categoryName(lang, c.cat)}</span>
             {c.debt && <span className="tag">{t("commit.debt")}</span>}
