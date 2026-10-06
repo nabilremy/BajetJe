@@ -50,3 +50,8 @@ export const freshCommitments = (): Commitment[] =>
 /** The example set used by "Fill with an example" (amounts filled in). */
 export const exampleCommitments = (): Commitment[] =>
   PRESETS.map((p, i) => ({ id: "c" + i, ...p, amt: p.ex }));
+
+let n = 0;
+/** Unique row id, safe for rows added in the same millisecond. */
+export const uid = () =>
+  "c" + (globalThis.crypto?.randomUUID?.() ?? Date.now().toString(36) + "-" + (n++).toString(36));
