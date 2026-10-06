@@ -1,44 +1,29 @@
 # BajetJe
 
-Salary planner for Malaysian first-jobbers. Salary + payday in, a full monthly plan out:
-take-home pay, 50/30/20 split, daily budget, commitment health, safe car and home budget.
-No tracking, no login, nothing leaves the phone.
+Salary planner for Malaysian first-jobbers. Salary + payday in, a full monthly plan out: take-home pay, 50/30/20 split,
+daily budget, commitment health, safe car and home budget. No tracking, no login, nothing leaves the phone.
 
-## Source of truth (read in this order)
-1. prototype/bajetje-prototype.html  - THE reference. Match its behaviour, copy, numbers and motion exactly.
-   Open it in a browser and click through every screen before building. Its engine is exposed on
-   `window.__bajetje` (payroll, cycle, calc, carAllIn, carLimit, home, eligibility).
-2. @docs/screens.md            - screen-by-screen behaviour and acceptance criteria
-3. @docs/calculation-rules.md  - every formula
-4. docs/golden-values.json     - expected outputs generated FROM the prototype. Tests must match these.
-5. @docs/design-system.md      - tokens, components, motion
-6. @docs/product-foundation.md - why: users, principles, scope, metrics
-7. Figma (via MCP, see .mcp.json): file RiniBhPH0gRrfdBSOrJk0K, page "Duit · Salary Routine Flow",
-   components on the "Duit · ..." pages. Figma still says "Duit" (old name); the product is BajetJe.
+## Read first
+1. TASKS.md      - what to build / change, in order
+2. CHANGELOG.md  - everything that changed since earlier packs (apply all if you built from an old pack)
+3. prototype/bajetje-prototype.html - THE reference for behaviour, copy (EN + BM), numbers and motion. Open it in a browser.
+   Its engine is exposed on window.__bajetje. If a doc and the prototype disagree, the prototype wins: flag it to me.
+4. @docs/screens.md            - every screen, state and motion as acceptance criteria
+5. @docs/calculation-rules.md  - every formula; tests must match docs/golden-values.json
+6. @docs/design-system.md      - colour (60/30/10), type, components, doodle style, motion
+7. @docs/voice-and-tone.md     - friendly, open voice; EN + BM santai; reactions; strings in docs/strings-en-bm.json
+8. docs/figma-map.md           - Figma page/node map (connect Figma MCP via .mcp.json, then /mcp to authenticate)
+9. brand/                      - BRAND.md, logo, icons, doodles, tokens, generators, fonts.md
 
-If the prototype and a doc disagree, the prototype wins; flag the mismatch to me.
+## Non-negotiables
+- No expense tracking. Warn, never block. Show the maths. Malaysian rules. All data on device (encrypted), no account.
+- One lime accent per screen; amber/coral only for status. Doodle style for every icon and illustration (use brand assets or
+  brand/generators, never generic icon sets).
+- Every control moves (press, slide, pop); respect reduced motion.
+- Two languages (EN, BM santai) with proper i18n keys.
+- NEVER use the em dash character anywhere: code, comments, UI copy, docs, commit messages.
+- Every money output is an estimate; keep the disclaimers.
 
 ## How to work
-- Plan first, then build in this order: (1) engine + tests against golden-values.json, (2) design tokens
-  and components, (3) screens in flow order F1 to F6, (4) motion, (5) storage, export/import, wipe.
-- Port engine functions from the prototype verbatim into typed modules before refactoring.
-- After each screen, compare against the prototype side by side and list any differences.
-- Ask before adding dependencies, a backend, analytics, or anything that sends data off the device.
-
-## Product rules (non-negotiable)
-1. Answer first: each screen leads with the number the user came for.
-2. No expense tracking, ever.
-3. Honest over flattering: warn, never block (e.g. needs over 50% is allowed, shown in amber).
-4. Show the maths: every derived number has a formula line or tooltip. A plan is not a balance.
-5. Malaysian by default: EPF, SOCSO, EIS, PCB, pay cycles, Belanjawanku, SRP / SJKP.
-6. Private by design: encrypted on-device storage, no account, no backend database.
-7. Calm: one lime accent (60/30/10), UI motion under 300 ms, reduced-motion fallbacks.
-
-## Copy rules
-- NEVER use the em dash character anywhere (code, comments, UI copy, docs).
-- Plain, kind, honest, lightly Malaysian. Every money output is an estimate:
-  "Estimates only. Not financial advice."
-
-## Tech direction (confirm with me before scaffolding)
-Mobile-first app. Pure TypeScript engine in src/engine with unit tests. Rates in a versioned JSON
-bundled with the app and refreshed from a static URL. Encrypted local storage.
+- Plan first, get approval, then build in TASKS.md order. One screen per session. After each screen, compare with the prototype
+  side by side and list differences. Ask before adding dependencies, a backend, analytics, or anything that sends data off device.

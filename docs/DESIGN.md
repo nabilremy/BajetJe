@@ -5,7 +5,7 @@ Tokens and motion values are the same as `docs/design-system.md` and `src/styles
 The prototype stays the source of truth; this file explains its taste so new screens fit.
 
 ## 1. Visual Theme & Atmosphere
-A calm, honest older sibling who is good with money, rendered as a quiet dark instrument.
+A friendly, honest older sibling who is good with money, with a doodler's sense of humour, rendered as a quiet dark instrument.
 Warm charcoal surfaces, one lime signal, monospaced numbers that read like a payslip.
 Every screen opens with the one number the person came for, then shows the maths beneath it.
 
@@ -33,7 +33,8 @@ Amber and coral never decorate; they always mean a state.
   Hero 64/72 bold at -0.03em; secondary hero 48/56.
 - **Body:** 13/20 in Soft Ink, pretty wrapping (no orphans). Captions 12/16. Overline 11px, 600, 0.06em caps,
   used only as the label of the number below it.
-- **Banned:** Inter, Roboto, system serif, any second display face.
+- **Handwritten:** Caveat Bold, for the salary submit note only.
+- **Banned:** Inter, Roboto, system serif, any other display face.
 
 ## 4. Component Stylings
 - **Primary button:** Payday Lime fill, ink 900 label, 52px tall, radius 14, press scales to 0.97 in 120ms.
@@ -46,7 +47,10 @@ Amber and coral never decorate; they always mean a state.
 - **Commitment row:** icon tile, name, category, Debt tag, inline amount. Swipe left reveals an 84px coral Delete.
 - **Gauges:** three zones at 40% opacity (lime, amber, coral) with a Paper Ink marker.
 - **Tooltip and toast:** Raised Graphite, radius 12, layered diffused shadow plus a top hairline.
-- **Icons:** one 24px line set, 1.5 stroke, round caps. No glyph arrows, emoji or decorative dots.
+- **Icons:** the hand-drawn doodle set (brand/icons, 22 glyphs incl. loader and sparkle), filled with currentColor, never stroked.
+  New icons come from brand/generators, never a generic icon set. Links use a text arrow. No emoji or decorative dots.
+- **Reaction chip:** small pill with a lime doodle sparkle that pops in once; never on legal or loan copy.
+- **Handwritten note:** Caveat Bold 26, rotated -6 deg, springs up above the primary button on salary submit.
 - **Empty states:** a quiet illustration, one sentence on what to add, one primary action.
 
 ## 5. Layout Principles
@@ -61,14 +65,15 @@ Amber and coral never decorate; they always mean a state.
 - Durations: press 120ms, value update 180ms, reveal 300 to 450ms, gauge sweep 650ms, stagger 50 to 60ms.
 - Screen push: 28px slide plus fade, 280ms. Hub reveal plays once per session.
 - Digits: typed digits rise 0.6em in a clipped line; backspace is instant; totals roll only changed digits.
-- Never animate tabs, segmented controls, scrolling or back navigation.
+- Every control moves: segmented and EN/BM thumbs slide (260ms), the picked chip pops (spring 340ms),
+  toggle knobs spring, everything pressable scales on press. No other motion on frequent actions.
 - Reduced motion: fades only. Animate transform and opacity, plus the one measured height ease on the split card.
 
 ## 7. Anti-Patterns (Banned)
 - Expense tracking, streaks, badges, confetti or anything gamified
 - Blocking the user ("you can't add this"); warn in amber instead
 - A second accent colour, blue links, purple or neon glows, gradient text
-- Emoji, Unicode arrows as icons, decorative coloured dots
+- Emoji, generic line icons, decorative coloured dots
 - Invented numbers: every figure comes from the engine and is labelled an estimate
 - AI filler copy ("Elevate", "Seamless", "Unleash"), "Scroll to explore", bouncing chevrons
 - Em dashes anywhere

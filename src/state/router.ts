@@ -1,6 +1,6 @@
 import { useSyncExternalStore } from "react";
 
-export type ScreenName = "salary" | "plan" | "commit" | "health" | "car" | "house";
+export type ScreenName = "welcome" | "salary" | "plan" | "commit" | "health" | "car" | "house";
 type Dir = "fwd" | "back";
 
 let stack: ScreenName[] = [];

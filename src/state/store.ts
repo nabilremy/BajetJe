@@ -3,6 +3,7 @@ import { freshCommitments, type Commitment, type Elig, type Payday, type SalaryM
 import { loadEncrypted, saveEncrypted, wipeStorage } from "./storage";
 
 export type SplitView = "bars" | "jars" | "ledger";
+export type Lang = "en" | "ms";
 
 export type AppState = {
   schema: 1;
@@ -19,6 +20,9 @@ export type AppState = {
   homeDown: number;
   elig: Elig;
   eligOpen: boolean;
+  lang: Lang;
+  /** saw the Welcome screen (first launch only) */
+  welcomed: boolean;
 };
 
 export const fresh = (): AppState => ({
@@ -36,6 +40,8 @@ export const fresh = (): AppState => ({
   homeDown: 0.1,
   elig: { first: null, citizen: null, age: null },
   eligOpen: false,
+  lang: "en",
+  welcomed: false,
 });
 
 /** Merge anything loaded (storage or a backup file) onto defaults, so older or partial data still works. */
@@ -49,6 +55,7 @@ export function normalise(x: unknown): AppState {
     bucket: c.bucket ?? (c.name === "Streaming & apps" ? "wants" : c.cat === "Investment" ? "savings" : "needs"),
   }));
   s.elig = { ...fresh().elig, ...s.elig };
+  if (s.lang !== "ms") s.lang = "en";
   return s;
 }
 

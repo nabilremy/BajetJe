@@ -6,9 +6,12 @@ import { Health } from "./screens/Health";
 import { House } from "./screens/House";
 import { Plan } from "./screens/Plan";
 import { Salary } from "./screens/Salary";
+import { Splash } from "./screens/Splash";
+import { Welcome } from "./screens/Welcome";
 import { useRouter, type ScreenName } from "./state/router";
 
 const SCREENS: Record<ScreenName, () => ReactElement> = {
+  welcome: Welcome,
   salary: Salary,
   plan: Plan,
   commit: Commitments,
@@ -18,6 +21,7 @@ const SCREENS: Record<ScreenName, () => ReactElement> = {
 };
 
 const TITLES: Record<ScreenName, string> = {
+  welcome: "Welcome",
   salary: "Your salary",
   plan: "My plan",
   commit: "My commitments",
@@ -45,6 +49,7 @@ export function App() {
           <Screen />
         </section>
         <ToastHost />
+        <Splash />
       </main>
     </div>
   );

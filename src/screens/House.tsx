@@ -1,12 +1,16 @@
 import type { CSSProperties } from "react";
 import { AmberNote, ChoiceChips, Gauge, ImpactBars, Legal, Navbar, Segmented, StatusPill, toneVar } from "../components/ui";
+
+const VERDICT = { Healthy: "common.healthy", Caution: "common.caution", High: "common.high" } as const;
 import { EligibilityCheck } from "../components/EligibilityCheck";
 import { calc, eligibility, fmt, home, instalmentFor, k, pct, rates, verdict } from "../engine";
+import { useT } from "../i18n";
 import { setState, useApp } from "../state/store";
 
 /** F6 · Housing */
 export function House() {
   const S = useApp();
+  const t = useT();
   const c = calc(S);
   const rent = c.net * rates().home.share;
   const cur = S.commitments.filter((x) => x.cat === "Housing").reduce((a, x) => a + x.amt, 0);
@@ -24,74 +28,68 @@ export function House() {
 
   return (
     <div className="stack">
-      <Navbar title="How much home can I afford?" />
+      <Navbar title={t("house.title")} />
       <div className="section" style={{ gap: 6 }}>
-        <div className="over">Healthy housing budget</div>
+        <div className="over">{t("house.over")}</div>
         <div className="row" style={{ alignItems: "baseline", gap: 8 }}>
           <span className="hero-md lime">RM {fmt(rent)}</span>
-          <span className="h2">/ month</span>
+          <span className="h2">{t("common.perMonth")}</span>
         </div>
-        <p className="body">30% of your take-home. Use it for rent or a mortgage instalment.</p>
+        <p className="body">{t("house.body")}</p>
       </div>
 
       {cur > 0 && (
         <div className="section">
           <div className="row between">
             <div>
-              <div className="lbl">Your rent now</div>
-              <div className="cap">
-                RM {fmt(cur)} · {pct(curPct)} of take-home
-              </div>
+              <div className="lbl">{t("house.rentNow")}</div>
+              <div className="cap">{t("house.rentNowSub", { v: fmt(cur), pct: Math.round(curPct) })}</div>
             </div>
-            <StatusPill tone={rc}>{rv}</StatusPill>
+            <StatusPill tone={rc}>{t(VERDICT[rv])}</StatusPill>
           </div>
           <Gauge p={curPct} stops={[30, 40]} max={50} sweep />
         </div>
       )}
 
       <Segmented
-        label="Rent or buy"
+        label={t("house.rentOrBuy")}
         value={S.home}
         options={[
-          ["rent", "Rent"],
-          ["buy", "Buy"],
+          ["rent", t("house.rent")],
+          ["buy", t("house.buy")],
         ]}
         onChange={(v) => setState({ home: v })}
       />
 
       {S.home === "rent" ? (
         <div className="card">
-          <h2 className="over">Renting</h2>
+          <h2 className="over">{t("house.renting")}</h2>
           <div className="row" style={{ alignItems: "baseline", gap: 6 }}>
-            <span className="lbl">Up to</span>
+            <span className="lbl">{t("common.upTo")}</span>
             <span className="mono" style={{ fontSize: 28, fontWeight: 700 }}>
               RM {fmt(rent)}
             </span>
-            <span className="cap">/mo</span>
+            <span className="cap">{t("common.perMo")}</span>
           </div>
           <p className="cap" style={{ color: "var(--ink-400)" }}>
-            {cur
-              ? cur <= rent
-                ? `That's RM ${fmt(rent - cur)} more than you pay now. Room to upgrade if you want to.`
-                : `You pay RM ${fmt(cur - rent)} above the healthy line.`
-              : "Add your rent in commitments to compare."}
+            {cur ? (cur <= rent ? t("house.more", { v: fmt(rent - cur) }) : t("house.above", { v: fmt(cur - rent) })) : t("house.addRent")}
           </p>
         </div>
       ) : (
         <>
           <div className="card">
-            <h2 className="over">Home price you can carry</h2>
+            <h2 className="over">{t("house.price")}</h2>
             <div className="row" style={{ alignItems: "baseline", gap: 6 }}>
-              <span className="lbl">Up to ~</span>
+              <span className="lbl">{t("common.upToApprox")}</span>
               <span className="mono" style={{ fontSize: 28, fontWeight: 700 }}>
                 RM {k(h.price)}
               </span>
             </div>
             <ChoiceChips
-              label="Down payment"
+              label={t("car.down")}
               value={S.eligOpen && elig.state === "pending" ? 0 : S.homeDown}
               options={[
-                [0, "Full loan (0%)"],
+                [0, t("car.fullLoan")],
                 [0.1, "10%"],
                 [0.2, "20%"],
               ]}
@@ -100,9 +98,9 @@ export function House() {
             {S.eligOpen && <EligibilityCheck />}
             {(
               [
-                ["Loan (" + pct((1 - S.homeDown) * 100) + ")", "35 years at " + S.rate + "%", h.loan],
-                ["Monthly instalment", h.capped ? "below your 30% limit" : "30% of take-home", h.capped ? instalmentFor(h.loan, S.rate) : h.inst],
-                ["Down payment (" + pct(S.homeDown * 100) + ")", S.homeDown === 0 ? "none with a first-home scheme" : "cash upfront, plus legal fees", h.dep],
+                [t("house.loan", { pct: Math.round((1 - S.homeDown) * 100) }), t("house.loanSub", { years: 35, rate: S.rate }), h.loan],
+                [t("house.instalment"), t(h.capped ? "house.belowLimit" : "house.thirty"), h.capped ? instalmentFor(h.loan, S.rate) : h.inst],
+                [t("house.downPct", { pct: Math.round(S.homeDown * 100) }), t(S.homeDown === 0 ? "house.downNone" : "house.downCash"), h.dep],
               ] as const
             ).map(([n, s, v]) => (
               <div key={s} className="row">
@@ -115,32 +113,33 @@ export function House() {
                 <span className="mono">RM {fmt(v)}</span>
               </div>
             ))}
-            <div className="row" style={{ gap: 6 }} role="group" aria-label="Interest rate">
-              <span className="cap">Rate</span>
-              {[3.5, 4, 4.5].map((r) => (
-                <button key={r} className="chip" aria-pressed={S.rate === r} onClick={() => setState({ rate: r })} style={S.rate === r ? { background: "var(--ink-700)", color: "var(--ink-50)" } : undefined}>
-                  {r}%
-                </button>
-              ))}
+            <div className="row" style={{ gap: 6 }}>
+              <span className="cap">{t("house.rate")}</span>
+              <ChoiceChips
+                label={t("house.rateAria")}
+                value={S.rate}
+                options={[3.5, 4, 4.5].map((r) => [r, r + "%"] as [number, string])}
+                onChange={(rate) => setState({ rate })}
+                style={{ minHeight: 0 }}
+                selectedStyle={{ background: "var(--ink-700)", color: "var(--ink-50)" }}
+              />
             </div>
           </div>
 
           {S.homeDown === 0 && (
-            <AmberNote title="100% financing has conditions">
-              Only through first-home schemes like Skim Rumah Pertamaku or SJKP: Malaysian, first home, price up to RM 500k, income limits apply.
-              {h.capped ? " Capped at RM 500k." : ""} You borrow more, so you pay more interest, and your max price is RM{" "}
-              {k(home(c.net, c.savingsOut, S.rate, 0.1).price - h.price)} lower than with 10% down. Legal and valuation fees may still apply.
+            <AmberNote title={t("house.fullTitle")}>
+              {t("house.fullBody", { capped: h.capped ? t("house.capped") : "", k: k(home(c.net, c.savingsOut, S.rate, 0.1).price - h.price) })}
             </AmberNote>
           )}
 
           {S.homeDown !== 0 && (
             <div className="section">
-              <h2 className="over">Saving for the down payment</h2>
+              <h2 className="over">{t("house.saving")}</h2>
               <div className="row" style={{ alignItems: "baseline", gap: 6 }}>
                 <span className="mono" style={{ fontSize: 20, fontWeight: 500 }}>
-                  {h.months === Infinity ? "n/a" : h.months < 12 ? h.months + " months" : "~" + Math.round((h.months / 12) * 10) / 10 + " years"}
+                  {h.months === Infinity ? t("house.na") : h.months < 12 ? t("house.months", { n: h.months }) : t("house.years", { n: Math.round((h.months / 12) * 10) / 10 })}
                 </span>
-                <span className="cap">at RM {fmt(c.savingsOut)} a month</span>
+                <span className="cap">{t("house.atMonth", { v: fmt(c.savingsOut) })}</span>
               </div>
               <div className="row" style={{ gap: 4 }}>
                 {Array.from({ length: Math.min(5, Math.ceil(h.months / 12)) }, (_, i) => {
@@ -150,7 +149,7 @@ export function House() {
                       <div className="track">
                         <i style={{ width: `${f * 100}%`, background: "var(--ink-300)" } as CSSProperties} />
                       </div>
-                      <span className="cap">Year {i + 1}</span>
+                      <span className="cap">{t("house.year", { n: i + 1 })}</span>
                     </div>
                   );
                 })}
@@ -161,24 +160,24 @@ export function House() {
           {c.commit > 0 && (
             <div className="section">
               <div className="row between">
-                <h2 className="over">If you buy at this price</h2>
-                <StatusPill tone={ac}>{av}</StatusPill>
+                <h2 className="over">{t("house.ifBuy")}</h2>
+                <StatusPill tone={ac}>{t(VERDICT[av])}</StatusPill>
               </div>
               <ImpactBars
-                title="Commitments"
+                title={t("common.commitments")}
                 rows={[
-                  ["Now", c.ratio, "var(--ink-600)", pct(c.ratio)],
-                  ["After", afterPct, toneVar(ac), pct(afterPct)],
+                  ["now", c.ratio, "var(--ink-600)", t("common.now", { v: pct(c.ratio) })],
+                  ["after", afterPct, toneVar(ac), t("common.after", { v: pct(afterPct) })],
                 ]}
               />
               <p className="cap" style={{ color: "var(--ink-400)" }}>
-                Instalment replaces your current rent of RM {fmt(cur)}.
+                {t("house.replaces", { v: fmt(cur) })}
               </p>
             </div>
           )}
         </>
       )}
-      <Legal>Estimates only. Bank approval, rates and fees vary. Not financial advice.</Legal>
+      <Legal>{t("house.legal")}</Legal>
     </div>
   );
 }

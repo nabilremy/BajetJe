@@ -1,0 +1,86 @@
+/* BajetJe design tokens (Tailwind v4, CSS-first). Generated from Figma variables. */
+@import "tailwindcss";
+@theme {
+  --color-ink-0: #ffffff;
+  --color-ink-50: #f7f7f6;
+  --color-ink-100: #ededec;
+  --color-ink-200: #d9d9d7;
+  --color-ink-300: #bcbcb9;
+  --color-ink-400: #949491;
+  --color-ink-500: #6f6f6c;
+  --color-ink-600: #545451;
+  --color-ink-700: #3d3d3b;
+  --color-ink-800: #2a2a28;
+  --color-ink-900: #1e1e1e;
+  --color-ink-950: #141414;
+  --color-lime-50: #f5ffe6;
+  --color-lime-100: #eaffcc;
+  --color-lime-200: #d9ffa3;
+  --color-lime-300: #c5ff73;
+  --color-lime-400: #aef24d;
+  --color-lime-500: #93db2e;
+  --color-lime-600: #74b31d;
+  --color-lime-700: #588a16;
+  --color-lime-800: #406312;
+  --color-lime-900: #2b420d;
+  --color-amber-50: #fff8e6;
+  --color-amber-100: #ffefc2;
+  --color-amber-200: #ffe195;
+  --color-amber-300: #ffd066;
+  --color-amber-400: #ffbb33;
+  --color-amber-500: #f5a524;
+  --color-amber-600: #c97e10;
+  --color-amber-700: #9a5d0b;
+  --color-coral-50: #fff0ed;
+  --color-coral-100: #ffdcd5;
+  --color-coral-200: #ffbcae;
+  --color-coral-300: #ff9b87;
+  --color-coral-400: #ff775c;
+  --color-coral-500: #f0553c;
+  --color-coral-600: #c43d28;
+  --color-coral-700: #932c1c;
+  --font-sans: "Geist", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --font-hand: "Caveat", "Geist", cursive;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 14px;
+  --radius-full: 9999px;
+  --ease-out-strong: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --animate-digit-in: digit-in 180ms var(--ease-out-strong) both;
+  --animate-sel-pop: sel-pop 340ms var(--ease-spring) both;
+  --animate-note-up: note-up 520ms var(--ease-spring) 120ms both;
+  --animate-spin-doodle: spin 900ms linear infinite;
+  --animate-rise: rise 400ms var(--ease-out-strong) both;
+  --animate-pop: pop 420ms var(--ease-spring) both;
+  @keyframes digit-in { from { transform: translateY(0.6em); opacity: 0 } 66% { opacity: 1 } to { transform: none; opacity: 1 } }
+  @keyframes sel-pop { from { transform: scale(.88) } to { transform: none } }
+  @keyframes note-up { from { opacity: 0; transform: translateY(46px) scale(.9) } to { opacity: 1; transform: translateY(0) rotate(-6deg) } }
+  @keyframes rise { from { transform: translateY(10px); opacity: 0 } to { transform: none; opacity: 1 } }
+  @keyframes pop { from { transform: scale(.9); opacity: 0 } to { transform: none; opacity: 1 } }
+}
+
+:root {
+  --background: var(--color-ink-900);
+  --surface: var(--color-ink-800);
+  --surface-2: var(--color-ink-700);
+  --divider: var(--color-ink-700);
+  --text: var(--color-ink-50);
+  --text-muted: var(--color-ink-400);
+  --text-subtle: var(--color-ink-500);
+  --primary: var(--color-lime-300);
+  --on-primary: var(--color-ink-900);
+  --bucket-needs: var(--color-ink-400);
+  --bucket-wants: var(--color-amber-400);
+  --bucket-savings: var(--color-lime-300);
+  --health-healthy: var(--color-lime-300);
+  --health-caution: var(--color-amber-400);
+  --health-high: var(--color-coral-400);
+  --debt: var(--color-coral-400);
+  --brand-tile: var(--color-lime-900);
+  --brand-line: var(--color-lime-100);
+  --brand-hatch: var(--color-lime-500);
+}
+
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; } /* press feedback (scale) stays; thumbs/knobs jump */ }

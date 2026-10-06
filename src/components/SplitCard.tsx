@@ -1,19 +1,21 @@
 import { useLayoutEffect, useRef, useState, type CSSProperties } from "react";
 import { fmt, type Plan } from "../engine";
 import { setState, useApp, type SplitView } from "../state/store";
+import { useT, type T } from "../i18n";
 import { Icon } from "./Icon";
 
-const VIEWS: [SplitView, "vbars" | "vjars" | "vledger", string][] = [
-  ["bars", "vbars", "Bars"],
-  ["jars", "vjars", "Jars"],
-  ["ledger", "vledger", "List"],
-];
+const VIEWS = [
+  ["bars", "vbars", "split.bars", "split.barsView"],
+  ["jars", "vjars", "split.jars", "split.jarsView"],
+  ["ledger", "vledger", "split.list", "split.listView"],
+] as const;
 
 const reduced = () => typeof matchMedia !== "undefined" && matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 /** 50/30/20 split: one container for every view; only the body changes. */
 export function SplitCard({ c }: { c: Plan }) {
   const S = useApp();
+  const t = useT();
   const [how, setHow] = useState(false);
   const [swap, setSwap] = useState(0);
   const body = useRef<HTMLDivElement>(null);
@@ -40,14 +42,14 @@ export function SplitCard({ c }: { c: Plan }) {
     <div className="section split">
       <div className="row between">
         <div className="row" style={{ gap: 6 }}>
-          <h2 className="over">Your 50/30/20 split</h2>
-          <button className="iconbtn" aria-expanded={how} aria-label="How it works" onClick={() => setHow(!how)} style={{ width: 28, height: 28, background: "none", color: "var(--ink-500)" }}>
+          <h2 className="over">{t("split.title")}</h2>
+          <button className="iconbtn" aria-expanded={how} aria-label={t("split.how")} onClick={() => setHow(!how)} style={{ width: 28, height: 28, background: "none", color: "var(--ink-500)" }}>
             <Icon name="info" />
           </button>
         </div>
-        <div className="vt" role="group" aria-label="Chart view" style={{ "--i": vi } as CSSProperties}>
-          {VIEWS.map(([v, i, l]) => (
-            <button key={v} aria-pressed={S.variant === v} aria-label={`${l} view`} title={l} onClick={() => pick(v)}>
+        <div className="vt" role="group" aria-label={t("split.chartView")} style={{ "--i": vi } as CSSProperties}>
+          {VIEWS.map(([v, i, l, aria]) => (
+            <button key={v} aria-pressed={S.variant === v} aria-label={t(aria)} title={t(l)} onClick={() => pick(v)}>
               <Icon name={i} />
             </button>
           ))}
@@ -55,21 +57,21 @@ export function SplitCard({ c }: { c: Plan }) {
       </div>
       {how && (
         <p className="cap" style={{ color: "var(--ink-400)" }}>
-          Half of your take-home covers needs, 30% is for wants, and 20% is saved first. If your city makes needs more expensive, BajetJe tells you.
+          {t("split.howBody")}
         </p>
       )}
       <div ref={body} key={swap} className={`split-body${swap ? " swap" : ""}`}>
-        <SplitBody c={c} view={S.variant} />
+        <SplitBody c={c} view={S.variant} t={t} />
       </div>
     </div>
   );
 }
 
-function SplitBody({ c, view }: { c: Plan; view: SplitView }) {
+function SplitBody({ c, view, t }: { c: Plan; view: SplitView; t: T }) {
   const B: [string, string, number, number, string][] = [
-    ["Needs", "var(--ink-400)", c.needs, 50, "Rent, food, transport, bills, PTPTN"],
-    ["Wants", "var(--amber)", c.wants, 30, "Eating out, shopping, hobbies"],
-    ["Savings", "var(--lime)", c.savingsOut, 20, "Emergency fund first, then goals"],
+    [t("bucket.needs"), "var(--ink-400)", c.needs, 50, t("split.needsDesc")],
+    [t("bucket.wants"), "var(--amber)", c.wants, 30, t("split.wantsDesc")],
+    [t("bucket.savings"), "var(--lime)", c.savingsOut, 20, t("split.savingsDesc")],
   ];
   if (view === "jars")
     return (
@@ -88,7 +90,7 @@ function SplitBody({ c, view }: { c: Plan; view: SplitView }) {
             </div>
           ))}
         </div>
-        <p className="cap">Filled to scale. Your needs jar is the biggest on purpose: it covers everything you can't skip.</p>
+        <p className="cap">{t("split.jarsNote")}</p>
       </>
     );
   if (view === "ledger")
@@ -102,7 +104,7 @@ function SplitBody({ c, view }: { c: Plan; view: SplitView }) {
               <span className="cap">{p}%</span>
             </div>
             <div className="cap" style={{ textAlign: "right" }}>
-              ≈ RM {fmt(v / c.days)}/day
+              {t("split.perDay", { v: fmt(v / c.days) })}
             </div>
             <div className="big">RM {fmt(v)}</div>
             <div />
