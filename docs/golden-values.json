@@ -1,0 +1,273 @@
+{
+  "payroll": [
+    {
+      "gross": 1800,
+      "epf": 198,
+      "socso": 8.75,
+      "eis": 3.5,
+      "pcb": 0,
+      "net": 1589.75
+    },
+    {
+      "gross": 2500,
+      "epf": 275,
+      "socso": 12.25,
+      "eis": 4.9,
+      "pcb": 0,
+      "net": 2207.85
+    },
+    {
+      "gross": 3500,
+      "epf": 385,
+      "socso": 17.25,
+      "eis": 6.9,
+      "pcb": 0.94,
+      "net": 3089.91
+    },
+    {
+      "gross": 5000,
+      "epf": 550,
+      "socso": 24.75,
+      "eis": 9.9,
+      "pcb": 108.25,
+      "net": 4307.1
+    },
+    {
+      "gross": 8000,
+      "epf": 880,
+      "socso": 29.75,
+      "eis": 11.9,
+      "pcb": 508.63,
+      "net": 6569.72
+    },
+    {
+      "gross": 12000,
+      "epf": 1320,
+      "socso": 29.75,
+      "eis": 11.9,
+      "pcb": 1421.88,
+      "net": 9216.47
+    }
+  ],
+  "plan": [
+    {
+      "gross": 3500,
+      "payday": 25,
+      "commitments": "example set (needs 1,370 / wants 40 / savings 100)",
+      "net": 3090,
+      "needs": 1545,
+      "wants": 927,
+      "savings": 618,
+      "needsC": 1370,
+      "wantsC": 40,
+      "savC": 100,
+      "fixedCommitments": 1410,
+      "savingsOut": 618,
+      "ratioPct": 45.63,
+      "debtRatioPct": 4.85,
+      "leftForYou": 1062,
+      "daily_formula": "floor(leftForYou / cycleDays)"
+    },
+    {
+      "gross": 6000,
+      "payday": 25,
+      "commitments": "example set (needs 1,370 / wants 40 / savings 100)",
+      "net": 5094,
+      "needs": 2547,
+      "wants": 1528,
+      "savings": 1019,
+      "needsC": 1370,
+      "wantsC": 40,
+      "savC": 100,
+      "fixedCommitments": 1410,
+      "savingsOut": 1019,
+      "ratioPct": 27.68,
+      "debtRatioPct": 2.94,
+      "leftForYou": 2665,
+      "daily_formula": "floor(leftForYou / cycleDays)"
+    }
+  ],
+  "car": [
+    {
+      "net": 3090,
+      "down": 0,
+      "safeBudget": 28752,
+      "maxTight": 39913,
+      "allIn_40k": 773.7,
+      "instalment_40k": 470.37
+    },
+    {
+      "net": 3090,
+      "down": 0.1,
+      "safeBudget": 31421,
+      "maxTight": 43618,
+      "allIn_40k": 726.67,
+      "instalment_40k": 423.33
+    },
+    {
+      "net": 3090,
+      "down": 0.2,
+      "safeBudget": 34637,
+      "maxTight": 48082,
+      "allIn_40k": 679.63,
+      "instalment_40k": 376.3
+    }
+  ],
+  "home": [
+    {
+      "net": 3090,
+      "rate": 4,
+      "down": 0.1,
+      "instalment": 927,
+      "loan": 209362,
+      "price": 232624,
+      "deposit": 23262,
+      "monthsToSaveAt618": 38,
+      "cappedAt500k": false
+    },
+    {
+      "net": 3090,
+      "rate": 4,
+      "down": 0,
+      "instalment": 927,
+      "loan": 209362,
+      "price": 209362,
+      "deposit": 0,
+      "monthsToSaveAt618": 0,
+      "cappedAt500k": false
+    },
+    {
+      "net": 3090,
+      "rate": 3.5,
+      "down": 0.1,
+      "instalment": 927,
+      "loan": 224297,
+      "price": 249219,
+      "deposit": 24922,
+      "monthsToSaveAt618": 41,
+      "cappedAt500k": false
+    }
+  ],
+  "eligibility": [
+    {
+      "answers": {
+        "first": true,
+        "citizen": true,
+        "age": true
+      },
+      "gross": 3500,
+      "result": {
+        "state": "yes",
+        "schemes": [
+          "Skim Rumah Pertamaku",
+          "SJKP"
+        ],
+        "note": ""
+      }
+    },
+    {
+      "answers": {
+        "first": true,
+        "citizen": true,
+        "age": false
+      },
+      "gross": 3500,
+      "result": {
+        "state": "yes",
+        "schemes": [
+          "SJKP"
+        ],
+        "note": ""
+      }
+    },
+    {
+      "answers": {
+        "first": false,
+        "citizen": true,
+        "age": true
+      },
+      "gross": 3500,
+      "result": {
+        "state": "no",
+        "why": "100% financing is only for your first home."
+      }
+    },
+    {
+      "answers": {
+        "first": true,
+        "citizen": true,
+        "age": true
+      },
+      "gross": 12000,
+      "result": {
+        "state": "no",
+        "why": "Your income is above the RM 11,000 limit for SJKP."
+      }
+    }
+  ],
+  "payCycle": [
+    {
+      "payday": "7",
+      "today": "2026-10-06",
+      "prev": "2026-09-07",
+      "next": "2026-10-07",
+      "days": 30,
+      "dayIndex": 30,
+      "daysLeft": 1
+    },
+    {
+      "payday": "7",
+      "today": "2026-10-07",
+      "prev": "2026-10-07",
+      "next": "2026-11-07",
+      "days": 31,
+      "dayIndex": 1,
+      "daysLeft": 31
+    },
+    {
+      "payday": "1",
+      "today": "2026-10-06",
+      "prev": "2026-10-01",
+      "next": "2026-11-01",
+      "days": 31,
+      "dayIndex": 6,
+      "daysLeft": 26
+    },
+    {
+      "payday": "last",
+      "today": "2026-10-06",
+      "prev": "2026-09-30",
+      "next": "2026-10-31",
+      "days": 31,
+      "dayIndex": 7,
+      "daysLeft": 25
+    },
+    {
+      "payday": "31",
+      "today": "2026-11-15",
+      "prev": "2026-10-31",
+      "next": "2026-11-30",
+      "days": 30,
+      "dayIndex": 16,
+      "daysLeft": 15
+    },
+    {
+      "payday": "25",
+      "today": "2027-01-03",
+      "prev": "2026-12-25",
+      "next": "2027-01-25",
+      "days": 31,
+      "dayIndex": 10,
+      "daysLeft": 22
+    },
+    {
+      "payday": "30",
+      "today": "2027-02-10",
+      "prev": "2027-01-30",
+      "next": "2027-02-28",
+      "days": 29,
+      "dayIndex": 12,
+      "daysLeft": 18
+    }
+  ]
+}

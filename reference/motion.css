@@ -1,0 +1,49 @@
+@import "tailwindcss";
+
+/* Duit tokens (Tailwind v4, CSS-first). Values mirror the Figma variables. */
+@theme {
+  /* Colour: 60 base / 30 surface / 10 accent */
+  --color-ink-50: #f7f7f6;
+  --color-ink-300: #bcbcb9;
+  --color-ink-400: #949491;
+  --color-ink-500: #6f6f6c;
+  --color-ink-700: #3d3d3b;
+  --color-ink-800: #2a2a28;
+  --color-ink-900: #1e1e1e;
+  --color-lime-300: #c5ff73;
+  --color-amber-400: #ffbb33;
+  --color-coral-400: #ff775c;
+
+  --font-sans: "Geist", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  /* Motion */
+  --ease-out-strong: cubic-bezier(0.23, 1, 0.32, 1);
+
+  --animate-digit-in: digit-in 180ms var(--ease-out-strong) both;
+  --animate-digit-fade: digit-fade 120ms ease-out both;
+
+  @keyframes digit-in {
+    from {
+      transform: translateY(0.6em);
+      opacity: 0;
+    }
+    66% {
+      opacity: 1;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  /* Reduced-motion fallback: no movement, just a quick fade */
+  @keyframes digit-fade {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+}

@@ -1,0 +1,793 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>BajetJe · Prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink-50:#f7f7f6;--ink-300:#bcbcb9;--ink-400:#949491;--ink-500:#6f6f6c;--ink-600:#545451;
+  --ink-700:#3d3d3b;--ink-800:#2a2a28;--ink-900:#1e1e1e;--ink-950:#141414;
+  --lime:#c5ff73;--amber:#ffbb33;--coral:#ff775c;
+  --ease:cubic-bezier(0.23,1,0.32,1);--spring:cubic-bezier(0.34,1.56,0.64,1);
+  --sans:"Geist",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+/* Duit is a dark product; tokens are the same in every viewer theme */
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--ink-900:#1e1e1e}}
+:root[data-theme="dark"]{--ink-900:#1e1e1e}
+*,*::before,*::after{box-sizing:inherit;margin:0;padding:0}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{height:100%;background:var(--ink-950);color:var(--ink-50);font-family:var(--sans);-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+input{font:inherit;color:inherit}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+.stage{height:100%;display:flex;align-items:center;justify-content:center;padding:16px}
+.phone{position:relative;width:min(100%,400px);height:min(calc(100% - 40px),860px);background:var(--ink-900);border-radius:36px;overflow:hidden;box-shadow:0 0 0 1px #2c2c2c,0 30px 80px rgba(0,0,0,.45)}
+@media (max-width:520px){.stage{padding:0;gap:0}.phone{width:100%;height:100%;border-radius:0;box-shadow:none}}
+
+/* Screens */
+.screen{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;padding:56px 20px 0;display:none;scrollbar-width:none}
+.screen::-webkit-scrollbar{display:none}
+.screen.active{display:block}
+.screen.in-fwd{animation:in-fwd 280ms var(--ease) both}
+.screen.in-back{animation:in-back 280ms var(--ease) both}
+@keyframes in-fwd{from{transform:translateX(28px);opacity:0}to{transform:none;opacity:1}}
+@keyframes in-back{from{transform:translateX(-28px);opacity:0}to{transform:none;opacity:1}}
+.stack{display:flex;flex-direction:column;gap:24px;padding-bottom:28px}
+
+/* Type */
+.over{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-500)}
+.h1{font-size:24px;line-height:30px;font-weight:600;letter-spacing:-.01em}
+.h2{font-size:20px;line-height:26px;font-weight:600}
+.h3{font-size:17px;line-height:24px;font-weight:600}
+.body{font-size:13px;line-height:20px;color:var(--ink-400)}
+.cap{font-size:12px;line-height:16px;color:var(--ink-500)}
+.lbl{font-size:13px;font-weight:500}
+.muted{color:var(--ink-500)}.soft{color:var(--ink-400)}.lime{color:var(--lime)}.amber{color:var(--amber)}.coral{color:var(--coral)}
+
+/* Building blocks */
+.row{display:flex;align-items:center;gap:8px}.grow{flex:1;min-width:0}.between{justify-content:space-between}
+.card{background:var(--ink-800);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:14px}
+.section{display:flex;flex-direction:column;gap:14px}
+.btn{display:flex;align-items:center;justify-content:center;width:100%;min-height:52px;border-radius:14px;font-size:15px;font-weight:500;transition:transform 120ms var(--ease),opacity 150ms}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:var(--lime);color:var(--ink-900)}
+.btn-primary:disabled{opacity:.35;pointer-events:none}
+.btn-quiet{background:var(--ink-700);color:var(--ink-50)}
+.link{font-size:13px;font-weight:500;color:var(--ink-50);padding:12px 0;margin:-12px 0;display:inline-flex;align-items:center;gap:4px}
+.link:active{opacity:.6}
+.iconbtn{width:36px;height:36px;border-radius:999px;background:var(--ink-800);display:grid;place-items:center;flex:none;transition:transform 120ms var(--ease)}
+.iconbtn:active{transform:scale(.94)}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:500;white-space:nowrap}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;background:var(--ink-800);font-size:12px;color:var(--ink-400)}
+.chip b{font-family:var(--mono);font-weight:400;color:var(--ink-50);font-size:13px}
+.seg{display:flex;gap:4px;padding:4px;border-radius:12px;background:var(--ink-800)}
+.seg button{flex:1;padding:10px 0;border-radius:9px;font-size:13px;font-weight:500;color:var(--ink-400);transition:background 150ms,color 150ms}
+.seg button[aria-pressed="true"]{background:var(--ink-700);color:var(--ink-50)}
+.hr{height:1px;background:var(--ink-700)}
+.sticky{position:sticky;bottom:0;margin:0 -20px;padding:16px 20px calc(20px + env(safe-area-inset-bottom,0px));background:linear-gradient(to bottom,rgba(30,30,30,0),var(--ink-900) 22%);display:flex;flex-direction:column;gap:12px}
+.tipwrap{position:relative}
+.tip{position:absolute;left:0;right:0;top:calc(100% + 10px);z-index:5;background:var(--ink-700);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px;box-shadow:0 12px 32px rgba(0,0,0,.45);transform-origin:var(--ax,24px) top;animation:tip-in 160ms var(--ease) both}
+.tip::before{content:"";position:absolute;top:-6px;left:calc(var(--ax,24px) - 6px);width:12px;height:12px;background:var(--ink-700);transform:rotate(45deg);border-radius:2px}
+.tip .eq{display:grid;grid-template-columns:1fr auto;gap:6px 12px;font-size:12px;color:var(--ink-300)}
+.tip .eq b{font-family:var(--mono);font-weight:400;color:var(--ink-50);text-align:right}
+.tip .eq .tot{border-top:1px solid var(--ink-600);padding-top:6px;color:var(--ink-50);font-weight:500}
+.tip[hidden],[hidden]{display:none!important}
+@keyframes tip-in{from{opacity:0;transform:translateY(-4px) scale(.96)}}
+.chip[aria-expanded="true"]{background:var(--ink-700)}
+.chip .svg-i{width:14px;height:14px;color:var(--ink-500)}
+.swipe{position:relative;border-radius:12px;overflow:hidden;background:var(--coral)}
+.sw-del{position:absolute;right:0;top:0;bottom:0;width:84px;display:grid;place-items:center;font-size:13px;font-weight:600;color:var(--ink-900)}
+.sw-fg{position:relative;transition:transform 220ms var(--ease);touch-action:pan-y;will-change:transform;border-radius:0}
+.minus{width:24px;height:24px;border-radius:99px;background:var(--coral);display:grid;place-items:center;flex:none;transition:transform 120ms var(--ease)}
+.minus:active{transform:scale(.9)}
+.minus i{width:10px;height:2px;border-radius:1px;background:var(--ink-900)}
+.vt{display:flex;gap:2px;padding:2px;border-radius:10px;background:var(--ink-800)}
+.vt{position:relative}
+.vt::before{content:"";position:absolute;top:2px;left:2px;width:36px;height:32px;border-radius:8px;background:var(--ink-700);transform:translateX(calc(var(--i,0) * 38px));transition:transform 240ms var(--ease)}
+.vt button{position:relative;z-index:1;width:36px;height:32px;border-radius:8px;display:grid;place-items:center;color:var(--ink-500);transition:color 150ms ease,transform 120ms var(--ease)}
+.vt button:active{transform:scale(.92)}
+.vt button[aria-pressed="true"]{color:var(--ink-50)}
+.split-body{display:flex;flex-direction:column;gap:14px;overflow:hidden}
+.split-body.swap>*{animation:swap-in 220ms var(--ease) both}
+.split-body.swap>*+*{animation-delay:40ms}
+.split-body.swap .grow-x{animation:grow-x 380ms var(--ease) both;animation-delay:calc(60ms + var(--i,0) * 50ms)}
+.split-body.swap .grow-y{animation:grow-y 420ms var(--ease) both;animation-delay:calc(60ms + var(--i,0) * 50ms)}
+.split-body.swap .grow-r{animation:swap-in 260ms var(--ease) both;animation-delay:calc(var(--i,0) * 50ms)}
+@keyframes swap-in{from{opacity:0;transform:translateY(6px)}}
+.toast{position:absolute;left:16px;right:16px;bottom:calc(112px + env(safe-area-inset-bottom,0px));z-index:30;background:var(--ink-700);border-radius:12px;padding:10px 10px 10px 14px;display:flex;align-items:center;gap:12px;box-shadow:0 12px 32px rgba(0,0,0,.45);animation:rise 200ms var(--ease) both;font-size:13px}
+.svg-i{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+
+/* Hero numbers */
+.hero{font-family:var(--mono);font-weight:700;font-size:64px;line-height:72px;letter-spacing:-.03em}
+.hero-md{font-family:var(--mono);font-weight:700;font-size:48px;line-height:56px;letter-spacing:-.03em}
+
+/* Digit roll */
+.roll{display:inline-flex;overflow:hidden;padding:.08em 0;line-height:1;vertical-align:bottom}
+.roll>span{display:inline-block}
+.roll>.in{animation:digit-in 180ms var(--ease) both}
+@keyframes digit-in{from{transform:translateY(.6em);opacity:0}66%{opacity:1}to{transform:none;opacity:1}}
+
+/* Fields */
+.field{position:relative;display:flex;align-items:center;gap:8px;height:64px;padding:0 16px;border-radius:12px;background:var(--ink-800);box-shadow:inset 0 0 0 1px var(--ink-700);transition:box-shadow 150ms var(--ease)}
+.field:focus-within{box-shadow:inset 0 0 0 1.5px var(--lime)}
+.field .cur{color:var(--ink-500);font-size:15px;font-weight:500}
+.field .val{position:relative;flex:1;font-family:var(--mono);font-weight:700;font-size:28px;height:36px;display:flex;align-items:center}
+.field .val input{position:absolute;inset:0;width:100%;background:transparent;border:0;outline:0;color:transparent;caret-color:var(--lime);font-family:var(--mono);font-weight:700;font-size:28px;letter-spacing:0}
+.field .val input::placeholder{color:var(--ink-700)}
+.amt{display:flex;align-items:baseline;gap:4px}
+.amt input{width:76px;text-align:right;background:transparent;border:0;outline:0;font-family:var(--mono);font-size:15px;color:var(--ink-50);padding:10px 0;border-bottom:1px dashed transparent;transition:border-color 150ms}
+.amt input:focus{border-bottom-color:var(--lime)}
+
+/* Meters */
+.track{position:relative;height:8px;border-radius:4px;background:var(--ink-700);overflow:hidden}
+.track>i{position:absolute;left:0;top:0;bottom:0;border-radius:4px;transform-origin:left}
+.zones{position:relative;height:10px;display:flex;gap:2px}
+.zones>i{border-radius:3px;opacity:.4}
+.marker{position:absolute;inset:-5px 0;pointer-events:none}
+.marker>b{position:absolute;left:0;top:0;bottom:0;width:100%;transform:translateX(var(--p));}
+.marker>b::before{content:"";position:absolute;left:-2px;top:0;width:4px;height:20px;border-radius:2px;background:var(--ink-50)}
+.marker.sweep>b{animation:sweep 650ms var(--ease) 300ms both}
+@keyframes sweep{from{transform:translateX(0)}}
+
+/* Reveal choreography (hub, once per session) */
+.reveal [data-r]{animation:rise 400ms var(--ease) both;animation-delay:calc(var(--i,0) * 60ms)}
+@keyframes rise{from{transform:translateY(10px);opacity:0}to{transform:none;opacity:1}}
+.reveal .grow-x{animation:grow-x 450ms var(--ease) both;animation-delay:calc(180ms + var(--i,0) * 60ms)}
+@keyframes grow-x{from{transform:scaleX(0)}}
+.reveal .grow-y{animation:grow-y 450ms var(--ease) both;animation-delay:calc(180ms + var(--i,0) * 60ms)}
+@keyframes grow-y{from{transform:scaleY(0)}}
+.reveal .today{animation:today 520ms var(--spring) 300ms both}
+@keyframes today{from{transform:scaleY(.4)}}
+.pop{animation:pop 420ms var(--spring) 250ms both}
+@keyframes pop{from{transform:scale(.9);opacity:0}to{transform:none;opacity:1}}
+
+/* Month strip */
+.strip{position:relative;display:flex;align-items:flex-end;gap:3px;height:52px;padding-top:20px}
+.strip i{flex:1;height:20px;border-radius:2px;background:var(--ink-700);transform-origin:bottom}
+.strip i.f{background:var(--amber);opacity:.55}
+.strip i.t{height:32px;background:var(--lime);opacity:1}
+.strip .tl{position:absolute;top:0;font-size:13px;font-weight:500;color:var(--lime);transform:translateX(-50%)}
+
+/* Lists */
+.list{display:flex;flex-direction:column;gap:8px}
+.item{display:flex;align-items:center;gap:12px;padding:10px 14px 10px 12px;border-radius:12px;background:var(--ink-800)}
+.ico{width:34px;height:34px;border-radius:9px;background:var(--ink-700);display:grid;place-items:center;flex:none}
+.tag{font-size:11px;padding:0 6px;border-radius:999px;background:var(--coral);color:var(--ink-900);font-weight:500}
+.add{border:1px dashed var(--ink-600);background:transparent;justify-content:center;color:var(--ink-50);font-size:13px;font-weight:500;min-height:48px}
+.legend{display:flex;flex-direction:column;gap:8px}
+.legend .row{font-size:12px}
+.sw{width:8px;height:8px;border-radius:2px;flex:none}
+.wf{display:flex;flex-direction:column;gap:12px}
+.wf .bar{position:relative;height:8px}
+.wf .bar i{position:absolute;top:0;bottom:0;border-radius:3px}
+
+/* Variant: Jars */
+.jars{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.jar{display:flex;flex-direction:column;gap:8px;align-items:stretch}
+.jar .glass{position:relative;height:150px;border-radius:14px 14px 18px 18px;background:var(--ink-800);box-shadow:inset 0 0 0 1px var(--ink-700);overflow:hidden}
+.jar .glass i{position:absolute;left:0;right:0;bottom:0;transform-origin:bottom;border-radius:0 0 18px 18px}
+.jar .glass span{position:absolute;left:0;right:0;bottom:10px;text-align:center;font-family:var(--mono);font-size:13px;font-weight:500;color:var(--ink-900)}
+/* Variant: Ledger */
+.ledger>div{display:grid;grid-template-columns:1fr auto;gap:2px 12px;padding:14px 0;border-top:1px solid var(--ink-700)}
+.ledger>div:first-child{border-top:0;padding-top:0}
+.ledger .big{font-family:var(--mono);font-size:28px;font-weight:700;letter-spacing:-.02em;line-height:34px}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:150ms!important;animation-delay:0ms!important;transition-duration:0ms!important}
+  .screen.in-fwd,.screen.in-back,.reveal [data-r],.roll>.in{animation-name:fade!important}
+  .reveal .grow-x,.reveal .grow-y,.reveal .today,.marker.sweep>b,.pop,.split-body.swap *{animation:none!important}
+  @keyframes fade{from{opacity:0}}
+}
+</style>
+</head>
+<body>
+<div class="stage">
+  <main class="phone" id="app" aria-live="off"></main>
+</div>
+
+<script>
+(() => {
+/* ================= State + storage (device only, no backend) ================= */
+const KEY = 'duit-proto-v1';
+const PRESETS = [
+  {icon:'home', name:'Room rent', cat:'Housing', debt:false, ex:650},
+  {icon:'grad', name:'PTPTN', cat:'Education', debt:true, ex:150},
+  {icon:'bus', name:'LRT & e-hailing', cat:'Transport', debt:false, ex:150},
+  {icon:'heart', name:'Parents', cat:'Family', debt:false, ex:200},
+  {icon:'shield', name:'Takaful', cat:'Insurance', debt:false, ex:80},
+  {icon:'phone', name:'Phone & internet', cat:'Bills', debt:false, ex:80},
+  {icon:'zap', name:'Utilities share', cat:'Bills', debt:false, ex:60},
+  {icon:'tv', name:'Streaming & apps', cat:'Lifestyle', debt:false, ex:40, bucket:'wants'},
+  {icon:'shield', name:'ASB', cat:'Investment', debt:false, ex:100, bucket:'savings'}
+];
+PRESETS.forEach(p => { if (!p.bucket) p.bucket = 'needs'; });
+const QUICK = {
+  needs: [{icon:'car', name:'Car loan', cat:'Loan', debt:true},{icon:'home', name:'Home loan', cat:'Loan', debt:true},{icon:'card', name:'Credit card', cat:'Loan', debt:true},{icon:'card', name:'BNPL', cat:'Loan', debt:true},{icon:'heart', name:'Zakat', cat:'Giving', debt:false}],
+  wants: [{icon:'zap', name:'Gym', cat:'Health', debt:false},{icon:'tv', name:'Subscription', cat:'Lifestyle', debt:false}],
+  savings: [{icon:'heart', name:'Tabung Haji', cat:'Savings', debt:false},{icon:'shield', name:'Emergency fund', cat:'Savings', debt:false},{icon:'card', name:'Extra EPF', cat:'Savings', debt:false}]
+};
+const BUCKETS = [['needs','Needs','var(--ink-400)',.5,'Rent, transport, bills, loans, family'],['wants','Wants','var(--amber)',.3,'Subscriptions, gym, hobbies'],['savings','Savings','var(--lime)',.2,'ASB, Tabung Haji, emergency fund']];
+const fresh = () => ({mode:'gross', raw:'', variant:'bars', commitments: PRESETS.map((p,i)=>({id:'c'+i, ...p, amt:0})), carPrice:40000, carSwap:true, home:'rent', rate:4, payday:null, carDown:0.1, homeDown:0.1, elig:{first:null,citizen:null,age:null}, eligOpen:false});
+let S;
+try { S = Object.assign(fresh(), JSON.parse(localStorage.getItem(KEY) || '{}')); } catch(e) { S = fresh(); }
+S.commitments.forEach(c => { if (!c.bucket) c.bucket = c.name==='Streaming & apps' ? 'wants' : c.cat==='Investment' ? 'savings' : 'needs'; });
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch(e) {} };
+
+/* ================= Calculation engine ================= */
+const bracketMid = g => Math.min(Math.floor((g - 0.01) / 100) * 100 + 50, 5950);
+function payroll(gross){
+  if (!gross) return {epf:0,socso:0,eis:0,pcb:0,net:0};
+  const epf = Math.ceil(gross * S_epf());
+  const mid = gross > 6000 ? 5950 : bracketMid(gross);
+  const socso = +(mid * 0.005).toFixed(2), eis = +(mid * 0.002).toFixed(2);
+  const ci = Math.max(0, gross*12 - Math.min(epf*12, 4000) - 9000 - Math.min((socso+eis)*12, 350));
+  const B = [[5000,0],[20000,.01],[35000,.03],[50000,.06],[70000,.11],[100000,.19],[400000,.25],[600000,.26],[2000000,.28],[Infinity,.30]];
+  let tax=0, lo=0; for (const [hi,r] of B){ if (ci>lo) tax += (Math.min(ci,hi)-lo)*r; lo=hi; }
+  if (ci <= 35000) tax = Math.max(0, tax - 400);
+  const pcb = +(tax/12).toFixed(2);
+  return {epf, socso, eis, pcb, net: gross - epf - socso - eis - pcb};
+}
+function S_epf(){ return 0.11; }
+const DAY = 86400000;
+function payDate(y, m, pd){ const last = new Date(y, m+1, 0).getDate(); return new Date(y, m, pd==='last' ? last : Math.min(+pd, last)); }
+function cycle(pd){
+  const n = new Date(), t = new Date(n.getFullYear(), n.getMonth(), n.getDate());
+  const here = payDate(t.getFullYear(), t.getMonth(), pd || 'last');
+  const [prev, next] = t >= here ? [here, payDate(t.getFullYear(), t.getMonth()+1, pd || 'last')] : [payDate(t.getFullYear(), t.getMonth()-1, pd || 'last'), here];
+  return {prev, next, days: Math.round((next-prev)/DAY), idx: Math.round((t-prev)/DAY)+1, left: Math.round((next-t)/DAY)};
+}
+const fmtD = d => d.getDate()+' '+d.toLocaleString('en-MY',{month:'short'});
+function calc(){
+  const raw = +S.raw || 0;
+  const p = S.mode === 'gross' ? payroll(raw) : {epf:0,socso:0,eis:0,pcb:0,net:raw};
+  const net = Math.round(p.net);
+  const cy = cycle(S.payday), days = cy.days, today = cy.idx, daysLeft = cy.left;
+  const needs = Math.round(net*.5), wants = Math.round(net*.3), savings = net - needs - wants;
+  const sumB = b => S.commitments.filter(c=>c.bucket===b).reduce((a,c)=>a+(+c.amt||0),0);
+  const needsC = sumB('needs'), wantsC = sumB('wants'), savC = sumB('savings');
+  const commit = needsC + wantsC;
+  const savingsOut = Math.max(savings, savC);
+  const debt = S.commitments.filter(c=>c.debt).reduce((a,c)=>a+(+c.amt||0),0);
+  const ratio = net ? commit/net*100 : 0;
+  const left = net - commit - savingsOut;
+  const daily = Math.max(0, Math.floor(commit + savC ? left/days : wants/days));
+  return {...p, raw, net, days, today, daysLeft, needs, wants, savings, savingsOut, needsC, wantsC, savC, commit, debt, ratio, debtRatio: net? debt/net*100:0, left, daily, cy};
+}
+// Car: 9 yrs, ~3% flat. Down payment 0% (graduate full-loan schemes) to 30%.
+const coef = (dp = S.carDown) => (1-dp)*1.27/108 + 0.025/12;   // instalment + insurance per RM of price
+const carAllIn = (price, dp = S.carDown) => {
+  const inst = price*(1-dp)*1.27/108, ins = price*0.025/12 + 20;
+  return {inst, petrol:150, ins, service:50, total: inst + 150 + ins + 50, down: price*dp};
+};
+const carLimit = (net, share, dp = S.carDown) => Math.max(0, (net*share - 220) / coef(dp));
+// Home: instalment capped at 30% of take-home, 35 yrs. 0% down needs a first-home scheme (SRP / SJKP, price up to RM 500k).
+function home(net, savings, rate, dp = S.homeDown){
+  const r = rate/100/12, n = 420, inst = net*0.30;
+  const loan = inst * (1 - Math.pow(1+r,-n)) / r;
+  let price = loan/(1-dp); const capped = dp===0 && price > 500000; if (capped) price = 500000;
+  const dep = price*dp;
+  return {inst, loan: price*(1-dp), price, dep, capped, months: dep===0 ? 0 : savings ? Math.ceil(dep/savings) : Infinity};
+}
+// Indicative first-home 100% financing check (SRP: gross <= RM 5k single, age 21-40; SJKP: income <= RM 11k, 18+). Banks decide.
+function eligibility(){
+  const e = S.elig, g = S.mode==='gross' ? (+S.raw||0) : null;
+  if ([e.first,e.citizen,e.age].some(v=>v===null)) return {state:'pending'};
+  if (!e.first) return {state:'no', why:'100% financing is only for your first home.'};
+  if (!e.citizen) return {state:'no', why:'First-home schemes are for Malaysian citizens only.'};
+  const schemes = [];
+  if (e.age && g!==null && g <= 5000) schemes.push('Skim Rumah Pertamaku');
+  if (g===null || g <= 11000) schemes.push('SJKP');
+  if (!schemes.length) return {state:'no', why:'Your income is above the RM 11,000 limit for SJKP.'};
+  return {state:'yes', schemes, note: g===null ? 'Income checked against take-home; your gross decides.' : ''};
+}
+function eligCard(){
+  const e = S.elig, r = eligibility();
+  const q = (key, label) => `<div class="row" style="gap:8px"><span class="lbl grow" style="color:var(--ink-300)">${label}</span>${[[true,'Yes'],[false,'No']].map(([v,l])=>`<button class="chip" data-act="elig" data-k="${key}" data-v="${v}" aria-pressed="${e[key]===v}" style="min-height:36px;${e[key]===v?'background:var(--ink-50);color:var(--ink-900)':'background:var(--ink-700)'}">${l}</button>`).join('')}</div>`;
+  const res = r.state==='pending' ? `<div class="cap">Answer all 3 to see if a full loan is possible.</div>`
+    : r.state==='yes' ? `<div class="row" style="gap:8px;align-items:flex-start"><span class="pill" style="background:var(--lime);color:var(--ink-900)">Likely eligible</span><span class="cap" style="color:var(--ink-300)">${r.schemes.join(' or ')}. ${r.note}</span></div>`
+    : `<div class="row" style="gap:8px;align-items:flex-start"><span class="pill" style="background:var(--coral);color:var(--ink-900)">Not eligible</span><span class="cap" style="color:var(--ink-300)">${r.why} Showing 10% down instead.</span></div>`;
+  return `<div style="background:var(--ink-900);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:12px">
+    <div class="row between"><div class="lbl">Can you get a full loan?</div><button class="link" data-act="eligClose" style="color:var(--ink-400)">Close</button></div>
+    ${q('first','Is this your first home?')}${q('citizen','Malaysian citizen?')}${q('age','Aged 40 or below?')}
+    <div class="cap">Income is taken from your salary (RM ${fmt(+S.raw||0)}${S.mode==='gross'?' gross':' take-home'}).</div>
+    ${res}<div class="cap" style="font-size:11px">Indicative only. The bank and scheme make the final decision.</div></div>`;
+}
+const dpChips = (act, opts, cur) => `<div class="row" style="gap:6px;flex-wrap:wrap" role="group" aria-label="Down payment">${opts.map(([v,l])=>`<button class="chip" data-act="${act}" data-v="${v}" aria-pressed="${cur===v}" style="min-height:36px;${cur===v?'background:var(--ink-50);color:var(--ink-900)':''}">${l}</button>`).join('')}</div>`;
+
+const verdict = (pct, a, b) => pct <= a ? ['Healthy','lime'] : pct <= b ? ['Caution','amber'] : ['High','coral'];
+
+/* ================= Helpers ================= */
+const $ = (s, el=document) => el.querySelector(s);
+const fmt = n => Math.round(n).toLocaleString('en-MY');
+const fmt2 = n => n.toLocaleString('en-MY',{minimumFractionDigits:2, maximumFractionDigits:2});
+const k = n => n >= 1000 ? (Math.round(n/1000)) + 'k' : fmt(n);
+const pct = n => Math.round(n) + '%';
+const ICON = {
+  home:'<path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .7-1.5l7-6a2 2 0 0 1 2.6 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',
+  grad:'<path d="M21.4 10.9a1 1 0 0 0 0-1.8L12.8 5.2a2 2 0 0 0-1.7 0L2.6 9.1a1 1 0 0 0 0 1.8l8.6 3.9a2 2 0 0 0 1.7 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/>',
+  bus:'<path d="M8 6v6M15 6v6M2 12h19.6"/><path d="M18 18h3s.5-1.7.8-2.8c.1-.4.2-.8.2-1.2s-.1-.8-.2-1.2l-1.4-5C20.1 6.8 19.1 6 18 6H4a2 2 0 0 0-2 2v10h3"/><circle cx="7" cy="18" r="2"/><path d="M9 18h5"/><circle cx="16" cy="18" r="2"/>',
+  heart:'<path d="M19 14c1.5-1.5 3-3.2 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.8 0-3 .5-4.5 2-1.5-1.5-2.7-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4 3 5.5l7 7Z"/>',
+  shield:'<path d="M20 13c0 5-3.5 7.5-7.7 9a1 1 0 0 1-.6 0C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.2-2.7a1.2 1.2 0 0 1 1.6 0C14.5 3.8 17 5 19 5a1 1 0 0 1 1 1z"/>',
+  phone:'<rect width="14" height="20" x="5" y="2" rx="2"/><path d="M12 18h.01"/>',
+  zap:'<path d="M4 14a1 1 0 0 1-.8-1.6l9.9-10.2a.5.5 0 0 1 .9.5l-1.9 6A1 1 0 0 0 13 10h7a1 1 0 0 1 .8 1.6l-9.9 10.2a.5.5 0 0 1-.9-.5l1.9-6A1 1 0 0 0 11 14z"/>',
+  tv:'<rect width="20" height="15" x="2" y="7" rx="2"/><path d="m17 2-5 5-5-5"/>',
+  car:'<path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/>',
+  card:'<rect width="20" height="14" x="2" y="5" rx="2"/><path d="M2 10h20"/>',
+  back:'<path d="m15 18-6-6 6-6"/>', vbars:'<path d="M4 6h16M4 12h10M4 18h6"/>', vjars:'<rect x="4" y="10" width="4" height="10" rx="1"/><rect x="10" y="5" width="4" height="15" rx="1"/><rect x="16" y="13" width="4" height="7" rx="1"/>', vledger:'<path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/>', trash:'<path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/>', info:'<circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/>', x:'<path d="M18 6 6 18M6 6l12 12"/>', pen:'<path d="M12 20h9"/><path d="M16.4 3.6a2.1 2.1 0 1 1 3 3L7 19l-4 1 1-4Z"/>'
+};
+const ic = (n, cls='svg-i') => `<svg class="${cls}" viewBox="0 0 24 24" aria-hidden="true">${ICON[n]||''}</svg>`;
+
+/* Digit roll: animates only new/changed characters. anchor 'start' while typing, 'end' for totals */
+function roll(el, text, anchor='start', stagger=0){
+  if (!el) return;
+  const chars = [...text], total = chars.filter(c=>/\d/.test(c)).length;
+  let seen = 0;
+  const slots = chars.map(ch => { const d = /\d/.test(ch); if (d) seen++; const pos = anchor==='start' ? seen : total - seen + (d?1:0); return {ch, slot:(d?'d':'s')+pos}; });
+  const prev = el._prev; let order = 0;
+  el.setAttribute('aria-label', text);
+  el.innerHTML = slots.map(({ch,slot}) => {
+    const isNew = prev && prev.get(slot) !== ch;
+    const d = isNew && stagger ? `style="animation-delay:${order++*stagger}ms"` : '';
+    return `<span aria-hidden="true" class="${isNew?'in':''}" ${d}>${ch}</span>`;
+  }).join('');
+  el._prev = new Map(slots.map(s=>[s.slot,s.ch]));
+}
+
+/* ================= Router ================= */
+const app = $('#app');
+const screens = {};
+let stack = [];
+let revealed = false;
+function go(name, dir='fwd'){
+  if (dir==='fwd') stack.push(name); else if (dir==='back') { stack.pop(); if (!stack.length) stack=[name]; }
+  else stack=[name];
+  Object.values(screens).forEach(s=>s.classList.remove('active','in-fwd','in-back'));
+  let el = screens[name];
+  if (!el){ el = document.createElement('section'); el.className='screen'; el.dataset.screen=name; app.appendChild(el); screens[name]=el; }
+  render(name);
+  el.scrollTop = 0;
+  el.classList.add('active', dir==='back' ? 'in-back' : 'in-fwd');
+}
+const back = () => { const prev = stack[stack.length-2] || 'plan'; go(prev,'back'); };
+function render(name){ const el = screens[name]; ({salary:rSalary, plan:rPlan, commit:rCommit, health:rHealth, car:rCar, house:rHouse})[name](el); }
+const navbar = (title, right='') => `<div class="row" style="gap:12px"><button class="iconbtn" data-act="back" aria-label="Back">${ic('back')}</button><div class="h3 grow">${title}</div>${right}</div>`;
+
+/* ================= F1 · Salary ================= */
+function rSalary(el){
+  const c = calc(); const has = !!c.raw;
+  el.innerHTML = `<div class="stack" style="min-height:100%">
+    <div class="section" style="gap:10px">
+      <div class="row between"><div class="over">Let's start · takes 1 minute</div>${stack.length>1?`<button class="link" data-act="back" style="color:var(--ink-400)">Cancel</button>`:''}</div>
+      <div class="h1">What's your salary?</div>
+      <div class="body">Everything in BajetJe starts here. It stays on this phone and is never uploaded.</div>
+    </div>
+    <div class="seg" role="group" aria-label="Salary type">
+      <button data-act="mode" data-v="gross" aria-pressed="${S.mode==='gross'}">Gross salary</button>
+      <button data-act="mode" data-v="net" aria-pressed="${S.mode==='net'}">Take-home</button>
+    </div>
+    <div class="section" style="gap:8px">
+      <label class="lbl soft" for="sal">${S.mode==='gross'?'Gross monthly salary':'Monthly take-home (net pay on your payslip)'}</label>
+      <div class="field"><span class="cur">RM</span>
+        <div class="val"><span class="roll" id="salRoll"></span><input id="sal" inputmode="numeric" autocomplete="off" placeholder="0" aria-describedby="salHelp"></div>
+      </div>
+      <div class="row" id="salHelp" style="flex-wrap:wrap">${has?'':`<span class="cap">Not sure yet?</span><button class="chip" data-act="sample">Try RM 3,500</button>`}</div>
+    </div>
+    <div class="section" style="gap:10px">
+      <div class="row between"><span class="lbl soft">When do you get paid?</span><span class="cap">Day of the month</span></div>
+      <div class="row" style="flex-wrap:wrap" role="group" aria-label="Payday">
+        ${[['1','1st'],['7','7th'],['15','15th'],['25','25th'],['last','Last day']].map(([v,l])=>`<button class="chip paychip" data-act="payday" data-v="${v}" aria-pressed="${S.payday===v}" style="min-height:40px;padding:0 14px;font-size:13px;${S.payday===v?'background:var(--ink-50);color:var(--ink-900)':'color:var(--ink-300)'}">${l}</button>`).join('')}
+        <label class="chip" style="min-height:40px;padding:0 6px 0 14px;font-size:13px;${S.payday&&!['1','7','15','25','last'].includes(S.payday)?'background:var(--ink-50);color:var(--ink-900)':'color:var(--ink-300)'}">Other
+          <select data-act="payOther" aria-label="Other payday" style="background:transparent;border:0;color:inherit;font:inherit;padding:8px 4px;outline:0">
+            <option value="">day</option>${Array.from({length:31},(_,i)=>i+1).filter(d=>![1,7,15,25].includes(d)).map(d=>`<option value="${d}" ${S.payday==String(d)?'selected':''}>${d}</option>`).join('')}
+          </select></label>
+      </div>
+      <div class="cap">Your daily budget runs from payday to payday. If the day doesn't exist in a month, we use the last day.</div>
+    </div>
+    ${S.mode==='gross' ? `<div class="section" style="gap:10px">
+      <div class="row between"><div class="over">Auto deductions</div><span class="cap">Malaysia · 2026 rates</span></div>
+      <div class="card" style="gap:12px">
+        ${[['EPF (your share)','11%','epf'],['SOCSO','','socso'],['EIS','','eis'],['Income tax (PCB)','est.','pcb']].map(([n,t,key])=>`<div class="row"><span class="lbl" style="color:var(--ink-300)">${n}</span>${t?`<span class="pill" style="background:var(--ink-700);color:var(--ink-400)">${t}</span>`:''}<span class="grow"></span><span class="mono cap" style="color:var(--ink-400);font-size:13px" id="d-${key}">− RM 0.00</span></div>`).join('')}
+        <div class="hr"></div>
+        <div class="row"><div class="grow"><div class="lbl" style="font-size:15px">Your take-home</div><div class="cap">Updates as you type</div></div><div class="mono lime" style="font-size:20px;font-weight:500">RM&nbsp;<span class="roll" id="netRoll">0</span></div></div>
+      </div>
+    </div>` : ''}
+    <div class="grow"></div>
+    <div class="sticky"><button class="btn btn-primary" id="toPlan" data-act="toPlan" ${has&&S.payday?'':'disabled'}>${!has?'See my 50/30/20':S.payday?'See my 50/30/20':'Pick your payday to continue'}</button></div>
+  </div>`;
+  const inp = $('#sal', el), sr = $('#salRoll', el), nr = $('#netRoll', el);
+  const show = S.raw ? fmt(+S.raw) : '';
+  inp.value = show; sr._prev = null; roll(sr, show); if (nr) { nr._prev=null; roll(nr, fmt(c.net), 'end'); }
+  updateDeductions(el, c);
+  let t;
+  inp.addEventListener('input', () => {
+    S.raw = inp.value.replace(/\D/g,'').replace(/^0+/,'').slice(0,7); save();
+    const f = S.raw ? fmt(+S.raw) : ''; inp.value = f; roll(sr, f, 'start');
+    const cc = calc(); updateDeductions(el, cc);
+    const tp=$('#toPlan', el); tp.disabled = !(S.raw && S.payday); tp.textContent = S.raw && !S.payday ? 'Pick your payday to continue' : 'See my 50/30/20';
+    const help = $('#salHelp', el); if (S.raw && help) help.innerHTML = '';
+    clearTimeout(t); t = setTimeout(()=> nr && roll(nr, fmt(cc.net), 'end', 30), 200);
+  });
+  if (!S.raw) setTimeout(()=>inp.focus({preventScroll:true}), 300);
+}
+function updateDeductions(el, c){
+  [['epf',c.epf],['socso',c.socso],['eis',c.eis],['pcb',c.pcb]].forEach(([k,v])=>{ const n=$('#d-'+k, el); if(n) n.textContent='− RM '+fmt2(v); });
+}
+
+/* ================= F2 · My Plan (hub) ================= */
+const VIEWS = [['bars','vbars','Bars'],['jars','vjars','Jars'],['ledger','vledger','List']];
+function splitCard(c){
+  const vi = Math.max(0, VIEWS.findIndex(v=>v[0]===S.variant));
+  const head = `<div class="row between"><div class="row" style="gap:6px"><div class="over">Your 50/30/20 split</div><button class="iconbtn" data-act="how" aria-expanded="false" aria-label="How it works" style="width:28px;height:28px;background:none;color:var(--ink-500)">${ic('info')}</button></div><div class="vt" role="group" aria-label="Chart view" style="--i:${vi}">${VIEWS.map(([v,i,l])=>`<button data-act="view" data-v="${v}" aria-pressed="${S.variant===v}" aria-label="${l} view" title="${l}">${ic(i)}</button>`).join('')}</div></div><div class="cap" data-how hidden style="color:var(--ink-400)">Half of your take-home covers needs, 30% is for wants, and 20% is saved first. If your city makes needs more expensive, BajetJe tells you.</div>`;
+  return `<div class="section split">${head}<div class="split-body">${splitBody(c)}</div></div>`;
+}
+/* Same container for every view; only the body changes */
+function splitBody(c){
+  const B = [['Needs','var(--ink-400)',c.needs,50,'Rent, food, transport, bills, PTPTN'],['Wants','var(--amber)',c.wants,30,'Eating out, shopping, hobbies'],['Savings','var(--lime)',c.savingsOut,20,'Emergency fund first, then goals']];
+  if (S.variant==='jars') return `<div class="jars">${B.map(([n,col,v,p],i)=>`<div class="jar"><div class="glass"><i class="grow-y" style="--i:${i};height:${p/50*86}%;background:${col}"></i><span>${p}%</span></div><div class="lbl">${n}</div><div class="mono" style="font-size:15px">RM ${fmt(v)}</div></div>`).join('')}</div>
+    <div class="cap">Filled to scale. Your needs jar is the biggest on purpose: it covers everything you can't skip.</div>`;
+  if (S.variant==='ledger') return `<div class="ledger">${B.map(([n,col,v,p,d],i)=>`<div class="grow-r" style="--i:${i}"><div class="row" style="gap:8px"><span class="sw" style="background:${col}"></span><span class="lbl">${n}</span><span class="cap">${p}%</span></div><div class="cap" style="text-align:right">≈ RM ${fmt(v/c.days)}/day</div><div class="big">RM ${fmt(v)}</div><div></div><div class="cap" style="grid-column:1/-1">${d}</div></div>`).join('')}</div>`;
+  return `<div class="row" style="gap:3px;height:32px">${B.map(([n,col,v,p],i)=>`<div class="grow-x" style="--i:${i};flex:${p};height:100%;background:${col};border-radius:6px;display:flex;align-items:center;padding-left:10px;transform-origin:left"><span class="lbl" style="color:var(--ink-900)">${p}%</span></div>`).join('')}</div>
+    <div class="list" style="gap:14px">${B.map(([n,col,v,p,d])=>`<div class="row" style="align-items:flex-start;gap:12px"><span class="sw" style="background:${col};width:10px;height:10px;margin-top:6px"></span><div class="grow"><div class="lbl" style="font-size:15px">${n}</div><div class="cap">${d}</div></div><div class="mono" style="font-size:15px">RM ${fmt(v)}</div></div>`).join('')}</div>`;
+}
+function rPlan(el){
+  const c = calc(); const has = c.commit > 0; const [vName, vCol] = verdict(c.ratio, 50, 65);
+  const strip = Array.from({length:c.days},(_,i)=>`<i class="${i+1<c.today?'':i+1===c.today?'t today':'f'}"></i>`).join('');
+  const kl = c.needs < 1930;
+  const carSafe = carLimit(c.net, .20), rent = c.net*.30;
+  el.innerHTML = `<div class="stack">
+    <div class="row" data-r style="--i:0"><div class="grow"><div class="h2">Hi there</div><div class="body">Pay cycle ${fmtD(c.cy.prev)} to ${fmtD(new Date(c.cy.next-DAY))} · ${c.daysLeft} day${c.daysLeft===1?'':'s'} to payday</div></div><span class="pill" style="background:var(--ink-800);color:var(--ink-400)">${ic('shield','svg-i')}On device</span></div>
+    <div class="card" data-r style="--i:1;flex-direction:row;align-items:center;padding:14px 12px 14px 16px">
+      <div class="grow"><div class="over">Take-home pay</div><div class="row" style="align-items:baseline;gap:4px"><span class="mono" style="font-size:20px;font-weight:500">RM ${fmt(c.net)}</span><span class="body">/ month</span></div><div class="cap">${S.mode==='gross'?'After EPF, SOCSO, EIS and tax':'Entered as take-home'}</div></div>
+      <button class="btn btn-quiet" style="width:auto;min-height:44px;padding:0 16px;border-radius:999px;gap:6px" data-act="edit">${ic('pen')}Edit</button>
+    </div>
+    <div class="section" style="gap:6px">
+      <div class="over" data-r style="--i:2">${has?'After bills and savings, you can spend':'You can spend'}</div>
+      <div class="row" data-r style="--i:2;align-items:baseline;gap:10px"><span class="hero lime"><span class="roll" id="dailyRoll"></span></span><span class="h2">a day</span></div>
+      <div class="row body" data-r style="--i:3"><span class="sw" style="background:var(--amber);border-radius:99px"></span>${has?`RM ${fmt(c.left)} this month for food, fun and personal stuff`:`From your 30% wants: RM ${fmt(c.wants)} ÷ ${c.days} days`}</div>
+      <div class="strip" data-r style="--i:4">${strip}<span class="tl" style="left:${(c.today-.5)/c.days*100}%">Today</span></div>
+      <div class="row between cap" data-r style="--i:4"><span>Paid ${fmtD(c.cy.prev)}</span><span>Next payday ${fmtD(c.cy.next)}</span></div>
+      <div class="row tipwrap" data-r style="--i:5;padding-top:6px;flex-wrap:wrap"><button class="chip" data-act="tip" data-tip="week" aria-expanded="false"><b>RM ${fmt(c.daily*7)}</b> a week ${ic('info')}</button><button class="chip" data-act="tip" data-tip="left" aria-expanded="false"><b>RM ${fmt(c.daily*c.daysLeft)}</b> budget till payday ${ic('info')}</button><div class="tip" id="tip" role="dialog" hidden></div></div>
+    </div>
+    <div data-r style="--i:6" id="split">${splitCard(c)}</div>
+    ${kl?`<div data-r style="--i:7;background:rgba(255,187,51,.12);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:4px"><div class="lbl amber">Needs may run short in KL</div><div class="cap" style="color:var(--ink-400)">EPF's Belanjawanku guide puts a single person's basics in Klang Valley at about RM 1,930. Your 50% is RM ${fmt(c.needs)}.</div><button class="link" data-act="commit" style="align-self:flex-start">Check my commitments →</button></div>`:''}
+    ${has ? `<div class="card" data-r style="--i:8">
+        <div class="row between"><div class="over">Commitment health</div><span class="pill" style="background:var(--${vCol});color:var(--ink-900)">${vName}</span></div>
+        <div class="row" style="align-items:baseline;gap:6px"><span class="mono" style="font-size:20px;font-weight:500">${pct(c.ratio)}</span><span class="cap">of take-home · RM ${fmt(c.commit)} a month</span></div>
+        ${gauge(c.ratio,[50,65,100],100,false)}
+        <div class="row between"><span class="cap" style="color:var(--ink-400)">${c.needsC<=c.needs?`RM ${fmt(c.needs-c.needsC)} left in your needs budget`:`Needs over by RM ${fmt(c.needsC-c.needs)}`}</span><button class="link" data-act="health">Details →</button></div>
+      </div>` : `<div class="card" data-r style="--i:8">
+        <div class="over">Commitment health</div>
+        <div class="h3">Want to check if your commitment is healthy?</div>
+        <div class="body">List your fixed monthly commitments. We check them against your 50% needs budget of RM ${fmt(c.needs)}.</div>
+        ${ILLU}
+        <button class="btn btn-primary" data-act="commit">Add my commitments</button>
+      </div>`}
+    <div class="section" data-r style="--i:9;gap:12px">
+      <div class="over">What can I afford?</div>
+      <div class="row" style="gap:12px;align-items:stretch">
+        ${tile('car','Car','Comfortable up to', carSafe? 'RM '+k(carSafe):'Not yet','', `RM ${fmt(c.net*.2)}/mo all-in`, .2, 'See cars','car')}
+        ${tile('home','Home','Rent up to','RM '+fmt(rent),'/mo','30% of take-home',.3,'See housing','house')}
+      </div>
+    </div>
+    <div class="cap" style="text-align:center;font-size:11px;padding:4px 12px 0">Estimates only, based on EPF, PERKESO, LHDN and Belanjawanku guidelines. Not financial advice.</div>
+    <button class="link" data-act="wipe" style="align-self:center;color:var(--ink-500);font-size:12px">${ic('trash')}<span> Delete all my data from this phone</span></button>
+  </div>`;
+  const dr = $('#dailyRoll', el); dr._prev = null; roll(dr, 'RM '+fmt(Math.max(0,c.daily)), 'end');
+  if (!revealed){ const st=el.firstElementChild; st.classList.add('reveal'); revealed = true; setTimeout(()=>st.classList.remove('reveal'), 1400); }
+}
+const tile = (icon,title,pre,val,unit,meta,share,cta,act) => `<button class="card" data-act="${act}" style="flex:1;padding:16px;gap:10px;text-align:left;transition:transform 120ms var(--ease)" onpointerdown="this.style.transform='scale(.97)'" onpointerup="this.style.transform=''" onpointerleave="this.style.transform=''">
+  <div class="row" style="gap:10px"><span class="ico">${ic(icon)}</span><span class="lbl" style="font-size:15px">${title}</span></div>
+  <div><div class="cap">${pre}</div><div class="row" style="align-items:baseline;gap:3px"><span class="mono" style="font-size:20px;font-weight:500">${val}</span><span class="cap">${unit}</span></div></div>
+  <div class="track" style="height:6px"><i style="width:${share*100}%;background:var(--lime)"></i></div>
+  <div class="cap" style="color:var(--ink-400)">${meta}</div>
+  <span class="lbl">${cta} →</span></button>`;
+function gauge(p, stops, max, sweep, marks){
+  const [a,b] = stops; const W = x => x/max*100;
+  return `<div style="position:relative;padding:5px 0">
+    <div class="zones"><i style="width:${W(a)}%;background:var(--lime)"></i><i style="width:${W(b-a)}%;background:var(--amber)"></i><i style="flex:1;background:var(--coral)"></i></div>
+    <div class="marker ${sweep?'sweep':''}"><b style="--p:${Math.min(p,max)/max*100}%"></b></div>
+  </div>
+  <div class="row between cap"><span class="lime">Healthy ≤ ${a}%</span><span class="amber">Caution ${a} to ${b}%</span><span class="coral">High > ${b}%</span></div>`;
+}
+const ILLU = `<svg viewBox="18 0 232 96" width="232" height="96" fill="none" aria-hidden="true" style="max-width:100%;align-self:center">
+<g transform="rotate(-8 60 48)"><rect x="28" y="22" width="64" height="50" rx="6" fill="#2A2A28" stroke="#545451" stroke-width="1.5"/></g>
+<g transform="rotate(4 66 46)"><rect x="34" y="20" width="64" height="50" rx="6" fill="#2A2A28" stroke="#6F6F6C" stroke-width="1.5"/><path d="M44 33H70M44 41H84M44 49H62" stroke="#6F6F6C" stroke-width="1.5" stroke-linecap="round"/><path d="M76 58H88" stroke="#949491" stroke-width="2" stroke-linecap="round"/></g>
+<path d="M112 52H140" stroke="#545451" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="2 5"/>
+<path d="M152 76A44 44 0 0 1 240 76" stroke="#3D3D3B" stroke-width="8" stroke-linecap="round"/>
+<path d="M152 76A44 44 0 0 1 196 32" stroke="#C5FF73" stroke-opacity=".45" stroke-width="8" stroke-linecap="round"/>
+<path d="M196 76L180 44" stroke="#949491" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="3 3"/><circle cx="196" cy="76" r="4" fill="#F7F7F6"/>
+</svg>`;
+
+/* ================= F3 · Commitments ================= */
+let editMode = false;
+const esc = t => String(t).replace(/[&<>"]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
+function rCommit(el){
+  el.innerHTML = `<div class="stack" style="min-height:100%">
+    ${navbar('My commitments', `<button class="link" data-act="editMode" style="color:var(--ink-300)">${editMode?'Done':'Edit'}</button>`)}
+    <div class="section" style="gap:6px"><div class="h1">What do you pay every month?</div><div class="body">Fixed amounts only, grouped by your 50/30/20 split. Swipe left on a row to delete it.</div><button class="link" data-act="example" style="align-self:flex-start;color:var(--ink-400)">Fill with an example</button></div>
+    ${BUCKETS.map(bucketHTML).join('')}
+    <div class="grow"></div>
+    <div class="sticky" style="border-top:1px solid var(--ink-800)">
+      <div class="row"><div class="grow"><div class="lbl soft">Fixed commitments</div><div class="cap" id="cshare"></div></div><div class="mono" style="font-size:20px;font-weight:500">RM&nbsp;<span class="roll" id="ctotal"></span></div></div>
+      <div class="track"><i id="cbar" style="background:var(--lime);transition:transform 250ms var(--ease);width:100%;transform:scaleX(0)"></i><span style="position:absolute;left:50%;top:0;bottom:0;width:2px;background:var(--ink-50)"></span></div>
+      <button class="btn btn-primary" id="toHealth" data-act="health">Check my commitment health</button>
+    </div></div>`;
+  const ct = $('#ctotal', el); ct._prev = null; updTotal(el, false);
+  if (!el._swipe){ bindSwipe(el); el._swipe = true; }
+  el.oninput = e => {
+    const inp = e.target.closest('input[data-id]'); if (!inp) return;
+    const c = S.commitments.find(x=>x.id===inp.dataset.id);
+    if (inp.dataset.f==='name'){ c.name = inp.value.slice(0,28); save(); return; }
+    const raw = inp.value.replace(/\D/g,'').replace(/^0+/,'').slice(0,6); c.amt = +raw||0; inp.value = raw ? fmt(+raw) : ''; save();
+    clearTimeout(el._t); el._t = setTimeout(()=>updTotal(el,true),150);
+  };
+}
+function bucketHTML([key,label,col,share,hint]){
+  const items = S.commitments.filter(x=>x.bucket===key);
+  return `<section class="section" data-bucket="${key}" style="gap:10px">
+    <div class="row between"><div class="row" style="gap:8px"><span class="sw" style="background:${col};width:10px;height:10px"></span><span class="h3">${label}</span><span class="cap">${share*100}%</span></div><span class="mono cap" data-used style="color:var(--ink-300)"></span></div>
+    <div class="track"><i data-fill style="width:100%;transform-origin:left;transform:scaleX(0);transition:transform 250ms var(--ease),background 150ms;background:${col}"></i></div>
+    <div class="cap" data-note>${hint}</div>
+    <div class="list">${items.map(rowHTML).join('')}<button class="item add" data-act="addRow" data-b="${key}">+ Add to ${label.toLowerCase()}</button></div>
+    <div class="row" style="flex-wrap:wrap;gap:6px">${QUICK[key].map((q,i)=>`<button class="chip" data-act="quick" data-b="${key}" data-i="${i}" style="min-height:36px">+ ${q.name}</button>`).join('')}</div>
+  </section>`;
+}
+const rowHTML = c => `<div class="swipe" data-row="${c.id}">
+  <button class="sw-del" data-act="del" data-id="${c.id}" aria-label="Delete ${esc(c.name||'commitment')}">Delete</button>
+  <div class="item sw-fg" data-fg="${c.id}">
+    ${editMode?`<button class="minus" data-act="reveal" data-id="${c.id}" aria-label="Show delete for ${esc(c.name||'commitment')}"><i></i></button>`:''}
+    <span class="ico">${ic(c.icon)}</span>
+    <div class="grow">${c.custom?`<input data-id="${c.id}" data-f="name" value="${esc(c.name)}" placeholder="Name" aria-label="Commitment name" style="background:none;border:0;outline:0;font-size:13px;font-weight:500;width:100%">`:`<div class="lbl">${esc(c.name)}</div>`}
+    <div class="row" style="gap:6px"><span class="cap">${c.cat}</span>${c.debt?'<span class="tag">Debt</span>':''}</div></div>
+    <label class="amt"><span class="cap">RM</span><input data-id="${c.id}" inputmode="numeric" placeholder="0" value="${c.amt?fmt(c.amt):''}" aria-label="${esc(c.name||'Commitment')} monthly amount"></label>
+  </div></div>`;
+function updTotal(el, animate){
+  const c = calc();
+  roll($('#ctotal',el), fmt(c.commit), 'end', animate?30:0);
+  $('#cshare',el).textContent = c.net ? `${pct(c.ratio)} of your RM ${fmt(c.net)} take-home · savings not included` : '';
+  $('#cbar',el).style.transform = `scaleX(${Math.min(c.ratio,100)/100})`;
+  $('#cbar',el).style.background = `var(--${verdict(c.ratio,50,65)[1]})`;
+  $('#toHealth',el).disabled = !(c.commit || c.savC);
+  for (const [key,label,col,share,hint] of BUCKETS){
+    const sec = el.querySelector(`[data-bucket="${key}"]`); if (!sec) continue;
+    const used = key==='needs'?c.needsC:key==='wants'?c.wantsC:c.savC, budget = key==='needs'?c.needs:key==='wants'?c.wants:c.savings;
+    const over = used > budget;
+    sec.querySelector('[data-used]').textContent = `RM ${fmt(used)} / ${fmt(budget)}`;
+    const f = sec.querySelector('[data-fill]'); f.style.transform = `scaleX(${budget?Math.min(used/budget,1):0})`; f.style.background = over && key!=='savings' ? 'var(--amber)' : col;
+    const note = sec.querySelector('[data-note]');
+    if (!used) { note.textContent = hint; note.style.color=''; }
+    else if (key==='savings') { note.textContent = used>=budget ? 'On track: you already save at least 20%.' : `RM ${fmt(budget-used)} more goes to savings automatically to reach 20%.`; note.style.color=''; }
+    else if (over) { note.textContent = `Over by RM ${fmt(used-budget)}. ${key==='needs'?'This comes out of your wants.':'Your daily spending money shrinks.'} You can still add more.`; note.style.color='var(--amber)'; }
+    else { note.textContent = `RM ${fmt(budget-used)} left in ${label.toLowerCase()}`; note.style.color=''; }
+  }
+}
+/* iOS-style swipe to delete: horizontal drag reveals Delete; vertical drag scrolls */
+function bindSwipe(root){
+  let fg=null, x0=0, y0=0, base=0, x=0, decided=false, drag=false;
+  const W = 84, closeAll = except => root.querySelectorAll('.sw-fg.open').forEach(f=>{ if (f!==except){ f.classList.remove('open'); f.style.transform=''; } });
+  root.addEventListener('pointerdown', e => { if (e.target.closest('.sw-del')) return; const f = e.target.closest('.sw-fg'); if (!f) { closeAll(); return; } fg=f; x0=e.clientX; y0=e.clientY; base = f.classList.contains('open') ? -W : 0; x=base; decided=false; drag=false; });
+  root.addEventListener('pointermove', e => {
+    if (!fg) return; const dx=e.clientX-x0, dy=e.clientY-y0;
+    if (!decided){ if (Math.abs(dx)<6 && Math.abs(dy)<6) return; decided=true; drag=Math.abs(dx)>Math.abs(dy); if (drag){ try{fg.setPointerCapture(e.pointerId);}catch(_){} closeAll(fg); } }
+    if (!drag) return;
+    x = base + dx; if (x>0) x = x*0.2; if (x<-W) x = -W + (x+W)*0.3;
+    fg.style.transition='none'; fg.style.transform=`translateX(${x}px)`;
+  });
+  const end = () => { if (!fg) return; if (drag){ const open = x < -W/2; fg.style.transition=''; fg.style.transform = open?`translateX(-${W}px)`:''; fg.classList.toggle('open', open); if (document.activeElement && fg.contains(document.activeElement)) document.activeElement.blur(); } fg=null; };
+  root.addEventListener('pointerup', end); root.addEventListener('pointercancel', end);
+}
+function toast(msg, undo){
+  document.querySelectorAll('.toast').forEach(t=>t.remove());
+  const t = document.createElement('div'); t.className='toast'; t.setAttribute('role','status');
+  t.innerHTML = `<span class="grow">${esc(msg)}</span><button class="link" style="color:var(--lime);padding:10px;margin:-10px 0">Undo</button>`;
+  t.querySelector('button').onclick = () => { t.remove(); undo(); };
+  app.appendChild(t); setTimeout(()=>t.remove(), 4000);
+}
+function rerenderCommit(){ const sc=screens.commit.scrollTop; render('commit'); screens.commit.scrollTop=sc; }
+
+/* ================= F4 · Commitment health ================= */
+function rHealth(el){
+  const c = calc(); const [vName, vCol] = verdict(c.ratio, 50, 65);
+  const copy = vName==='Healthy' ? `of your take-home goes to fixed bills and loans. Your needs (RM ${fmt(c.needsC)}) ${c.needsC<=c.needs?`fit inside your 50% budget of RM ${fmt(c.needs)}, with RM ${fmt(c.needs-c.needsC)} to spare.`:`are RM ${fmt(c.needsC-c.needs)} over your 50% budget, so less is left for wants.`}`
+    : vName==='Caution' ? `of your take-home is committed. Needs are RM ${fmt(Math.abs(c.needsC-c.needs))} ${c.needsC>c.needs?'over':'under'} your 50% budget. Manageable, but keep wants small this month.`
+    : `of your take-home. More than two-thirds of your pay is committed, so one surprise bill could leave you short.`;
+  const items = S.commitments.filter(x=>x.amt>0 && x.bucket!=='savings').sort((a,b)=>b.amt-a.amt);
+  const top = items.slice(0,4), others = items.slice(4).reduce((a,x)=>a+x.amt,0);
+  const shades = ['var(--ink-300)','var(--ink-400)','var(--ink-500)','var(--ink-600)'];
+  let si = 0; const parts = top.map(x=>({n:x.name,v:x.amt,col:x.debt?'var(--coral)':shades[si++]}));
+  if (others) parts.push({n:'Others',v:others,col:'var(--ink-700)'});
+  const W = S.mode==='gross' ? c.raw : c.net; const sc = v => v/(W||1)*100;
+  const steps = S.mode==='gross'
+    ? [['Gross salary','',fmt(c.raw),0,c.raw,'var(--ink-600)'],['Deductions','EPF, SOCSO, EIS, tax','− '+fmt(c.raw-c.net),c.net,c.raw,'var(--ink-700)']]
+    : [];
+  steps.push(['Take-home','',fmt(c.net),0,c.net,'var(--ink-400)',1],['Commitments',pct(c.ratio),'− '+fmt(c.commit),c.net-c.commit,c.net,'var(--ink-300)'],['Savings first','20%','− '+fmt(c.savingsOut),Math.max(0,c.left),Math.max(0,c.left)+c.savingsOut,'var(--ink-500)'],['For yourself','food, fun, personal',fmt(Math.max(0,c.left)),0,Math.max(0,c.left),'var(--lime)',1]);
+  el.innerHTML = `<div class="stack">
+    ${navbar('Commitment health', `<button class="link" data-act="commit" style="color:var(--ink-300)">Edit</button>`)}
+    <div class="section" style="gap:6px">
+      <div class="over">Your commitments take</div>
+      <div class="row" style="gap:12px"><span class="hero" style="color:var(--${vCol})"><span class="roll" id="hpct"></span></span><span class="pill pop" style="background:var(--${vCol});color:var(--ink-900);font-size:15px;padding:6px 12px"><span class="sw" style="background:var(--ink-900);border-radius:99px"></span>${vName}</span></div>
+      <div class="body">${copy}</div>
+    </div>
+    <div class="card">
+      <div class="row between"><div class="over">Breakdown</div><button class="link" data-act="commit">Manage →</button></div>
+      <div class="row" style="align-items:baseline;gap:6px"><span class="mono" style="font-size:28px;font-weight:700">RM ${fmt(c.commit)}</span><span class="body">/ month</span></div>
+      <div class="row" style="gap:2px;height:10px">${parts.map(p=>`<i style="flex:${p.v};height:100%;background:${p.col};border-radius:2px"></i>`).join('')}</div>
+      <div class="legend">${parts.map(p=>`<div class="row"><span class="sw" style="background:${p.col}"></span><span style="color:var(--ink-300)">${p.n}</span><span class="grow"></span><span class="muted">${pct(p.v/c.net*100)}</span><span class="mono" style="width:70px;text-align:right">RM ${fmt(p.v)}</span></div>`).join('')}</div>
+      <div class="hr"></div>
+      ${gauge(c.ratio,[50,65,100],100,true)}
+      <div class="row" style="background:rgba(61,61,59,.5);border-radius:10px;padding:10px 12px"><div class="grow"><div class="lbl" style="color:var(--ink-300)">Debt only (loans)</div><div class="cap">Banks look at this when you apply for a loan</div></div><span class="mono" style="color:var(--${verdict(c.debtRatio,30,40)[1]})">${pct(c.debtRatio)}</span></div>
+    </div>
+    <div class="section" style="gap:6px">
+      <div class="over">After commitments and savings, you can spend</div>
+      <div class="row" style="align-items:baseline;gap:10px"><span class="hero">RM ${fmt(c.daily)}</span><span class="h2">a day</span></div>
+      <div class="body">RM ${fmt(Math.max(0,c.left))} this month for food, fun and everything personal. RM ${fmt(c.savingsOut)} is saved first (20%).</div>
+    </div>
+    <div class="section"><div class="over">Where your salary goes</div>
+      <div class="wf">${steps.map(([n,sub,v,a,b,col,tot])=>`<div style="display:flex;flex-direction:column;gap:6px;${tot?'padding-top:4px':''}"><div class="row"><span class="${tot?'lbl':'cap'}" style="${tot?'font-size:15px':'color:var(--ink-300);font-size:13px'}">${n}</span><span class="cap">${sub}</span><span class="grow"></span><span class="mono" style="font-size:13px;${n==='For yourself'?'color:var(--lime)':''}">RM ${v}</span></div><div class="bar"><i style="left:${sc(a)}%;width:${Math.max(1,sc(b)-sc(a))}%;background:${col};${tot?'height:12px':''}"></i></div></div>`).join('')}</div>
+    </div>
+    <button class="btn btn-primary" data-act="toPlanBack">Back to my plan</button>
+    <div class="cap" style="text-align:center;font-size:11px">Estimates only. Not financial advice.</div>
+  </div>`;
+  const hp = $('#hpct', el); hp._prev = new Map(); roll(hp, pct(c.ratio), 'end', 40);
+}
+
+/* ================= F5 · Car ================= */
+function rCar(el){
+  const c = calc(); const safe = carLimit(c.net,.20), tight = carLimit(c.net,.25);
+  const max = Math.max(60000, Math.ceil(tight*1.5/10000)*10000);
+  el.innerHTML = `<div class="stack">
+    ${navbar('What car can I afford?')}
+    <div class="section" style="gap:6px"><div class="over">Your safe car budget</div>
+      <div class="row" style="align-items:baseline;gap:8px"><span class="h2">Up to</span><span class="hero-md lime">RM ${k(safe)}</span></div>
+      <div class="body">Keeps the all-in car cost under RM ${fmt(c.net*.2)}/mo, 20% of your take-home, with ${S.carDown===0?'a full loan':pct(S.carDown*100)+' down'}.</div></div>
+    <div class="section" style="gap:8px"><div class="row between"><div class="over">Down payment</div><span class="cap">9 yrs · ~3% flat</span></div>
+      ${dpChips('cardown',[[0,'Full loan (0%)'],[0.1,'10%'],[0.2,'20%'],[0.3,'30%']],S.carDown)}
+      ${S.carDown===0?`<div style="background:rgba(255,187,51,.12);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:4px"><div class="lbl amber">Full loans are the exception</div><div class="cap" style="color:var(--ink-400)">Most banks lend up to 90%. 100% is mainly graduate schemes for new cars. With 10% down (RM ${fmt(carLimit(c.net,.20,0.1)*0.1)}), the same monthly budget buys up to RM ${k(carLimit(c.net,.20,0.1))}.</div></div>`:`<div class="cap">Upfront cash at your safe budget: RM ${fmt(safe*S.carDown)}. Need a full loan? Pick 0%.</div>`}
+    </div>
+    <div class="section"><div class="over">What fits your salary</div>
+      <div style="position:relative;padding-top:22px"><div class="zones"><i style="width:${safe/max*100}%;background:var(--lime)"></i><i style="width:${(tight-safe)/max*100}%;background:var(--amber)"></i><i style="flex:1;background:var(--coral)"></i></div>
+        <div id="pickMark" style="position:absolute;top:0;left:0;right:0;bottom:-6px;pointer-events:none"></div></div>
+      <div class="row between cap"><span>RM 0</span><span>RM ${k(max/2)}</span><span>RM ${k(max)}+</span></div>
+      ${[['lime','Comfortable','up to RM '+k(safe),'New entry hatchback, or a used compact'],['amber','Tight','RM '+k(safe)+' to '+k(tight),'New compact hatchback or sedan'],['coral','Stretch too far','above RM '+k(tight),'Compact SUV and up']].map(([col,n,r,ex])=>`<div class="row" style="align-items:flex-start;gap:10px"><span class="sw" style="background:var(--${col});margin-top:5px"></span><div><div class="row" style="gap:6px"><span class="lbl">${n}</span><span class="mono cap">${r}</span></div><div class="cap">${ex}</div></div></div>`).join('')}
+    </div>
+    <div class="section"><div class="row between"><div class="over">Try a price</div><span class="cap">${S.carDown===0?'Full loan':pct(S.carDown*100)+' down'} · 9 yrs</span></div>
+      <div class="field" style="height:56px"><span class="cur">RM</span><div class="val" style="font-size:24px"><span class="roll" id="priceRoll"></span></div><span class="cap">Car price</span></div>
+      <div class="row" style="gap:8px;flex-wrap:wrap"><span class="cap">Jump to</span><button class="chip" data-act="carq" data-v="${Math.floor(safe/1000)*1000}" style="min-height:36px">Comfortable max · RM ${k(Math.floor(safe/1000)*1000)}</button><button class="chip" data-act="carq" data-v="${Math.floor(tight/1000)*1000}" style="min-height:36px">Max · RM ${k(Math.floor(tight/1000)*1000)}</button></div>
+      <input type="range" id="price" min="10000" max="${max}" step="1000" value="${Math.min(S.carPrice,max)}" aria-label="Car price" style="width:100%;accent-color:var(--lime);height:28px">
+      <div id="carOut"></div>
+    </div>
+    <div class="cap" style="text-align:center;font-size:11px">Estimates only. Actual rates, insurance and approval depend on the lender. Not financial advice.</div>
+  </div>`;
+  const pr = $('#priceRoll', el), r = $('#price', el);
+  const upd = (anim) => {
+    const p = +r.value; S.carPrice = p; save(); roll(pr, fmt(p), 'end', 0);
+    el.querySelectorAll('[data-act=carq]').forEach(q=>{ const on = +q.dataset.v===p; q.setAttribute('aria-pressed', on); q.style.background = on?'var(--ink-50)':''; q.style.color = on?'var(--ink-900)':''; });
+    const a = carAllIn(p), share = a.total/c.net*100; const [vn,vc] = share<=20?['Comfortable','lime']:share<=25?['Tight','amber']:['Unaffordable','coral'];
+    const transport = S.commitments.filter(x=>x.cat==='Transport').reduce((s,x)=>s+x.amt,0);
+    const after = c.commit - (S.carSwap?transport:0) + a.total, afterPct = after/c.net*100, dailyAfter = (c.net-after-c.savingsOut)/c.days;
+    $('#pickMark',el).innerHTML = `<div style="position:absolute;left:${p/max*100}%;transform:translateX(-50%);top:0;display:flex;flex-direction:column;align-items:center;gap:2px;transition:left 0ms"><span class="mono" style="font-size:12px">RM ${k(p)}</span><span style="width:4px;height:20px;border-radius:2px;background:var(--ink-50)"></span></div>`;
+    const prevV = el._v; el._v = vn;
+    $('#carOut',el).innerHTML = `
+      <div class="card" style="gap:10px;${prevV&&prevV!==vn&&anim?'animation:rise 200ms var(--ease) both':''}">
+        <div class="row between"><span class="pill" style="background:var(--${vc});color:var(--ink-900)">${vn}</span><span class="cap">${pct(share)} of take-home</span></div>
+        <div class="over">True monthly cost</div>
+        <div class="mono" style="font-size:40px;font-weight:700;line-height:44px">RM ${fmt(a.total)}</div>
+        <div class="row" style="gap:2px;height:10px">${[[a.inst,'var(--amber)'],[a.petrol,'var(--ink-300)'],[a.ins,'var(--ink-400)'],[a.service,'var(--ink-500)']].map(([v,col])=>`<i style="flex:${v};height:100%;background:${col};border-radius:2px"></i>`).join('')}</div>
+        <div class="legend">${[['Loan instalment',a.inst,'var(--amber)'],['Petrol',a.petrol,'var(--ink-300)'],['Insurance & road tax',a.ins,'var(--ink-400)'],['Servicing',a.service,'var(--ink-500)']].map(([n,v,col])=>`<div class="row"><span class="sw" style="background:${col}"></span><span style="color:var(--ink-300)">${n}</span><span class="grow"></span><span class="mono">RM ${fmt(v)}</span></div>`).join('')}</div>
+        <div class="row" style="font-size:12px"><span style="color:var(--ink-300)">Paid upfront (${S.carDown===0?'full loan':pct(S.carDown*100)+' down'})</span><span class="grow"></span><span class="mono">RM ${fmt(a.down)}</span></div>
+        <div class="cap" style="color:var(--ink-400)">Running costs add ${pct((a.total-a.inst)/a.inst*100)} on top of the instalment.</div>
+      </div>
+      ${c.commit ? `<div class="section" style="padding-top:20px"><div class="row between"><div class="over">If you buy it</div><span class="pill" style="background:var(--${verdict(afterPct,50,65)[1]});color:var(--ink-900)">${verdict(afterPct,50,65)[0]}</span></div>
+        ${bars('Commitments',[['Now',c.ratio,'var(--ink-600)',pct(c.ratio)],['After',afterPct,'var(--'+verdict(afterPct,50,65)[1]+')',pct(afterPct)]])}
+        ${bars('You can spend a day',[['Now',100,'var(--ink-600)','RM '+fmt(c.daily)],['After',Math.max(0,dailyAfter/c.daily*100),'var(--lime)','RM '+fmt(Math.max(0,dailyAfter))]])}
+        ${transport?`<label class="row cap" style="gap:8px;min-height:44px"><input type="checkbox" data-act="swap" ${S.carSwap?'checked':''} style="accent-color:var(--lime);width:18px;height:18px"> Stop paying RM ${fmt(transport)} for transport</label>`:''}</div>`
+      : `<div class="card" style="margin-top:16px;gap:8px"><div class="lbl">See what this does to your month</div><div class="cap">Add your commitments to check the impact on your health and daily spend.</div><button class="link" data-act="commit">Add commitments →</button></div>`}`;
+  };
+  r.addEventListener('input', ()=>upd(true)); upd(false);
+}
+const bars = (t, rows) => `<div class="section" style="gap:8px"><div class="lbl">${t}</div>${rows.map(([n,v,col,label])=>`<div class="row" style="gap:10px"><div class="track grow"><i style="width:${Math.min(v,100)}%;background:${col}"></i></div><span class="mono cap" style="width:96px;text-align:right;color:var(--ink-50)">${n} ${label}</span></div>`).join('')}</div>`;
+
+/* ================= F6 · Housing ================= */
+function rHouse(el){
+  const c = calc(); const rent = c.net*.30; const cur = S.commitments.filter(x=>x.cat==='Housing').reduce((a,x)=>a+x.amt,0);
+  const curPct = cur/c.net*100; const h = home(c.net, c.savingsOut, S.rate);
+  const nonHouse = c.commit - cur; const afterPct = (nonHouse + h.inst)/c.net*100;
+  el.innerHTML = `<div class="stack">
+    ${navbar('How much home can I afford?')}
+    <div class="section" style="gap:6px"><div class="over">Healthy housing budget</div>
+      <div class="row" style="align-items:baseline;gap:8px"><span class="hero-md lime">RM ${fmt(rent)}</span><span class="h2">/ month</span></div>
+      <div class="body">30% of your take-home. Use it for rent or a mortgage instalment.</div></div>
+    ${cur?`<div class="section"><div class="row between"><div><div class="lbl">Your rent now</div><div class="cap">RM ${fmt(cur)} · ${pct(curPct)} of take-home</div></div><span class="pill" style="background:var(--${verdict(curPct,30,40)[1]});color:var(--ink-900)">${verdict(curPct,30,40)[0]}</span></div>${gauge(curPct,[30,40,50],50,true).replace('High > 40%','High > 40%')}</div>`:''}
+    <div class="seg" role="group" aria-label="Rent or buy"><button data-act="home" data-v="rent" aria-pressed="${S.home==='rent'}">Rent</button><button data-act="home" data-v="buy" aria-pressed="${S.home==='buy'}">Buy</button></div>
+    ${S.home==='rent' ? `<div class="card"><div class="over">Renting</div>
+        <div class="row" style="align-items:baseline;gap:6px"><span class="lbl">Up to</span><span class="mono" style="font-size:28px;font-weight:700">RM ${fmt(rent)}</span><span class="cap">/mo</span></div>
+        <div class="cap" style="color:var(--ink-400)">${cur?(cur<=rent?`That's RM ${fmt(rent-cur)} more than you pay now. Room to upgrade if you want to.`:`You pay RM ${fmt(cur-rent)} above the healthy line.`):'Add your rent in commitments to compare.'}</div></div>`
+    : `<div class="card"><div class="over">Home price you can carry</div>
+        <div class="row" style="align-items:baseline;gap:6px"><span class="lbl">Up to ~</span><span class="mono" style="font-size:28px;font-weight:700">RM ${k(h.price)}</span></div>
+        ${dpChips('homedown',[[0,'Full loan (0%)'],[0.1,'10%'],[0.2,'20%']],S.eligOpen && eligibility().state==='pending' ? 0 : S.homeDown)}
+        ${S.eligOpen ? eligCard() : ''}
+        ${[['Loan ('+pct((1-S.homeDown)*100)+')','35 years at '+S.rate+'%',h.loan],['Monthly instalment',h.capped?'below your 30% limit':'30% of take-home',h.capped?h.loan*(S.rate/1200)/(1-Math.pow(1+S.rate/1200,-420)):h.inst],['Down payment ('+pct(S.homeDown*100)+')',S.homeDown===0?'none with a first-home scheme':'cash upfront, plus legal fees',h.dep]].map(([n,s,v])=>`<div class="row"><div class="grow"><div class="lbl" style="color:var(--ink-300)">${n}</div><div class="cap">${s}</div></div><span class="mono">RM ${fmt(v)}</span></div>`).join('')}
+        <div class="row" style="gap:6px"><span class="cap">Rate</span>${[3.5,4,4.5].map(r=>`<button class="chip" data-act="rate" data-v="${r}" style="${S.rate===r?'background:var(--ink-700);color:var(--ink-50)':''}">${r}%</button>`).join('')}</div></div>
+      ${S.homeDown===0?`<div style="background:rgba(255,187,51,.12);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:4px"><div class="lbl amber">100% financing has conditions</div><div class="cap" style="color:var(--ink-400)">Only through first-home schemes like Skim Rumah Pertamaku or SJKP: Malaysian, first home, price up to RM 500k, income limits apply.${h.capped?' Capped at RM 500k.':''} You borrow more, so you pay more interest, and your max price is RM ${k(home(c.net,c.savingsOut,S.rate,0.1).price-h.price)} lower than with 10% down. Legal and valuation fees may still apply.</div></div>`:''}
+      ${S.homeDown===0?'':`<div class="section"><div class="over">Saving for the down payment</div>
+        <div class="row" style="align-items:baseline;gap:6px"><span class="mono" style="font-size:20px;font-weight:500">${h.months===Infinity?'n/a':h.months<12?h.months+' months':'~'+Math.round(h.months/12*10)/10+' years'}</span><span class="cap">at RM ${fmt(c.savingsOut)} a month</span></div>
+        <div class="row" style="gap:4px">${Array.from({length:Math.min(5,Math.ceil(h.months/12))},(_,i)=>{const f=Math.min(1,Math.max(0,(h.months-i*12)/12));return `<div class="grow" style="display:flex;flex-direction:column;gap:6px"><div class="track"><i class="grow-x" style="width:${f*100}%;background:var(--ink-300)"></i></div><span class="cap">Year ${i+1}</span></div>`}).join('')}</div></div>`}
+      ${c.commit?`<div class="section"><div class="row between"><div class="over">If you buy at this price</div><span class="pill" style="background:var(--${verdict(afterPct,50,65)[1]});color:var(--ink-900)">${verdict(afterPct,50,65)[0]}</span></div>
+        ${bars('Commitments',[['Now',c.ratio,'var(--ink-600)',pct(c.ratio)],['After',afterPct,'var(--'+verdict(afterPct,50,65)[1]+')',pct(afterPct)]])}
+        <div class="cap" style="color:var(--ink-400)">Instalment replaces your current rent of RM ${fmt(cur)}.</div></div>`:''}`}
+    <div class="cap" style="text-align:center;font-size:11px">Estimates only. Bank approval, rates and fees vary. Not financial advice.</div>
+  </div>`;
+}
+
+/* ================= Events ================= */
+app.addEventListener('click', e => {
+  const b = e.target.closest('[data-act]'); if (!b) return;
+  const a = b.dataset.act;
+  if (a==='back') return back();
+  if (a==='mode'){ S.mode=b.dataset.v; save(); return render('salary'); }
+  if (a==='payday'){ S.payday=b.dataset.v; save(); return render('salary'); }
+  if (a==='sample'){ S.raw='3500'; save(); render('salary'); const sr=$('#salRoll'); if(sr){sr._prev=new Map(); roll(sr,'3,500','start');} return; }
+  if (a==='toPlan'){ stack=[]; return go('plan','fwd'); }
+  if (a==='edit') return go('salary','fwd');
+  if (a==='commit') return go('commit','fwd');
+  if (a==='health') return go('health','fwd');
+  if (a==='car') return go('car','fwd');
+  if (a==='house') return go('house','fwd');
+  if (a==='carq'){ const r=screens.car.querySelector('#price'); r.value=b.dataset.v; r.dispatchEvent(new Event('input')); return; }
+  if (a==='tip'){ const tip=screens.plan.querySelector('#tip'); const open = b.getAttribute('aria-expanded')==='true';
+    screens.plan.querySelectorAll('[data-act=tip]').forEach(x=>x.setAttribute('aria-expanded','false'));
+    if (open){ tip.hidden=true; return; }
+    tip.innerHTML = tipHTML(b.dataset.tip, calc()); tip.style.setProperty('--ax', (b.offsetLeft + 24)+'px'); tip.hidden=false; tip.style.animation='none'; void tip.offsetWidth; tip.style.animation='';
+    b.setAttribute('aria-expanded','true'); return; }
+  if (a==='toPlanBack'){ stack=['plan']; return go('plan','back'); }
+  if (a==='how'){ const t=b.closest('#split').querySelector('[data-how]'); t.hidden=!t.hidden; b.setAttribute('aria-expanded', String(!t.hidden)); return; }
+  if (a==='example'){ PRESETS.forEach((p,i)=>{ let c=S.commitments.find(x=>x.name===p.name); if(!c){ c={id:'c'+Date.now()+i, ...p, amt:0}; S.commitments.push(c); } c.amt=p.ex; c.bucket=p.bucket; }); save(); return rerenderCommit(); }
+  if (a==='addRow'||a==='quick'){ const bk=b.dataset.b; const q = a==='quick'? QUICK[bk][+b.dataset.i] : {icon:'card',name:'',cat:'Other',debt:false}; const id='c'+Date.now(); S.commitments.push({id, ...q, bucket:bk, amt:0, custom:a==='addRow'}); save(); rerenderCommit(); const row=screens.commit.querySelector(`[data-row="${id}"]`); row.style.animation='rise 250ms var(--ease) both'; row.querySelector(a==='addRow'?'input[data-f="name"]':'.amt input')?.focus({preventScroll:true}); return; }
+  if (a==='editMode'){ editMode=!editMode; return rerenderCommit(); }
+  if (a==='reveal'){ const f=screens.commit.querySelector(`[data-fg="${b.dataset.id}"]`); const open=!f.classList.contains('open'); screens.commit.querySelectorAll('.sw-fg.open').forEach(x=>{x.classList.remove('open');x.style.transform='';}); if(open){ f.classList.add('open'); f.style.transform='translateX(-84px)'; } return; }
+  if (a==='del'){ const id=b.dataset.id, idx=S.commitments.findIndex(c=>c.id===id), item=S.commitments[idx]; const row=screens.commit.querySelector(`[data-row="${id}"]`);
+    row.style.height=row.offsetHeight+'px'; void row.offsetHeight; row.style.transition='height 220ms var(--ease), opacity 160ms ease, margin 220ms var(--ease)'; row.style.height='0px'; row.style.opacity='0'; row.style.marginTop='-8px';
+    setTimeout(()=>{ S.commitments.splice(idx,1); save(); rerenderCommit(); toast(`Deleted ${item.name||'commitment'}`, ()=>{ S.commitments.splice(Math.min(idx,S.commitments.length),0,item); save(); rerenderCommit(); }); }, 220); return; }
+  if (a==='view'){ const v=b.dataset.v; if (v===S.variant) return; S.variant=v; save();
+    const wrap=screens.plan.querySelector('#split'), vt=wrap.querySelector('.vt'), body=wrap.querySelector('.split-body');
+    vt.style.setProperty('--i', VIEWS.findIndex(x=>x[0]===v)); vt.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed', x.dataset.v===v));
+    const h0=body.offsetHeight; body.innerHTML=splitBody(calc()); const h1=body.offsetHeight;
+    body.classList.remove('swap'); void body.offsetWidth; body.classList.add('swap');
+    if (body.animate && !matchMedia('(prefers-reduced-motion: reduce)').matches) body.animate([{height:h0+'px'},{height:h1+'px'}],{duration:260,easing:'cubic-bezier(0.23,1,0.32,1)'});
+    return; }
+  if (a==='wipe'){ if (b.dataset.armed){ S=fresh(); save(); revealed=false; Object.values(screens).forEach(x=>x.remove()); for (const k in screens) delete screens[k]; stack=[]; return go('salary','fwd'); } b.dataset.armed='1'; b.style.color='var(--coral)'; b.lastChild.textContent=' Tap again to delete everything'; setTimeout(()=>{ if(b.isConnected){ delete b.dataset.armed; b.style.color='var(--ink-500)'; b.lastChild.textContent=' Delete all my data from this phone'; } }, 3000); return; }
+
+  if (a==='home'){ S.home=b.dataset.v; save(); return render('house'); }
+  if (a==='rate'){ S.rate=+b.dataset.v; save(); return render('house'); }
+  if (a==='cardown'){ S.carDown=+b.dataset.v; save(); return render('car'); }
+  if (a==='homedown'){ const v=+b.dataset.v; if (v===0){ S.eligOpen=true; if (eligibility().state==='yes') S.homeDown=0; } else { S.homeDown=v; S.eligOpen=false; } save(); return render('house'); }
+  if (a==='elig'){ S.elig[b.dataset.k] = b.dataset.v==='true'; const r=eligibility(); S.homeDown = r.state==='yes' ? 0 : (S.homeDown===0 ? 0.1 : S.homeDown); save(); const sc=screens.house.scrollTop; render('house'); screens.house.scrollTop=sc; return; }
+  if (a==='eligClose'){ S.eligOpen=false; save(); const sc=screens.house.scrollTop; render('house'); screens.house.scrollTop=sc; return; }
+});
+document.addEventListener('click', e => { if (e.target.closest('[data-act=tip]') || e.target.closest('#tip')) return; closeTip(); });
+document.addEventListener('keydown', e => { if (e.key==='Escape') closeTip(); });
+function closeTip(){ const t=screens.plan && screens.plan.querySelector('#tip'); if (t && !t.hidden){ t.hidden=true; screens.plan.querySelectorAll('[data-act=tip]').forEach(x=>x.setAttribute('aria-expanded','false')); } }
+function tipHTML(kind, c){
+  const src = c.commit ? ['Left after bills and savings', c.left] : ['30% wants', c.wants];
+  const n = kind==='week' ? 7 : c.daysLeft;
+  return `<div class="lbl">${kind==='week' ? 'Your spending budget for 7 days' : 'Your spending budget until payday'}</div>
+    <div class="eq"><span>${src[0]}</span><b>RM ${fmt(src[1])}</b><span>÷ days in this pay cycle</span><b>${c.days}</b><span>= Daily budget</span><b>RM ${fmt(c.daily)}</b><span>× ${kind==='week'?'7 days':'days left till payday'}</span><b>${n}</b><span class="tot">${kind==='week'?'Weekly budget':'Budget till payday'}</span><b class="tot">RM ${fmt(c.daily*n)}</b></div>
+    <div class="cap" style="color:var(--ink-400)">A plan, not your bank balance. BajetJe doesn't track spending, so this assumes you keep to RM ${fmt(c.daily)} a day.</div>`;
+}
+app.addEventListener('change', e => { if (e.target.matches('[data-act="swap"]')){ S.carSwap=e.target.checked; save(); render('car'); } if (e.target.matches('[data-act="payOther"]') && e.target.value){ S.payday=e.target.value; save(); render('salary'); } });
+
+/* Test hook for the build team: exposes the pure engine (no UI) */
+window.__bajetje = { payroll, cycle, calc, carAllIn, carLimit, home, eligibility, state: () => S, set: o => Object.assign(S, o) };
+go(S.raw && S.payday ? 'plan' : 'salary', 'fwd');
+})();
+</script>
+</body>
+</html>

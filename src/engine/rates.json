@@ -1,0 +1,35 @@
+{
+  "version": "2026.1",
+  "effective": "2026-01-01",
+  "payroll": {
+    "epfEmployee": 0.11,
+    "socsoEmployee": 0.005,
+    "eisEmployee": 0.002,
+    "wageCeiling": 6000,
+    "wageCeilingMidpoint": 5950,
+    "pcb": {
+      "epfReliefCap": 4000,
+      "personalRelief": 9000,
+      "socsoEisReliefCap": 350,
+      "rebate": 400,
+      "rebateMaxChargeable": 35000,
+      "brackets": [
+        [5000, 0], [20000, 0.01], [35000, 0.03], [50000, 0.06], [70000, 0.11],
+        [100000, 0.19], [400000, 0.25], [600000, 0.26], [2000000, 0.28], [null, 0.30]
+      ]
+    }
+  },
+  "split": { "needs": 0.5, "wants": 0.3, "klNeedsBasics": 1930 },
+  "car": {
+    "years": 9,
+    "flatFactor": 1.27,
+    "insuranceRate": 0.025,
+    "roadTaxMonthly": 20,
+    "petrol": 150,
+    "servicing": 50,
+    "comfortableShare": 0.2,
+    "tightShare": 0.25
+  },
+  "home": { "share": 0.3, "months": 420, "fullLoanPriceCap": 500000 },
+  "eligibility": { "srpMaxGross": 5000, "sjkpMaxIncome": 11000 }
+}
