@@ -1,12 +1,17 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Confetti } from "../components/Confetti";
 import { Icon } from "../components/Icon";
 import { RollingNumber } from "../components/RollingNumber";
 import { savingsTip } from "../components/savingsTip";
+import { Scribble } from "../components/Scribble";
 import { Gauge, Navbar, Reaction, StatusPill, toneVar } from "../components/ui";
 import { calc, fmt, pct, verdict } from "../engine";
 import { itemName, useLang, useT } from "../i18n";
 import { backTo, go } from "../state/router";
 import { useApp } from "../state/store";
+
+// Confetti celebrates reaching Healthy: on the first Healthy visit this session, and again only after a visit that wasn't
+let lastVerdict: string | null = null;
 
 /**
  * F4 · Commitment Health.
@@ -20,6 +25,10 @@ export function Health() {
   const c = calc(S);
   const [open, setOpen] = useState(false);
   const [vName, vCol] = verdict(c.ratio, 50, 65);
+  const [celebrate] = useState(() => vName === "Healthy" && lastVerdict !== "Healthy");
+  useEffect(() => {
+    lastVerdict = vName;
+  }, [vName]);
   // Extra money: take-home minus everything listed (needs, wants and any savings entered)
   const extra = Math.max(0, c.extra);
   const vKey = vName === "Healthy" ? "healthy" : vName === "Caution" ? "caution" : "high";
@@ -70,7 +79,9 @@ export function Health() {
 
       {/* 1. The answer: extra money */}
       <div className="section" style={{ gap: 6 }}>
-        <div className="over">{t("health.dailyOver")}</div>
+        <div className="over">
+          <Scribble>{t("health.extraLead")}</Scribble> {t("health.extraTail")}
+        </div>
         <span className="hero lime" style={c.extra < 0 ? { color: "var(--coral)" } : undefined}>
           <RollingNumber value={"RM " + fmt(extra)} anchor="end" stagger={30} animateOnMount />
         </span>
@@ -83,9 +94,12 @@ export function Health() {
       <div className="card">
         <div className="row between">
           <h2 className="over">{t("health.card")}</h2>
-          <StatusPill tone={vCol} pop>
-            {t(`common.${vKey}`)}
-          </StatusPill>
+          <span style={{ position: "relative", display: "inline-flex" }}>
+            <StatusPill tone={vCol} pop>
+              {t(`common.${vKey}`)}
+            </StatusPill>
+            <Confetti fire={celebrate} delay={520} />
+          </span>
         </div>
         <div className="row" style={{ alignItems: "baseline", gap: 8 }}>
           <span className="mono" style={{ fontSize: 28, fontWeight: 700, color: toneVar(vCol) }}>

@@ -29,6 +29,7 @@
   --color-lime-700: #588a16;
   --color-lime-800: #406312;
   --color-lime-900: #2b420d;
+  --color-amber-300: #ffd066;
   --color-amber-400: #ffbb33;
   --color-coral-400: #ff775c;
 
@@ -58,6 +59,8 @@
   --ink-950: var(--color-ink-950);
   --lime: var(--color-lime-300);
   --amber: var(--color-amber-400);
+  /* Marker yellow: decoration only (sketched underline, confetti), never a status */
+  --marker: var(--color-amber-300);
   --coral: var(--color-coral-400);
   --ease: var(--ease-out-strong);
   --spring: var(--ease-spring);
@@ -282,6 +285,16 @@
     background: linear-gradient(transparent, var(--ink-900) 30%);
   }
   /* Tap-to-expand details (Commitment Health "Where your salary goes"): grouped in one card, height eases open */
+  /* Sketched marker underline: main swipe draws left to right, the return pass draws back */
+  .scribble { position: relative; display: inline-block; color: var(--ink-300); }
+  .scribble .scr { position: absolute; left: -3px; bottom: -7px; height: 10px; width: calc(100% + 7px); color: var(--marker); overflow: visible; pointer-events: none; }
+  .scribble .scr-1 { bottom: -9px; left: 4px; width: calc(100% - 6px); height: 6px; }
+  .scribble .scr-0 { animation: scr-ltr 420ms var(--ease) 280ms both; }
+  .scribble .scr-1 { animation: scr-rtl 300ms var(--ease) 640ms both; }
+  /* Doodle confetti: a zero-size layer at its parent's centre; pieces fly out from there */
+  .confetti { position: absolute; left: 50%; top: 50%; width: 0; height: 0; z-index: 5; pointer-events: none; }
+  .confetti > i { position: absolute; left: -8px; top: -8px; width: 16px; height: 16px; will-change: transform, opacity; }
+  .confetti svg { display: block; width: 100%; height: 100%; }
   .disclose { background: var(--ink-800); border-radius: 14px; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035); }
   .disclose-head {
     width: 100%; display: flex; align-items: center; gap: 12px; padding: 16px 18px; min-height: 64px; border-radius: 14px;
@@ -510,6 +523,8 @@
 @keyframes blink { 0%, 93%, 100% { transform: none; } 96% { transform: scaleY(0.1); } }
 @keyframes drop { from { transform: translateY(-26px); opacity: 0; } 50% { opacity: 1; } to { transform: none; opacity: 1; } }
 @keyframes spin-in { from { transform: rotate(-120deg); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes scr-ltr { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+@keyframes scr-rtl { from { clip-path: inset(0 0 0 100%); } to { clip-path: inset(0 0 0 0); } }
 @keyframes twinkle { 0%, 100% { opacity: 0.35; } 50% { opacity: 1; } }
 
 /* Reduced motion: fades only */
@@ -524,6 +539,7 @@
   .reveal .grow-x, .reveal .grow-y, .reveal .today, .marker.sweep > b, .pop, .split-body.swap * { animation: none !important; }
   .welcome [data-r] { animation: none !important; }
   .look-swap * { animation: none !important; }
+  .scribble .scr { animation: none !important; }
 }
 
 /* Frosted strip under the phone's status bar. Zero height where there is no inset (desktop browsers). */

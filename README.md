@@ -80,13 +80,18 @@ The prototype wins where it disagrees with a doc. Decisions so far:
 14. **Health layout (product decision)**: answer first. Extra money is the lime hero, then one card with commitment
     health (%, verdict, gauge) and total commitments. Breakdown, debt-only ratio and the salary waterfall sit behind a
     tap-to-expand "Where your salary goes" row (height eases 260 ms, chevron turns; closed content is inert).
+15. **Marker yellow (product decision)**: "Extra money" on Health gets a sketched underline in `--marker` (amber/300,
+    #FFD066), drawn on with a clip wipe (420 ms, then a 300 ms return pass). Reaching Healthy fires doodle confetti from
+    the verdict pill (40 pieces, about 2 s, never blocks taps): on the first Healthy visit per session, and again only
+    after a visit that wasn't Healthy. Marker yellow is decoration only, never a status. Both are off under reduced motion.
+    Generators: `brand/generators/underline.js`, `brand/generators/confetti.js` (CommonJS, run like the others).
 
 ### BM strings written for this build (not in docs/strings-en-bm.json, please review)
 `afford.notYet` Belum lagi ·
 `car.emptyTitle` Tengok kesannya pada bulan awak · `car.emptyBody` · `car.emptyLink` Tambah komitmen → ·
 `car.swapAria` · `house.belowLimit` bawah had 30% awak · `house.rateAria` Kadar faedah · `house.na` t/a ·
 `elig.netNote` · `elig.income` (the prototype leaves this reason in English) · `gauge.aria` · `hub.stripAria` ·
-`commit.fallbackName` komitmen · `health.whereHint` · `health.total` · `health.ofTakeHome` · `health.manageLink` · callings in `CALLINGS`. All in `src/i18n/messages.ts`.
+`commit.fallbackName` komitmen · `health.whereHint` · `health.extraLead` / `health.extraTail` (split of the old Health label) · `health.total` · `health.ofTakeHome` · `health.manageLink` · callings in `CALLINGS`. All in `src/i18n/messages.ts`.
 
 ## Polish on top of the prototype
 
