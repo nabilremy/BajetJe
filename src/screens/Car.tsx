@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { Icon } from "../components/Icon";
 import { RollingNumber } from "../components/RollingNumber";
 import { AmberNote, ChoiceChips, ImpactBars, Legal, Navbar, StatusPill, toneVar } from "../components/ui";
 import { calc, carAllIn, carLimit, carVerdict, fmt, k, pct, rates, verdict, type Plan } from "../engine";
@@ -226,7 +227,7 @@ function CarOutcome({ c, price }: { c: Plan; price: number }) {
           <div className="lbl">See what this does to your month</div>
           <p className="cap">Add your commitments to check the impact on your health and daily spend.</p>
           <button className="link" onClick={() => go("commit")} style={{ alignSelf: "flex-start" }}>
-            Add commitments →
+            Add commitments <Icon name="arrow" className="svg-i ic-sm" />
           </button>
         </div>
       )}

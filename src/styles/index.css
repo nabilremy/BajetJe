@@ -45,6 +45,8 @@
   --sans: var(--font-sans);
   --mono: var(--font-mono);
   color-scheme: dark;
+  /* Floating layers (tooltip, toast): top hairline + layered, diffused shadow */
+  --float: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 2px 6px -2px rgba(10, 10, 9, 0.5), 0 18px 40px -12px rgba(10, 10, 9, 0.65);
 }
 
 @layer base {
@@ -93,6 +95,8 @@
 
   /* Type */
   .over { font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-500); }
+  .h1, .h2, .h3 { text-wrap: balance; }
+  .body, .cap { text-wrap: pretty; }
   .h1 { font-size: 24px; line-height: 30px; font-weight: 600; letter-spacing: -0.01em; }
   .h2 { font-size: 20px; line-height: 26px; font-weight: 600; }
   .h3 { font-size: 17px; line-height: 24px; font-weight: 600; }
@@ -109,7 +113,10 @@
   .row { display: flex; align-items: center; gap: 8px; }
   .grow { flex: 1; min-width: 0; }
   .between { justify-content: space-between; }
-  .card { background: var(--ink-800); border-radius: 14px; padding: 18px; display: flex; flex-direction: column; gap: 14px; }
+  .card {
+    background: var(--ink-800); border-radius: 14px; padding: 18px; display: flex; flex-direction: column; gap: 14px;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
+  }
   .section { display: flex; flex-direction: column; gap: 14px; }
   .btn {
     display: flex; align-items: center; justify-content: center; width: 100%; min-height: 52px;
@@ -167,7 +174,7 @@
   .tip {
     position: absolute; left: 0; right: 0; top: calc(100% + 10px); z-index: 5; background: var(--ink-700);
     border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 10px;
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45); transform-origin: var(--ax, 24px) top;
+    box-shadow: var(--float); transform-origin: var(--ax, 24px) top;
     animation: tip-in 160ms var(--ease) both;
   }
   .tip::before {
@@ -179,7 +186,11 @@
   .tip .eq .tot { border-top: 1px solid var(--ink-600); padding-top: 6px; color: var(--ink-50); font-weight: 500; }
 
   /* Swipe to delete */
-  .swipe { position: relative; border-radius: 12px; overflow: hidden; background: var(--coral); }
+  .swipe {
+    position: relative; border-radius: 12px; overflow: hidden; background: var(--ink-800);
+    transition: background-color 0s linear 220ms;
+  }
+  .swipe.live { background: var(--coral); transition-delay: 0s; }
   .swipe.collapsing {
     transition: height 220ms var(--ease), opacity 160ms ease, margin 220ms var(--ease);
     height: 0 !important; opacity: 0; margin-top: -8px;
@@ -218,8 +229,9 @@
   .toast {
     position: absolute; left: 16px; right: 16px; bottom: calc(112px + env(safe-area-inset-bottom, 0px)); z-index: 30;
     background: var(--ink-700); border-radius: 12px; padding: 10px 10px 10px 14px; display: flex; align-items: center;
-    gap: 12px; box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45); animation: rise 200ms var(--ease) both; font-size: 13px;
+    gap: 12px; box-shadow: var(--float); animation: rise 200ms var(--ease) both; font-size: 13px;
   }
+  .svg-i.ic-sm { width: 14px; height: 14px; flex: none; }
   .svg-i { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
 
   /* Hero numbers */
@@ -283,7 +295,7 @@
   .item { display: flex; align-items: center; gap: 12px; padding: 10px 14px 10px 12px; border-radius: 12px; background: var(--ink-800); }
   .ico { width: 34px; height: 34px; border-radius: 9px; background: var(--ink-700); display: grid; place-items: center; flex: none; }
   .tag { font-size: 11px; padding: 0 6px; border-radius: 999px; background: var(--coral); color: var(--ink-900); font-weight: 500; }
-  .add { border: 1px dashed var(--ink-600); background: transparent; justify-content: center; color: var(--ink-50); font-size: 13px; font-weight: 500; min-height: 48px; }
+  .add { gap: 6px; border: 1px dashed var(--ink-600); background: transparent; justify-content: center; color: var(--ink-50); font-size: 13px; font-weight: 500; min-height: 48px; }
   .legend { display: flex; flex-direction: column; gap: 8px; }
   .legend .row { font-size: 12px; }
   .sw { width: 8px; height: 8px; border-radius: 2px; flex: none; }

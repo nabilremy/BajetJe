@@ -12,6 +12,8 @@ const PATHS: Record<IconName, string> = {
   car: '<path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/>',
   card: '<rect width="20" height="14" x="2" y="5" rx="2"/><path d="M2 10h20"/>',
   back: '<path d="m15 18-6-6 6-6"/>',
+  arrow: '<path d="M5 12h14M13 6l6 6-6 6"/>',
+  plus: '<path d="M12 5v14M5 12h14"/>',
   vbars: '<path d="M4 6h16M4 12h10M4 18h6"/>',
   vjars: '<rect x="4" y="10" width="4" height="10" rx="1"/><rect x="10" y="5" width="4" height="15" rx="1"/><rect x="16" y="13" width="4" height="7" rx="1"/>',
   vledger: '<path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/>',

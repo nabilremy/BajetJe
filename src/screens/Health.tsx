@@ -1,3 +1,4 @@
+import { Icon } from "../components/Icon";
 import { RollingNumber } from "../components/RollingNumber";
 import { Gauge, Navbar, StatusPill, toneVar } from "../components/ui";
 import { calc, fmt, pct, verdict } from "../engine";
@@ -60,7 +61,6 @@ export function Health() {
             <RollingNumber value={pct(c.ratio)} anchor="end" stagger={40} animateOnMount />
           </span>
           <StatusPill tone={vCol} big pop>
-            <span className="sw" style={{ background: "var(--ink-900)", borderRadius: 99 }} />
             {vName}
           </StatusPill>
         </div>
@@ -71,7 +71,7 @@ export function Health() {
         <div className="row between">
           <h2 className="over">Breakdown</h2>
           <button className="link" onClick={() => go("commit")}>
-            Manage →
+            Manage <Icon name="arrow" className="svg-i ic-sm" />
           </button>
         </div>
         <div className="row" style={{ alignItems: "baseline", gap: 6 }}>

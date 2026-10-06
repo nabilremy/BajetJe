@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { fmt, type Commitment } from "../engine";
 import { Icon } from "./Icon";
 
@@ -26,6 +26,8 @@ export function CommitmentRow({
   const fg = useRef<HTMLDivElement>(null);
   const name = useRef<HTMLInputElement>(null);
   const amt = useRef<HTMLInputElement>(null);
+  // coral backing only while swiping or open, so it never fringes the row corners
+  const [swiping, setSwiping] = useState(false);
   const drag = useRef({ active: false, x0: 0, y0: 0, base: 0, x: 0, decided: false, horizontal: false });
 
   useEffect(() => {
@@ -59,6 +61,7 @@ export function CommitmentRow({
       } catch {
         /* ignore */
       }
+      setSwiping(true);
       onOpen(open); // closes the others
     }
     let x = d.base + dx;
@@ -73,6 +76,7 @@ export function CommitmentRow({
     if (!d.active) return;
     d.active = false;
     if (!d.horizontal || !fg.current) return;
+    setSwiping(false);
     const next = d.x < -W / 2;
     fg.current.style.transition = "";
     fg.current.style.transform = next ? `translateX(-${W}px)` : "";
@@ -91,7 +95,7 @@ export function CommitmentRow({
 
   const label = c.name || "commitment";
   return (
-    <div ref={row} className={`swipe${isNew ? " rise" : ""}`} data-row={c.id}>
+    <div ref={row} className={`swipe${open || swiping ? " live" : ""}${isNew ? " rise" : ""}`} data-row={c.id}>
       <button className="sw-del" onClick={del} aria-label={`Delete ${label}`} tabIndex={open ? 0 : -1}>
         Delete
       </button>

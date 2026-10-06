@@ -1,5 +1,6 @@
 import { useState, type ReactNode } from "react";
 import { CommitmentRow } from "../components/CommitmentRow";
+import { Icon } from "../components/Icon";
 import { RollingNumber, useSettled } from "../components/RollingNumber";
 import { Navbar, toast } from "../components/ui";
 import { BUCKETS, calc, fmt, pct, PRESETS, QUICK, uid, verdict, type BucketDef, type Commitment, type Plan } from "../engine";
@@ -99,7 +100,8 @@ export function Commitments() {
           c={c}
           chips={QUICK[b.key].map((q, i) => (
             <button key={q.name} className="chip" style={{ minHeight: 36 }} onClick={() => add(b.key, i)}>
-              + {q.name}
+              <Icon name="plus" className="svg-i ic-sm" />
+              {q.name}
             </button>
           ))}
         >
@@ -118,7 +120,8 @@ export function Commitments() {
               />
             ))}
           <button className="item add" onClick={() => add(b.key)}>
-            + Add to {b.label.toLowerCase()}
+            <Icon name="plus" className="svg-i ic-sm" />
+            Add to {b.label.toLowerCase()}
           </button>
         </BucketSection>
       ))}

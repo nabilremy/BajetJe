@@ -53,7 +53,7 @@ export function RollingNumber({
         const delay = isNew && stagger ? order++ * stagger : 0;
         return (
           <span key={`${slot}:${ch}`} aria-hidden="true" className={isNew ? "in" : undefined} style={delay ? { animationDelay: `${delay}ms` } : undefined}>
-            {ch}
+            {ch === " " ? "\u00a0" : ch}
           </span>
         );
       })}

@@ -8,6 +8,10 @@ import { calc, carLimit, DAY, fmt, fmtD, isKlShort, k, pct, rates, verdict, type
 import { go } from "../state/router";
 import { exportBackup, importBackup, useApp, wipeAll } from "../state/store";
 
+/** No name is collected, so the hub greets with a friendly calling, picked once per app launch. */
+const CALLINGS = ["Master", "Boss", "Bos", "Geng", "Kawan", "Champ", "Sifu", "Legend", "Chief", "Bestie"];
+const calling = CALLINGS[Math.floor(Math.random() * CALLINGS.length)];
+
 /** Hub reveal plays once per session */
 let revealed = false;
 export const resetReveal = () => {
@@ -40,7 +44,7 @@ export function Plan() {
     <div className={`stack${revealing ? " reveal" : ""}`}>
       <div className="row" {...r(0)}>
         <div className="grow">
-          <h1 className="h2">Hi there</h1>
+          <h1 className="h2">Hi, {calling}</h1>
           <p className="body">
             Pay cycle {fmtD(c.cy.prev)} to {fmtD(new Date(+c.cy.next - DAY))} · {c.daysLeft} day{c.daysLeft === 1 ? "" : "s"} to payday
           </p>
@@ -110,7 +114,7 @@ export function Plan() {
             EPF's Belanjawanku guide puts a single person's basics in Klang Valley at about RM {fmt(rates().split.klNeedsBasics)}. Your 50% is RM {fmt(c.needs)}.
           </p>
           <button className="link" onClick={() => go("commit")} style={{ alignSelf: "flex-start" }}>
-            Check my commitments →
+            Check my commitments <Icon name="arrow" className="svg-i ic-sm" />
           </button>
         </div>
       )}
@@ -133,7 +137,7 @@ export function Plan() {
               {c.needsC <= c.needs ? `RM ${fmt(c.needs - c.needsC)} left in your needs budget` : `Needs over by RM ${fmt(c.needsC - c.needs)}`}
             </span>
             <button className="link" onClick={() => go("health")}>
-              Details →
+              Details <Icon name="arrow" className="svg-i ic-sm" />
             </button>
           </div>
         </div>
@@ -191,7 +195,9 @@ function AffordTile(p: { icon: IconName; title: string; pre: string; val: ReactN
       <div className="cap" style={{ color: "var(--ink-400)" }}>
         {p.meta}
       </div>
-      <span className="lbl">{p.cta} →</span>
+      <span className="lbl row" style={{ gap: 4 }}>
+        {p.cta} <Icon name="arrow" className="svg-i ic-sm" />
+      </span>
     </button>
   );
 }

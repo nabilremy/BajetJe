@@ -5,7 +5,7 @@ export type Payday = string;
 
 export type IconName =
   | "home" | "grad" | "bus" | "heart" | "shield" | "phone" | "zap" | "tv" | "car" | "card"
-  | "back" | "vbars" | "vjars" | "vledger" | "trash" | "info" | "x" | "pen";
+  | "back" | "arrow" | "plus" | "vbars" | "vjars" | "vledger" | "trash" | "info" | "x" | "pen";
 
 export type Commitment = {
   id: string;
