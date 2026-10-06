@@ -10,7 +10,8 @@ import "./styles/index.css";
 async function boot() {
   await hydrate();
   const s = getState();
-  go(s.raw && s.payday ? "plan" : "salary", "reset");
+  document.documentElement.lang = s.lang;
+  go(s.raw && s.payday ? "plan" : s.welcomed ? "salary" : "welcome", "reset");
   createRoot(document.getElementById("root")!).render(
     <StrictMode>
       <App />

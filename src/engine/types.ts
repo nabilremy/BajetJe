@@ -3,9 +3,10 @@ export type SalaryMode = "gross" | "net";
 /** "1" to "31" or "last" */
 export type Payday = string;
 
+/** Doodle icon set (brand/icons) */
 export type IconName =
-  | "home" | "grad" | "bus" | "heart" | "shield" | "phone" | "zap" | "tv" | "car" | "card"
-  | "back" | "arrow" | "plus" | "vbars" | "vjars" | "vledger" | "trash" | "info" | "x" | "pen";
+  | "back" | "bus" | "car" | "card" | "check" | "grad" | "heart" | "home" | "info" | "loader" | "pen"
+  | "phone" | "plus" | "shield" | "sparkle" | "trash" | "tv" | "vbars" | "vjars" | "vledger" | "x" | "zap";
 
 export type Commitment = {
   id: string;

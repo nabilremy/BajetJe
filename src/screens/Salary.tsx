@@ -1,71 +1,87 @@
 import { useEffect, useRef, useState } from "react";
+import { NOTE_ARROW } from "../brand/assets";
+import { BrandSvg, Icon } from "../components/Icon";
 import { RollingNumber, useSettled } from "../components/RollingNumber";
-import { Segmented } from "../components/ui";
+import { Segmented, usePop } from "../components/ui";
 import { calc, fmt, fmt2, type SalaryMode } from "../engine";
+import { noteFor, useLang, useT, type MsgKey } from "../i18n";
 import { back, go, useRouter } from "../state/router";
 import { setState, useApp } from "../state/store";
 
-const PAYDAYS: [string, string][] = [
-  ["1", "1st"],
-  ["7", "7th"],
-  ["15", "15th"],
-  ["25", "25th"],
-  ["last", "Last day"],
+const PAYDAYS: [string, MsgKey][] = [
+  ["1", "salary.pd1"],
+  ["7", "salary.pd7"],
+  ["15", "salary.pd15"],
+  ["25", "salary.pd25"],
+  ["last", "salary.pdLast"],
 ];
 const PRESET_DAYS = PAYDAYS.map(([v]) => v);
+const reduced = () => typeof matchMedia !== "undefined" && matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 /** F1 · Salary (required, no skip) */
 export function Salary() {
   const S = useApp();
+  const t = useT();
+  const lang = useLang();
   const { stack } = useRouter();
   const c = calc(S);
   const has = !!S.raw;
   const inp = useRef<HTMLInputElement>(null);
+  const pop = usePop<string>();
   // "Try RM 3,500" rolls every digit in; typing only rolls new digits
   const [sampleKey, setSampleKey] = useState(0);
-  // Take-home waits for a 200 ms typing pause, then rolls changed digits 30 ms apart
-  const settledNet = useSettled(c.net, 200);
+  // While typing: "Crunching the numbers..." then take-home rolls changed digits 30 ms apart after 450 ms
+  const settledRaw = useSettled(S.raw, 450);
+  const crunching = settledRaw !== S.raw;
+  const settledNet = calc({ ...S, raw: settledRaw }).net;
+  // Submit: loading button + handwritten note, then the plan
+  const [note, setNote] = useState<string | null>(null);
 
   useEffect(() => {
     if (!S.raw) {
       const id = setTimeout(() => inp.current?.focus({ preventScroll: true }), 300);
       return () => clearTimeout(id);
     }
-    // only on first mount
   }, []);
 
   const shown = S.raw ? fmt(+S.raw) : "";
   const other = S.payday && !PRESET_DAYS.includes(S.payday);
   const ready = has && !!S.payday;
 
+  const submit = () => {
+    if (note) return;
+    setNote(noteFor(c.net, lang));
+    setTimeout(() => go("plan", "reset"), reduced() ? 500 : 1300);
+  };
+
   return (
     <div className="stack" style={{ minHeight: "100%" }}>
       <div className="section" style={{ gap: 10 }}>
         <div className="row between">
-          <div className="over">Let's start · takes 1 minute</div>
+          <div className="over">{t("salary.over")}</div>
           {stack.length > 1 && (
             <button className="link" onClick={back} style={{ color: "var(--ink-400)" }}>
-              Cancel
+              {t("common.cancel")}
             </button>
           )}
         </div>
-        <h1 className="h1">What's your salary?</h1>
-        <p className="body">Everything in BajetJe starts here. It stays on this phone and is never uploaded.</p>
+        <h1 className="h1">{t("salary.title")}</h1>
+        <p className="body">{t("salary.body")}</p>
       </div>
 
       <Segmented<SalaryMode>
-        label="Salary type"
+        label={t("salary.type")}
         value={S.mode}
         options={[
-          ["gross", "Gross salary"],
-          ["net", "Take-home"],
+          ["gross", t("salary.gross")],
+          ["net", t("salary.net")],
         ]}
         onChange={(mode) => setState({ mode })}
       />
 
       <div className="section" style={{ gap: 8 }}>
         <label className="lbl soft" htmlFor="sal">
-          {S.mode === "gross" ? "Gross monthly salary" : "Monthly take-home (net pay on your payslip)"}
+          {t(S.mode === "gross" ? "salary.grossLabel" : "salary.netLabel")}
         </label>
         <div className="field">
           <span className="cur">RM</span>
@@ -86,7 +102,7 @@ export function Salary() {
         <div className="row" id="salHelp" style={{ flexWrap: "wrap" }}>
           {!has && (
             <>
-              <span className="cap">Not sure yet?</span>
+              <span className="cap">{t("salary.notSure")}</span>
               <button
                 className="chip"
                 onClick={() => {
@@ -94,7 +110,7 @@ export function Salary() {
                   setSampleKey((n) => n + 1);
                 }}
               >
-                Try RM 3,500
+                {t("salary.try")}
               </button>
             </>
           )}
@@ -104,31 +120,38 @@ export function Salary() {
       <div className="section" style={{ gap: 10 }}>
         <div className="row between">
           <span className="lbl soft" id="paydayLbl">
-            When do you get paid?
+            {t("salary.when")}
           </span>
-          <span className="cap">Day of the month</span>
+          <span className="cap">{t("salary.dom")}</span>
         </div>
         <div className="row" style={{ flexWrap: "wrap" }} role="group" aria-labelledby="paydayLbl">
           {PAYDAYS.map(([v, l]) => (
             <button
-              key={v}
-              className={`chip${S.payday === v ? " on" : ""}`}
+              key={pop.key(v)}
+              className={`chip${S.payday === v ? " on" : ""}${pop.cls(v)}`}
               aria-pressed={S.payday === v}
-              onClick={() => setState({ payday: v })}
+              onClick={() => {
+                pop.pop(v);
+                setState({ payday: v });
+              }}
               style={{ minHeight: 40, padding: "0 14px", fontSize: 13, ...(S.payday === v ? {} : { color: "var(--ink-300)" }) }}
             >
-              {l}
+              {t(l)}
             </button>
           ))}
-          <label className={`chip${other ? " on" : ""}`} style={{ minHeight: 40, padding: "0 6px 0 14px", fontSize: 13, ...(other ? {} : { color: "var(--ink-300)" }) }}>
-            Other
+          <label key={pop.key("other")} className={`chip${other ? " on" : ""}${pop.cls("other")}`} style={{ minHeight: 40, padding: "0 6px 0 14px", fontSize: 13, ...(other ? {} : { color: "var(--ink-300)" }) }}>
+            {t("common.other")}
             <select
-              aria-label="Other payday"
+              aria-label={t("salary.otherPayday")}
               value={other ? (S.payday ?? "") : ""}
-              onChange={(e) => e.target.value && setState({ payday: e.target.value })}
+              onChange={(e) => {
+                if (!e.target.value) return;
+                pop.pop("other");
+                setState({ payday: e.target.value });
+              }}
               style={{ background: "transparent", border: 0, color: "inherit", font: "inherit", padding: "8px 4px", outline: 0 }}
             >
-              <option value="">day</option>
+              <option value="">{t("salary.dayPlaceholder")}</option>
               {Array.from({ length: 31 }, (_, i) => i + 1)
                 .filter((d) => ![1, 7, 15, 25].includes(d))
                 .map((d) => (
@@ -139,31 +162,31 @@ export function Salary() {
             </select>
           </label>
         </div>
-        <p className="cap">Your daily budget runs from payday to payday. If the day doesn't exist in a month, we use the last day.</p>
+        <p className="cap">{t("salary.cycleNote")}</p>
       </div>
 
       {S.mode === "gross" && (
         <div className="section" style={{ gap: 10 }}>
           <div className="row between">
-            <h2 className="over">Auto deductions</h2>
-            <span className="cap">Malaysia · 2026 rates</span>
+            <h2 className="over">{t("salary.deductions")}</h2>
+            <span className="cap">{t("salary.rates")}</span>
           </div>
           <div className="card" style={{ gap: 12 }}>
             {(
               [
-                ["EPF (your share)", "11%", c.epf],
-                ["SOCSO", "", c.socso],
-                ["EIS", "", c.eis],
-                ["Income tax (PCB)", "est.", c.pcb],
+                ["salary.epf", "11%", c.epf],
+                ["salary.socso", "", c.socso],
+                ["salary.eis", "", c.eis],
+                ["salary.pcb", t("common.est"), c.pcb],
               ] as const
-            ).map(([n, t, v]) => (
+            ).map(([n, tag, v]) => (
               <div key={n} className="row">
                 <span className="lbl" style={{ color: "var(--ink-300)" }}>
-                  {n}
+                  {t(n)}
                 </span>
-                {t && (
+                {tag && (
                   <span className="pill" style={{ background: "var(--ink-700)", color: "var(--ink-400)" }}>
-                    {t}
+                    {tag}
                   </span>
                 )}
                 <span className="grow" />
@@ -176,9 +199,9 @@ export function Salary() {
             <div className="row">
               <div className="grow">
                 <div className="lbl" style={{ fontSize: 15 }}>
-                  Your take-home
+                  {t("salary.yourTakeHome")}
                 </div>
-                <div className="cap">Updates as you type</div>
+                <div className="cap">{t(crunching ? "salary.crunchingNumbers" : "salary.updates")}</div>
               </div>
               <div className="mono lime" style={{ fontSize: 20, fontWeight: 500 }} aria-live="polite">
                 RM&nbsp;
@@ -191,9 +214,24 @@ export function Salary() {
 
       <div className="grow" />
       <div className="sticky">
-        <button className="btn btn-primary" disabled={!ready} onClick={() => go("plan", "reset")}>
-          {has && !S.payday ? "Pick your payday to continue" : "See my 50/30/20"}
-        </button>
+        <div className="cta-wrap">
+          {note && (
+            <div className="note" aria-live="polite">
+              <BrandSvg svg={NOTE_ARROW} />
+              <span>{note}</span>
+            </div>
+          )}
+          <button className={`btn btn-primary${note ? " loading" : ""}`} disabled={!ready} onClick={submit} aria-busy={!!note}>
+            {note ? (
+              <>
+                <Icon name="loader" className="svg-i spin" />
+                <span>{t("salary.ctaLoading")}</span>
+              </>
+            ) : (
+              t(has && !S.payday ? "salary.ctaPickPayday" : "salary.cta")
+            )}
+          </button>
+        </div>
       </div>
     </div>
   );

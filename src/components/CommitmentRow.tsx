@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { fmt, type Commitment } from "../engine";
+import { categoryName, itemName, useLang, useT } from "../i18n";
 import { Icon } from "./Icon";
 
 const W = 84;
@@ -22,6 +23,8 @@ export function CommitmentRow({
   onChange: (patch: Partial<Commitment>) => void;
   onDelete: () => void;
 }) {
+  const t = useT();
+  const lang = useLang();
   const row = useRef<HTMLDivElement>(null);
   const fg = useRef<HTMLDivElement>(null);
   const name = useRef<HTMLInputElement>(null);
@@ -93,15 +96,16 @@ export function CommitmentRow({
     setTimeout(onDelete, 220);
   };
 
-  const label = c.name || "commitment";
+  const shown = itemName(lang, c.name, c.custom);
+  const label = shown || t("commit.fallbackName");
   return (
     <div ref={row} className={`swipe${open || swiping ? " live" : ""}${isNew ? " rise" : ""}`} data-row={c.id}>
-      <button className="sw-del" onClick={del} aria-label={`Delete ${label}`} tabIndex={open ? 0 : -1}>
-        Delete
+      <button className="sw-del" onClick={del} aria-label={t("commit.deleteAria", { name: label })} tabIndex={open ? 0 : -1}>
+        {t("common.delete")}
       </button>
       <div ref={fg} className="item sw-fg" onPointerDown={down} onPointerMove={move} onPointerUp={up} onPointerCancel={up}>
         {edit && (
-          <button className="minus" onClick={() => onOpen(!open)} aria-label={`Show delete for ${label}`} aria-expanded={open}>
+          <button className="minus" onClick={() => onOpen(!open)} aria-label={t("commit.revealAria", { name: label })} aria-expanded={open}>
             <i />
           </button>
         )}
@@ -113,18 +117,18 @@ export function CommitmentRow({
             <input
               ref={name}
               value={c.name}
-              placeholder="Name"
-              aria-label="Commitment name"
+              placeholder={t("commit.namePlaceholder")}
+              aria-label={t("commit.nameAria")}
               maxLength={28}
               onChange={(e) => onChange({ name: e.target.value.slice(0, 28) })}
               style={{ background: "none", border: 0, outline: 0, fontSize: 13, fontWeight: 500, width: "100%" }}
             />
           ) : (
-            <div className="lbl">{c.name}</div>
+            <div className="lbl">{shown}</div>
           )}
           <div className="row" style={{ gap: 6 }}>
-            <span className="cap">{c.cat}</span>
-            {c.debt && <span className="tag">Debt</span>}
+            <span className="cap">{categoryName(lang, c.cat)}</span>
+            {c.debt && <span className="tag">{t("commit.debt")}</span>}
           </div>
         </div>
         <label className="amt">
@@ -135,7 +139,7 @@ export function CommitmentRow({
             autoComplete="off"
             placeholder="0"
             value={c.amt ? fmt(c.amt) : ""}
-            aria-label={`${c.name || "Commitment"} monthly amount`}
+            aria-label={t("commit.amountAria", { name: label })}
             onChange={(e) => onChange({ amt: +e.target.value.replace(/\D/g, "").replace(/^0+/, "").slice(0, 6) || 0 })}
           />
         </label>

@@ -1,0 +1,503 @@
+{
+ "exact": {
+  "Hi there": "Hai!",
+  "Hey there!": "Hai!",
+  "Back": "Kembali",
+  "Close": "Tutup",
+  "Edit": "Ubah",
+  "Done": "Siap",
+  "Delete": "Padam",
+  "Undo": "Batal",
+  "Yes": "Ya",
+  "No": "Tak",
+  "Other": "Lain",
+  "Others": "Lain-lain",
+  "Today": "Hari ini",
+  "day": "hari",
+  "RM": "RM",
+  "Up to": "Sampai",
+  "Up to ~": "Sampai ~",
+  "est.": "anggaran",
+  "Know what your gaji can do.": "Tengok gaji awak boleh buat apa.",
+  "Enter your salary once. BajetJe works out your daily budget, checks your commitments, and shows what car or home fits.": "Isi gaji sekali je. BajetJe kira bajet harian, semak komitmen, dan tunjuk kereta atau rumah yang padan.",
+  "Estimates only, not financial advice": "Anggaran je, bukan nasihat kewangan",
+  "BajetJe is a planning tool, not a licensed financial adviser. Numbers are estimates based on public guidelines (EPF, LHDN, BNM). Check big decisions with your bank or a licensed financial planner.": "BajetJe ni alat merancang, bukan penasihat kewangan berlesen. Semua nombor anggaran ikut garis panduan awam (KWSP, LHDN, BNM). Keputusan besar, tanya bank atau perancang kewangan berlesen dulu ya.",
+  "I understand, let's start": "Faham, jom mula!",
+  "Your salary never leaves this phone": "Gaji awak tak pernah keluar dari telefon ni",
+  "Three young workers thinking about their salary, budget and savings": "Tiga pekerja muda fikir pasal gaji, bajet dan simpanan",
+  "Let's start · takes 1 minute": "Jom mula · 1 minit je",
+  "Cancel": "Batal",
+  "First, how much is your gaji?": "Mula-mula, berapa gaji awak?",
+  "What's your salary?": "Berapa gaji awak?",
+  "Everything in BajetJe starts here. It stays on this phone and is never uploaded.": "Semua dalam BajetJe bermula di sini. Ia kekal dalam telefon ni, tak dimuat naik ke mana-mana.",
+  "Salary type": "Jenis gaji",
+  "Gross salary": "Gaji kasar",
+  "Take-home": "Gaji bersih",
+  "Gross monthly salary": "Gaji kasar sebulan",
+  "Monthly take-home (net pay on your payslip)": "Gaji bersih sebulan (net pay dalam slip gaji)",
+  "Not sure yet?": "Tak pasti lagi?",
+  "Try RM 3,500": "Cuba RM 3,500",
+  "When do you get paid?": "Bila gaji masuk?",
+  "Day of the month": "Hari dalam bulan",
+  "Payday": "Hari gaji",
+  "Other payday": "Hari gaji lain",
+  "1st": "1hb",
+  "7th": "7hb",
+  "15th": "15hb",
+  "25th": "25hb",
+  "Last day": "Hari terakhir",
+  "Your daily budget runs from payday to payday. If the day doesn't exist in a month, we use the last day.": "Bajet harian dikira dari gaji ke gaji. Kalau tarikh tu tak wujud dalam bulan tu, kami guna hari terakhir.",
+  "Auto deductions": "Potongan automatik",
+  "Malaysia · 2026 rates": "Malaysia · kadar 2026",
+  "EPF (your share)": "KWSP (bahagian awak)",
+  "SOCSO": "PERKESO",
+  "EIS": "SIP",
+  "Income tax (PCB)": "Cukai (PCB)",
+  "Your take-home": "Gaji bersih awak",
+  "Updates as you type": "Berubah ikut apa yang awak taip",
+  "Crunching the numbers...": "Kira jap...",
+  "See my 50/30/20": "Tengok 50/30/20 saya",
+  "Pick your payday to continue": "Pilih hari gaji dulu",
+  "On device": "Dalam telefon",
+  "Take-home pay": "Gaji bersih",
+  "After EPF, SOCSO, EIS and tax": "Lepas KWSP, PERKESO, SIP dan cukai",
+  "Entered as take-home": "Diisi sebagai gaji bersih",
+  "You can spend": "Awak boleh belanja",
+  "After bills and savings, you can spend": "Lepas bil dan simpanan, awak boleh belanja",
+  "a day": "sehari",
+  "a week": "seminggu",
+  "budget till payday": "bajet sampai gaji",
+  "Whoa, living large!": "Uish, kaya gila!",
+  "Plenty to go around!": "Banyak lagi ni!",
+  "Nice and steady.": "Ok la tu, steady.",
+  "Tight, but doable.": "Ketat sikit, boleh punya!",
+  "Your spending budget until payday": "Bajet belanja sampai gaji masuk",
+  "Your spending budget for 7 days": "Bajet belanja untuk 7 hari",
+  "30% wants": "30% kehendak",
+  "Left after bills and savings": "Baki lepas bil & simpanan",
+  "÷ days in this pay cycle": "÷ hari dalam kitaran gaji",
+  "= Daily budget": "= Bajet harian",
+  "× 7 days": "× 7 hari",
+  "× days left till payday": "× hari lagi sampai gaji",
+  "Budget till payday": "Bajet sampai gaji",
+  "Weekly budget": "Bajet seminggu",
+  "Your 50/30/20 split": "Pecahan 50/30/20 awak",
+  "How it works": "Macam mana ia berfungsi",
+  "Chart view": "Paparan carta",
+  "Bars view": "Paparan bar",
+  "Jars view": "Paparan balang",
+  "List view": "Paparan senarai",
+  "Bars": "Bar",
+  "Jars": "Balang",
+  "List": "Senarai",
+  "Half of your take-home covers needs, 30% is for wants, and 20% is saved first. If your city makes needs more expensive, BajetJe tells you.": "Separuh gaji bersih untuk keperluan, 30% untuk kehendak, 20% simpan dulu. Kalau bandar awak buat keperluan lebih mahal, BajetJe akan bagitahu.",
+  "Needs": "Keperluan",
+  "Wants": "Kehendak",
+  "Savings": "Simpanan",
+  "Rent, food, transport, bills, PTPTN": "Sewa, makan, pengangkutan, bil, PTPTN",
+  "Eating out, shopping, hobbies": "Makan luar, shopping, hobi",
+  "Emergency fund first, then goals": "Dana kecemasan dulu, lepas tu matlamat",
+  "Filled to scale. Your needs jar is the biggest on purpose: it covers everything you can't skip.": "Diisi ikut skala. Balang keperluan paling besar sebab ia tanggung semua yang wajib.",
+  "Needs may run short in KL": "Keperluan mungkin tak cukup di KL",
+  "Check my commitments →": "Semak komitmen saya →",
+  "Commitment health": "Kesihatan komitmen",
+  "Want to check if your commitment is healthy?": "Nak tahu komitmen awak sihat ke tak?",
+  "Add my commitments": "Tambah komitmen saya",
+  "Details →": "Butiran →",
+  "What can I afford?": "Apa yang saya mampu?",
+  "Car": "Kereta",
+  "Home": "Rumah",
+  "Comfortable up to": "Selesa sampai",
+  "Rent up to": "Sewa sampai",
+  "30% of take-home": "30% daripada gaji bersih",
+  "See cars →": "Tengok kereta →",
+  "See housing →": "Tengok rumah →",
+  "Estimates only, based on EPF, PERKESO, LHDN and Belanjawanku guidelines. BajetJe is not a licensed financial adviser.": "Anggaran je, ikut garis panduan KWSP, PERKESO, LHDN dan Belanjawanku. BajetJe bukan penasihat kewangan berlesen.",
+  "Delete all my data from this phone": "Padam semua data saya dari telefon ni",
+  "Tap again to delete everything": "Tekan lagi sekali untuk padam semua",
+  "Healthy": "Sihat",
+  "Caution": "Hati-hati",
+  "High": "Tinggi",
+  "My commitments": "Komitmen saya",
+  "What do you pay every month?": "Apa yang awak bayar setiap bulan?",
+  "Fixed amounts only, grouped by your 50/30/20 split. Swipe left on a row to delete it.": "Jumlah tetap je, ikut pecahan 50/30/20. Leret ke kiri untuk padam.",
+  "Fill with an example": "Isi dengan contoh",
+  "Rent, transport, bills, loans, family": "Sewa, pengangkutan, bil, pinjaman, keluarga",
+  "Subscriptions, gym, hobbies": "Langganan, gim, hobi",
+  "ASB, Tabung Haji, emergency fund": "ASB, Tabung Haji, dana kecemasan",
+  "+ Add to needs": "+ Tambah keperluan",
+  "+ Add to wants": "+ Tambah kehendak",
+  "+ Add to savings": "+ Tambah simpanan",
+  "Fixed commitments": "Komitmen tetap",
+  "Check my commitment health": "Semak kesihatan komitmen",
+  "Room rent": "Sewa bilik",
+  "PTPTN": "PTPTN",
+  "LRT & e-hailing": "LRT & e-hailing",
+  "Parents": "Mak ayah",
+  "Takaful": "Takaful",
+  "Phone & internet": "Telefon & internet",
+  "Utilities share": "Kongsi bil utiliti",
+  "Streaming & apps": "Streaming & app",
+  "ASB": "ASB",
+  "+ Car loan": "+ Pinjaman kereta",
+  "+ Home loan": "+ Pinjaman rumah",
+  "+ Credit card": "+ Kad kredit",
+  "+ BNPL": "+ BNPL",
+  "+ Zakat": "+ Zakat",
+  "+ Gym": "+ Gim",
+  "+ Subscription": "+ Langganan",
+  "+ Tabung Haji": "+ Tabung Haji",
+  "+ Emergency fund": "+ Dana kecemasan",
+  "+ Extra EPF": "+ KWSP tambahan",
+  "Car loan": "Pinjaman kereta",
+  "Home loan": "Pinjaman rumah",
+  "Credit card": "Kad kredit",
+  "Gym": "Gim",
+  "Subscription": "Langganan",
+  "Emergency fund": "Dana kecemasan",
+  "Extra EPF": "KWSP tambahan",
+  "Zakat": "Zakat",
+  "Tabung Haji": "Tabung Haji",
+  "BNPL": "BNPL",
+  "Housing": "Kediaman",
+  "Education": "Pendidikan",
+  "Transport": "Pengangkutan",
+  "Family": "Keluarga",
+  "Insurance": "Insurans",
+  "Bills": "Bil",
+  "Lifestyle": "Gaya hidup",
+  "Investment": "Pelaburan",
+  "Loan": "Pinjaman",
+  "Giving": "Sedekah",
+  "Health": "Kesihatan",
+  "Debt": "Hutang",
+  "Name": "Nama",
+  "Commitment name": "Nama komitmen",
+  "Your commitments take": "Komitmen awak ambil",
+  "Breakdown": "Pecahan",
+  "Manage →": "Urus →",
+  "Debt only (loans)": "Hutang je (pinjaman)",
+  "Banks look at this when you apply for a loan": "Bank tengok ni bila awak mohon pinjaman",
+  "After commitments and savings, you can spend": "Lepas komitmen dan simpanan, awak boleh belanja",
+  "Where your salary goes": "Ke mana gaji awak pergi",
+  "Deductions": "Potongan",
+  "EPF, SOCSO, EIS, tax": "KWSP, PERKESO, SIP, cukai",
+  "Commitments": "Komitmen",
+  "Savings first": "Simpan dulu",
+  "For yourself": "Untuk diri sendiri",
+  "food, fun, personal": "makan, hiburan, peribadi",
+  "Back to my plan": "Balik ke pelan saya",
+  "Estimates only. Not financial advice.": "Anggaran je. Bukan nasihat kewangan.",
+  "Nice, you're in good shape!": "Mantap, sihat ni!",
+  "Okay, but watch it.": "Boleh lagi, tapi jaga-jaga.",
+  "Let's fix this together.": "Jom betulkan sama-sama.",
+  "of your take-home. More than two-thirds of your pay is committed, so one surprise bill could leave you short.": "daripada gaji bersih. Lebih dua pertiga gaji dah terikat, satu bil mengejut boleh buat awak sesak.",
+  "What car can I afford?": "Kereta apa saya mampu?",
+  "Your safe car budget": "Bajet kereta yang selamat",
+  "Down payment": "Bayaran pendahuluan",
+  "9 yrs · ~3% flat": "9 thn · ~3% rata",
+  "Full loan (0%)": "Pinjaman penuh (0%)",
+  "Full loans are the exception": "Pinjaman penuh jarang dapat",
+  "What fits your salary": "Yang padan dengan gaji awak",
+  "Comfortable": "Selesa",
+  "Tight": "Ketat",
+  "Stretch too far": "Terlalu tinggi",
+  "New entry hatchback, or a used compact": "Hatchback baru asas, atau kompak terpakai",
+  "New compact hatchback or sedan": "Hatchback atau sedan kompak baru",
+  "Compact SUV and up": "SUV kompak ke atas",
+  "Try a price": "Cuba satu harga",
+  "Car price": "Harga kereta",
+  "Jump to": "Lompat ke",
+  "Unaffordable": "Tak mampu",
+  "True monthly cost": "Kos sebenar sebulan",
+  "Loan instalment": "Ansuran pinjaman",
+  "Petrol": "Minyak",
+  "Insurance & road tax": "Insurans & cukai jalan",
+  "Servicing": "Servis",
+  "If you buy it": "Kalau awak beli",
+  "You can spend a day": "Awak boleh belanja sehari",
+  "Estimates only. Actual rates, insurance and approval depend on the lender. Not financial advice.": "Anggaran je. Kadar, insurans dan kelulusan ikut bank. Bukan nasihat kewangan.",
+  "Full loan · 9 yrs": "Pinjaman penuh · 9 thn",
+  "How much home can I afford?": "Rumah berapa saya mampu?",
+  "Healthy housing budget": "Bajet kediaman yang sihat",
+  "/ month": "/ bulan",
+  "/mo": "/bln",
+  "30% of your take-home. Use it for rent or a mortgage instalment.": "30% daripada gaji bersih. Guna untuk sewa atau ansuran rumah.",
+  "Your rent now": "Sewa awak sekarang",
+  "Rent or buy": "Sewa atau beli",
+  "Rent": "Sewa",
+  "Buy": "Beli",
+  "Renting": "Menyewa",
+  "Add your rent in commitments to compare.": "Tambah sewa dalam komitmen untuk banding.",
+  "Home price you can carry": "Harga rumah yang awak mampu",
+  "Monthly instalment": "Ansuran bulanan",
+  "cash upfront, plus legal fees": "tunai awal, campur yuran guaman",
+  "none with a first-home scheme": "tiada dengan skim rumah pertama",
+  "Rate": "Kadar",
+  "Saving for the down payment": "Simpan untuk bayaran pendahuluan",
+  "If you buy at this price": "Kalau beli pada harga ni",
+  "Estimates only. Bank approval, rates and fees vary. Not financial advice.": "Anggaran je. Kelulusan bank, kadar dan yuran berbeza. Bukan nasihat kewangan.",
+  "Can you get a full loan?": "Boleh dapat pinjaman penuh?",
+  "Is this your first home?": "Ni rumah pertama awak?",
+  "Malaysian citizen?": "Warganegara Malaysia?",
+  "Aged 40 or below?": "Umur 40 tahun ke bawah?",
+  "Answer all 3 to see if a full loan is possible.": "Jawab ketiga-tiga untuk tahu boleh dapat pinjaman penuh atau tak.",
+  "Likely eligible": "Mungkin layak",
+  "Not eligible": "Tak layak",
+  "Indicative only. The bank and scheme make the final decision.": "Panduan je. Keputusan akhir di tangan bank dan skim.",
+  "Skim Rumah Pertamaku or SJKP.": "Skim Rumah Pertamaku atau SJKP.",
+  "100% financing has conditions": "Pembiayaan 100% ada syarat",
+  "100% financing is only for your first home. Showing 10% down instead.": "Pembiayaan 100% untuk rumah pertama je. Kami tunjuk 10% pendahuluan.",
+  "First-home schemes are for Malaysian citizens only. Showing 10% down instead.": "Skim rumah pertama untuk warganegara Malaysia je. Kami tunjuk 10% pendahuluan."
+ },
+ "patterns": [
+  {
+   "en": "^(\\d+)% of your RM ([\\d,]+) take-home · savings not included$",
+   "bm": "(m,a,b)=>`${a}% daripada gaji bersih RM ${b} · tak termasuk simpanan`"
+  },
+  {
+   "en": "^(\\d+)% of take-home$",
+   "bm": "(m,a)=>`${a}% daripada gaji bersih`"
+  },
+  {
+   "en": "^RM ([\\d,]+) · (\\d+)% of take-home$",
+   "bm": "(m,a,b)=>`RM ${a} · ${b}% daripada gaji bersih`"
+  },
+  {
+   "en": "^(\\d+) years at ([\\d.]+)%$",
+   "bm": "(m,a,b)=>`${a} tahun pada ${b}%`"
+  },
+  {
+   "en": "^After (.+)$",
+   "bm": "(m,a)=>`Lepas ${a}`"
+  },
+  {
+   "en": "^Now (.+)$",
+   "bm": "(m,a)=>`Sekarang ${a}`"
+  },
+  {
+   "en": "^A plan, not your bank balance\\. BajetJe doesn't track spending, so this assumes you keep to RM ([\\d,]+) a day\\.$",
+   "bm": "(m,a)=>`Ini rancangan, bukan baki bank. BajetJe tak jejak perbelanjaan, jadi kami anggap awak belanja RM ${a} sehari.`"
+  },
+  {
+   "en": "^Show delete for (.+)$",
+   "bm": "(m,a)=>`Tunjuk padam untuk ${g(a)}`"
+  },
+  {
+   "en": "^Delete (.+)$",
+   "bm": "(m,a)=>`Padam ${g(a)}`"
+  },
+  {
+   "en": "^(.+) monthly amount$",
+   "bm": "(m,a)=>`Jumlah bulanan ${g(a)}`"
+  },
+  {
+   "en": "^Deleted (.+)$",
+   "bm": "(m,a)=>`${g(a)} dah dipadam`"
+  },
+  {
+   "en": "^Comfortable max · RM (\\w+)$",
+   "bm": "(m,a)=>`Maks selesa · RM ${a}`"
+  },
+  {
+   "en": "^Max · RM (\\w+)$",
+   "bm": "(m,a)=>`Maks · RM ${a}`"
+  },
+  {
+   "en": "^EPF's Belanjawanku guide puts a single person's basics in Klang Valley at about RM 1,930\\. Your 50% is RM ([\\d,]+)\\.$",
+   "bm": "(m,a)=>`Panduan Belanjawanku KWSP letak keperluan asas seorang bujang di Lembah Klang sekitar RM 1,930. 50% awak RM ${a}.`"
+  },
+  {
+   "en": "^From your 30% wants: RM ([\\d,]+) ÷ (\\d+) days$",
+   "bm": "(m,a,b)=>`Daripada 30% kehendak: RM ${a} ÷ ${b} hari`"
+  },
+  {
+   "en": "^Income is taken from your salary \\(RM ([\\d,]+) (gross|take-home)\\)\\.$",
+   "bm": "(m,a,b)=>`Pendapatan diambil dari gaji awak (RM ${a} ${b==='gross'?'kasar':'bersih'}).`"
+  },
+  {
+   "en": "^Instalment replaces your current rent of RM ([\\d,]+)\\.$",
+   "bm": "(m,a)=>`Ansuran ganti sewa awak sekarang, RM ${a}.`"
+  },
+  {
+   "en": "^Keeps the all-in car cost under RM ([\\d,]+)\\/mo, 20% of your take-home, with (\\d+)% down\\.$",
+   "bm": "(m,a,b)=>`Kos kereta semua sekali bawah RM ${a}/bln, 20% gaji bersih, dengan ${b}% pendahuluan.`"
+  },
+  {
+   "en": "^Keeps the all-in car cost under RM ([\\d,]+)\\/mo, 20% of your take-home, with a full loan\\.$",
+   "bm": "(m,a)=>`Kos kereta semua sekali bawah RM ${a}/bln, 20% gaji bersih, dengan pinjaman penuh.`"
+  },
+  {
+   "en": "^Most banks lend up to 90%\\. 100% is mainly graduate schemes for new cars\\. With 10% down \\(RM ([\\d,]+)\\), the same monthly budget buys up to RM (\\w+)\\.$",
+   "bm": "(m,a,b)=>`Kebanyakan bank bagi sampai 90% je. 100% biasanya skim graduan untuk kereta baru. Dengan 10% pendahuluan (RM ${a}), bajet bulanan yang sama boleh beli sampai RM ${b}.`"
+  },
+  {
+   "en": "^Needs over by RM ([\\d,]+)$",
+   "bm": "(m,a)=>`Keperluan lebih RM ${a}`"
+  },
+  {
+   "en": "^RM ([\\d,]+) left in your needs budget$",
+   "bm": "(m,a)=>`Ada RM ${a} lagi dalam bajet keperluan`"
+  },
+  {
+   "en": "^Next payday (.+)$",
+   "bm": "(m,a)=>`Gaji seterusnya ${a}`"
+  },
+  {
+   "en": "^Paid (.+)$",
+   "bm": "(m,a)=>`Gaji masuk ${a}`"
+  },
+  {
+   "en": "^Only through first-home schemes like Skim Rumah Pertamaku or SJKP: Malaysian, first home, price up to RM 500k, income limits apply\\.( Capped at RM 500k\\.)? You borrow more, so you pay more interest, and your max price is RM (\\w+) lower than with 10% down\\. Legal and valuation fees may still apply\\.$",
+   "bm": "(m,c,a)=>`Hanya melalui skim rumah pertama macam Skim Rumah Pertamaku atau SJKP: warganegara, rumah pertama, harga sampai RM 500k, ada had pendapatan.${c?' Dihadkan RM 500k.':''} Pinjam lebih bermakna bunga lebih, dan harga maks RM ${a} lebih rendah berbanding 10% pendahuluan. Yuran guaman dan penilaian mungkin masih ada.`"
+  },
+  {
+   "en": "^Over by RM ([\\d,]+)\\. This comes out of your wants\\. You can still add more\\.$",
+   "bm": "(m,a)=>`Terlebih RM ${a}. Ni akan potong kehendak awak. Masih boleh tambah lagi.`"
+  },
+  {
+   "en": "^Over by RM ([\\d,]+)\\. Your daily spending money shrinks\\. You can still add more\\.$",
+   "bm": "(m,a)=>`Terlebih RM ${a}. Duit belanja harian jadi kurang. Masih boleh tambah lagi.`"
+  },
+  {
+   "en": "^Paid upfront \\((\\d+)% down\\)$",
+   "bm": "(m,a)=>`Bayar awal (${a}% pendahuluan)`"
+  },
+  {
+   "en": "^Paid upfront \\(full loan\\)$",
+   "bm": "()=>`Bayar awal (pinjaman penuh)`"
+  },
+  {
+   "en": "^Pay cycle (.+) to (.+) · (\\d+) days? to payday$",
+   "bm": "(m,a,b,c)=>`Kitaran gaji ${a} hingga ${b} · ${c} hari lagi gaji masuk`"
+  },
+  {
+   "en": "^RM ([\\d,]+) left in (needs|wants)\\. Plenty of room!$",
+   "bm": "(m,a,b)=>`Ada RM ${a} lagi untuk ${b==='needs'?'keperluan':'kehendak'}. Banyak lagi ni!`"
+  },
+  {
+   "en": "^RM ([\\d,]+) left in (needs|wants)$",
+   "bm": "(m,a,b)=>`Ada RM ${a} lagi untuk ${b==='needs'?'keperluan':'kehendak'}`"
+  },
+  {
+   "en": "^RM ([\\d,]+) more goes to savings automatically to reach 20%\\.$",
+   "bm": "(m,a)=>`RM ${a} lagi masuk simpanan secara automatik sampai cukup 20%.`"
+  },
+  {
+   "en": "^On track: you already save at least 20%\\.$",
+   "bm": "()=>`Mantap! Awak dah simpan sekurang-kurangnya 20%.`"
+  },
+  {
+   "en": "^RM ([\\d,]+) this month for food, fun and everything personal\\. RM ([\\d,]+) is saved first \\((\\d+)%\\)\\.$",
+   "bm": "(m,a,b,c)=>`RM ${a} bulan ni untuk makan, hiburan dan hal peribadi. RM ${b} disimpan dulu (${c}%).`"
+  },
+  {
+   "en": "^RM ([\\d,]+) this month for food, fun and personal stuff$",
+   "bm": "(m,a)=>`RM ${a} bulan ni untuk makan, hiburan dan hal peribadi`"
+  },
+  {
+   "en": "^Running costs add (\\d+)% on top of the instalment\\.$",
+   "bm": "(m,a)=>`Kos penyelenggaraan tambah ${a}% atas ansuran.`"
+  },
+  {
+   "en": "^Stop paying RM ([\\d,]+) for transport$",
+   "bm": "(m,a)=>`Berhenti bayar RM ${a} untuk pengangkutan`"
+  },
+  {
+   "en": "^Upfront cash at your safe budget: RM ([\\d,]+)\\. Need a full loan\\? Pick 0%\\.$",
+   "bm": "(m,a)=>`Tunai awal pada bajet selamat: RM ${a}. Nak pinjaman penuh? Pilih 0%.`"
+  },
+  {
+   "en": "^Year (\\d+)$",
+   "bm": "(m,a)=>`Tahun ${a}`"
+  },
+  {
+   "en": "^above RM (\\w+)$",
+   "bm": "(m,a)=>`atas RM ${a}`"
+  },
+  {
+   "en": "^up to RM (\\w+)$",
+   "bm": "(m,a)=>`sampai RM ${a}`"
+  },
+  {
+   "en": "^RM (\\w+) to (\\w+)$",
+   "bm": "(m,a,b)=>`RM ${a} hingga ${b}`"
+  },
+  {
+   "en": "^at RM ([\\d,]+) a month$",
+   "bm": "(m,a)=>`pada RM ${a} sebulan`"
+  },
+  {
+   "en": "^of take-home · RM ([\\d,]+) a month$",
+   "bm": "(m,a)=>`daripada gaji bersih · RM ${a} sebulan`"
+  },
+  {
+   "en": "^RM ([\\d,]+)\\/mo all-in$",
+   "bm": "(m,a)=>`RM ${a}/bln semua sekali`"
+  },
+  {
+   "en": "^of your take-home is committed\\. Needs are RM ([\\d,]+) (over|under) your 50% budget\\. Manageable, but keep wants small this month\\.$",
+   "bm": "(m,a,b)=>`daripada gaji bersih dah terikat. Keperluan ${b==='over'?'lebih':'kurang'} RM ${a} dari bajet 50%. Masih boleh, tapi kurangkan kehendak bulan ni.`"
+  },
+  {
+   "en": "^of your take-home goes to fixed bills and loans\\. Your needs \\(RM ([\\d,]+)\\) fit inside your 50% budget of RM ([\\d,]+), with RM ([\\d,]+) to spare\\.$",
+   "bm": "(m,a,b,c)=>`daripada gaji bersih pergi ke bil dan pinjaman tetap. Keperluan awak (RM ${a}) muat dalam bajet 50% (RM ${b}), lebih RM ${c}.`"
+  },
+  {
+   "en": "^of your take-home goes to fixed bills and loans\\. Your needs \\(RM ([\\d,]+)\\) are RM ([\\d,]+) over your 50% budget, so less is left for wants\\.$",
+   "bm": "(m,a,b)=>`daripada gaji bersih pergi ke bil dan pinjaman tetap. Keperluan awak (RM ${a}) lebih RM ${b} dari bajet 50%, jadi kehendak tinggal sikit.`"
+  },
+  {
+   "en": "^~([\\d.]+) years$",
+   "bm": "(m,a)=>`~${a} tahun`"
+  },
+  {
+   "en": "^(\\d+) months$",
+   "bm": "(m,a)=>`${a} bulan`"
+  },
+  {
+   "en": "^≈ RM ([\\d,]+)\\/day$",
+   "bm": "(m,a)=>`≈ RM ${a}/hari`"
+  },
+  {
+   "en": "^List your fixed monthly commitments\\. We check them against your 50% needs budget of RM ([\\d,]+)\\.$",
+   "bm": "(m,a)=>`Senaraikan komitmen tetap bulanan. Kami semak dengan bajet keperluan 50% awak, RM ${a}.`"
+  },
+  {
+   "en": "^Healthy ≤ (\\d+)%$",
+   "bm": "(m,a)=>`Sihat ≤ ${a}%`"
+  },
+  {
+   "en": "^Caution (\\d+) to (\\d+)%$",
+   "bm": "(m,a,b)=>`Hati-hati ${a} hingga ${b}%`"
+  },
+  {
+   "en": "^High > (\\d+)%$",
+   "bm": "(m,a)=>`Tinggi > ${a}%`"
+  },
+  {
+   "en": "^That's RM ([\\d,]+) more than you pay now\\. Room to upgrade if you want to\\.$",
+   "bm": "(m,a)=>`Lebih RM ${a} dari yang awak bayar sekarang. Boleh upgrade kalau nak.`"
+  },
+  {
+   "en": "^You pay RM ([\\d,]+) above the healthy line\\.$",
+   "bm": "(m,a)=>`Awak bayar RM ${a} atas garis sihat.`"
+  },
+  {
+   "en": "^(\\d+)% down · 9 yrs$",
+   "bm": "(m,a)=>`${a}% pendahuluan · 9 thn`"
+  },
+  {
+   "en": "^Loan \\((\\d+)%\\)$",
+   "bm": "(m,a)=>`Pinjaman (${a}%)`"
+  },
+  {
+   "en": "^Down payment \\((\\d+)%\\)$",
+   "bm": "(m,a)=>`Pendahuluan (${a}%)`"
+  },
+  {
+   "en": "^(\\d+) years at (.+)$",
+   "bm": "(m,a,b)=>`${a} tahun pada ${b}`"
+  }
+ ]
+}

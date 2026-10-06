@@ -49,7 +49,7 @@ every rule below and exposes them on window.__bajetje; expected outputs are in d
 - Instalment budget = net x 30%; 35 years; rate 3.5 / 4 / 4.5%
 - Loan = instalment x (1 - (1 + r)^-420) / r, r = rate / 12
 - Price = loan / (1 - down), down in {0, 10, 20}%; deposit = price x down
-- Deposit timeline months = ceil(deposit / savings)
+- Deposit timeline months = ceil(deposit / savingsOut)
 - 0% down only after eligibility check; price capped at RM 500,000
 
 ## First-home full-loan eligibility (indicative)
@@ -57,3 +57,9 @@ every rule below and exposes them on window.__bajetje; expected outputs are in d
 - Skim Rumah Pertamaku: gross <= RM 5,000 (single) and aged 21-40
 - SJKP: income <= RM 11,000
 - Copy must say: "Indicative only. The bank and scheme make the final decision."
+
+## Car "Jump to" chips
+- Comfortable max = floor(safe budget / 1,000) x 1,000 ; Max = floor(25% limit / 1,000) x 1,000
+
+## Hub reactions (thresholds, copy in docs/voice-and-tone.md)
+- Daily >= 100 / >= 40 / >= 20 / below. Salary submit note tiers by take-home: >= 5,000 / >= 3,000 / >= 2,000 / below.

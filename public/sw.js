@@ -1,6 +1,6 @@
 /* BajetJe service worker: offline app shell. Caches only the app's own files; no personal data passes through here. */
-const CACHE = "bajetje-v1";
-const SHELL = ["/", "/index.html", "/manifest.webmanifest", "/icon.svg"];
+const CACHE = "bajetje-v2";
+const SHELL = ["/", "/index.html", "/manifest.webmanifest", "/icons/app-icon-192.png", "/fonts/geist-latin.woff2", "/fonts/jetbrains-mono-latin.woff2", "/fonts/caveat-700-latin.woff2"];
 
 self.addEventListener("install", (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(SHELL)).then(() => self.skipWaiting()));
@@ -17,8 +17,7 @@ self.addEventListener("fetch", (e) => {
   if (req.method !== "GET") return;
   const url = new URL(req.url);
   const sameOrigin = url.origin === self.location.origin;
-  const isFont = url.hostname === "fonts.googleapis.com" || url.hostname === "fonts.gstatic.com";
-  if (!sameOrigin && !isFont) return;
+  if (!sameOrigin) return;
 
   // Pages: network first so updates land, cache as fallback for offline
   if (req.mode === "navigate") {
@@ -34,7 +33,7 @@ self.addEventListener("fetch", (e) => {
     return;
   }
 
-  // Hashed assets and fonts: cache first
+  // Hashed assets, fonts and icons: cache first
   e.respondWith(
     caches.match(req).then(
       (hit) =>

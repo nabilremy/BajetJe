@@ -1,16 +1,17 @@
 import { useEffect, useRef } from "react";
-import { Icon } from "../components/Icon";
 import { RollingNumber } from "../components/RollingNumber";
-import { AmberNote, ChoiceChips, ImpactBars, Legal, Navbar, StatusPill, toneVar } from "../components/ui";
+import { AmberNote, ChoiceChips, ImpactBars, Legal, Navbar, StatusPill, Toggle, toneVar, usePop } from "../components/ui";
 import { calc, carAllIn, carLimit, carVerdict, fmt, k, pct, rates, verdict, type Plan } from "../engine";
+import { useT, type T } from "../i18n";
 import { go } from "../state/router";
 import { setState, useApp } from "../state/store";
 
-const downLabel = (d: number) => (d === 0 ? "a full loan" : pct(d * 100) + " down");
 
 /** F5 · Car */
 export function Car() {
   const S = useApp();
+  const t = useT();
+  const jump = usePop<string>();
   const c = calc(S);
   const R = rates().car;
   const safe = carLimit(c.net, R.comfortableShare, S.carDown);
@@ -23,28 +24,28 @@ export function Car() {
 
   return (
     <div className="stack">
-      <Navbar title="What car can I afford?" />
+      <Navbar title={t("car.title")} />
       <div className="section" style={{ gap: 6 }}>
-        <div className="over">Your safe car budget</div>
+        <div className="over">{t("car.over")}</div>
         <div className="row" style={{ alignItems: "baseline", gap: 8 }}>
-          <span className="h2">Up to</span>
+          <span className="h2">{t("common.upTo")}</span>
           <span className="hero-md lime">RM {k(safe)}</span>
         </div>
         <p className="body">
-          Keeps the all-in car cost under RM {fmt(c.net * 0.2)}/mo, 20% of your take-home, with {downLabel(S.carDown)}.
+          {S.carDown === 0 ? t("car.bodyFull", { cap: fmt(c.net * 0.2) }) : t("car.bodyDown", { cap: fmt(c.net * 0.2), dp: Math.round(S.carDown * 100) })}
         </p>
       </div>
 
       <div className="section" style={{ gap: 8 }}>
         <div className="row between">
-          <h2 className="over">Down payment</h2>
-          <span className="cap">9 yrs · ~3% flat</span>
+          <h2 className="over">{t("car.down")}</h2>
+          <span className="cap">{t("car.terms")}</span>
         </div>
         <ChoiceChips
-          label="Down payment"
+          label={t("car.down")}
           value={S.carDown}
           options={[
-            [0, "Full loan (0%)"],
+            [0, t("car.fullLoan")],
             [0.1, "10%"],
             [0.2, "20%"],
             [0.3, "30%"],
@@ -52,16 +53,14 @@ export function Car() {
           onChange={(carDown) => setState({ carDown })}
         />
         {S.carDown === 0 ? (
-          <AmberNote title="Full loans are the exception">
-            Most banks lend up to 90%. 100% is mainly graduate schemes for new cars. With 10% down (RM {fmt(alt * 0.1)}), the same monthly budget buys up to RM {k(alt)}.
-          </AmberNote>
+          <AmberNote title={t("car.fullTitle")}>{t("car.fullBody", { down: fmt(alt * 0.1), k: k(alt) })}</AmberNote>
         ) : (
-          <p className="cap">Upfront cash at your safe budget: RM {fmt(safe * S.carDown)}. Need a full loan? Pick 0%.</p>
+          <p className="cap">{t("car.upfront", { v: fmt(safe * S.carDown) })}</p>
         )}
       </div>
 
       <div className="section">
-        <h2 className="over">What fits your salary</h2>
+        <h2 className="over">{t("car.fits")}</h2>
         <div style={{ position: "relative", paddingTop: 22 }}>
           <div className="zones">
             <i style={{ width: `${(safe / max) * 100}%`, background: "var(--lime)" }} />
@@ -84,9 +83,9 @@ export function Car() {
         </div>
         {(
           [
-            ["lime", "Comfortable", "up to RM " + k(safe), "New entry hatchback, or a used compact"],
-            ["amber", "Tight", "RM " + k(safe) + " to " + k(tight), "New compact hatchback or sedan"],
-            ["coral", "Stretch too far", "above RM " + k(tight), "Compact SUV and up"],
+            ["lime", t("car.comfortable"), t("car.rangeUpTo", { a: k(safe) }), t("car.exComfortable")],
+            ["amber", t("car.tight"), t("car.rangeBetween", { a: k(safe), b: k(tight) }), t("car.exTight")],
+            ["coral", t("car.stretch"), t("car.rangeAbove", { a: k(tight) }), t("car.exStretch")],
           ] as const
         ).map(([col, n, r, ex]) => (
           <div key={n} className="row" style={{ alignItems: "flex-start", gap: 10 }}>
@@ -104,38 +103,50 @@ export function Car() {
 
       <div className="section">
         <div className="row between">
-          <h2 className="over">Try a price</h2>
-          <span className="cap">{S.carDown === 0 ? "Full loan" : pct(S.carDown * 100) + " down"} · 9 yrs</span>
+          <h2 className="over">{t("car.try")}</h2>
+          <span className="cap">{S.carDown === 0 ? t("car.termFull") : t("car.termDown", { dp: Math.round(S.carDown * 100) })}</span>
         </div>
         <div className="field" style={{ height: 56 }}>
           <span className="cur">RM</span>
           <div className="val" style={{ fontSize: 24 }}>
             <RollingNumber value={fmt(p)} anchor="end" />
           </div>
-          <span className="cap">Car price</span>
+          <span className="cap">{t("car.price")}</span>
         </div>
         <div className="row" style={{ gap: 8, flexWrap: "wrap" }}>
-          <span className="cap">Jump to</span>
+          <span className="cap">{t("car.jump")}</span>
           {(
             [
-              [safeQ, "Comfortable max"],
-              [tightQ, "Max"],
+              [safeQ, "car.jumpComfortable"],
+              [tightQ, "car.jumpMax"],
             ] as const
           ).map(([v, l]) => (
-            <button key={l} className={`chip${v === p ? " on" : ""}`} aria-pressed={v === p} style={{ minHeight: 36 }} onClick={() => setState({ carPrice: v })}>
-              {l} · RM {k(v)}
+            <button
+              key={jump.key(l)}
+              className={`chip${v === p ? " on" : ""}${jump.cls(l)}`}
+              aria-pressed={v === p}
+              style={{ minHeight: 36 }}
+              onClick={() => {
+                jump.pop(l);
+                setState({ carPrice: v });
+              }}
+            >
+              {t(l, { k: k(v) })}
             </button>
           ))}
         </div>
-        <input type="range" className="range" min={10000} max={max} step={1000} value={p} aria-label="Car price" aria-valuetext={`RM ${fmt(p)}`} onChange={(e) => setState({ carPrice: +e.target.value })} />
-        <CarOutcome c={c} price={p} />
+        <input type="range" className="range" min={10000} max={max} step={1000} value={p} aria-label={t("car.price")} aria-valuetext={`RM ${fmt(p)}`} onChange={(e) => setState({ carPrice: +e.target.value })} />
+        <CarOutcome c={c} price={p} t={t} />
       </div>
-      <Legal>Estimates only. Actual rates, insurance and approval depend on the lender. Not financial advice.</Legal>
+      <Legal>{t("car.legal")}</Legal>
     </div>
   );
 }
 
-function CarOutcome({ c, price }: { c: Plan; price: number }) {
+const CAR_VERDICT = { Comfortable: "car.comfortable", Tight: "car.tight", Unaffordable: "car.unaffordable" } as const;
+const HEALTH_VERDICT = { Healthy: "common.healthy", Caution: "common.caution", High: "common.high" } as const;
+
+function CarOutcome({ c, price, t }: { c: Plan; price: number; t: T }) {
   const S = useApp();
   const a = carAllIn(price, S.carDown);
   const share = (a.total / (c.net || 1)) * 100;
@@ -154,20 +165,20 @@ function CarOutcome({ c, price }: { c: Plan; price: number }) {
   const [an, ac] = verdict(afterPct, 50, 65);
 
   const costs: [string, number, string][] = [
-    ["Loan instalment", a.inst, "var(--amber)"],
-    ["Petrol", a.petrol, "var(--ink-300)"],
-    ["Insurance & road tax", a.ins, "var(--ink-400)"],
-    ["Servicing", a.service, "var(--ink-500)"],
+    [t("car.instalment"), a.inst, "var(--amber)"],
+    [t("car.petrol"), a.petrol, "var(--ink-300)"],
+    [t("car.insurance"), a.ins, "var(--ink-400)"],
+    [t("car.servicing"), a.service, "var(--ink-500)"],
   ];
 
   return (
     <div>
       <div key={changed ? vn : "card"} className={`card${changed ? " rise-fast" : ""}`} style={{ gap: 10 }} aria-live="polite">
         <div className="row between">
-          <StatusPill tone={vc}>{vn}</StatusPill>
-          <span className="cap">{pct(share)} of take-home</span>
+          <StatusPill tone={vc}>{t(CAR_VERDICT[vn])}</StatusPill>
+          <span className="cap">{t("common.pctOfTakeHome", { pct: Math.round(share) })}</span>
         </div>
-        <div className="over">True monthly cost</div>
+        <div className="over">{t("car.trueCost")}</div>
         <div className="mono" style={{ fontSize: 40, fontWeight: 700, lineHeight: "44px" }}>
           RM {fmt(a.total)}
         </div>
@@ -187,47 +198,47 @@ function CarOutcome({ c, price }: { c: Plan; price: number }) {
           ))}
         </div>
         <div className="row" style={{ fontSize: 12 }}>
-          <span style={{ color: "var(--ink-300)" }}>Paid upfront ({S.carDown === 0 ? "full loan" : pct(S.carDown * 100) + " down"})</span>
+          <span style={{ color: "var(--ink-300)" }}>{S.carDown === 0 ? t("car.paidFull") : t("car.paidDown", { dp: Math.round(S.carDown * 100) })}</span>
           <span className="grow" />
           <span className="mono">RM {fmt(a.down)}</span>
         </div>
         <p className="cap" style={{ color: "var(--ink-400)" }}>
-          Running costs add {pct(((a.total - a.inst) / a.inst) * 100)} on top of the instalment.
+          {t("car.running", { pct: Math.round(((a.total - a.inst) / a.inst) * 100) })}
         </p>
       </div>
       {c.commit ? (
         <div className="section" style={{ paddingTop: 20 }}>
           <div className="row between">
-            <h2 className="over">If you buy it</h2>
-            <StatusPill tone={ac}>{an}</StatusPill>
+            <h2 className="over">{t("car.ifBuy")}</h2>
+            <StatusPill tone={ac}>{t(HEALTH_VERDICT[an])}</StatusPill>
           </div>
           <ImpactBars
-            title="Commitments"
+            title={t("common.commitments")}
             rows={[
-              ["Now", c.ratio, "var(--ink-600)", pct(c.ratio)],
-              ["After", afterPct, toneVar(ac), pct(afterPct)],
+              ["now", c.ratio, "var(--ink-600)", t("common.now", { v: pct(c.ratio) })],
+              ["after", afterPct, toneVar(ac), t("common.after", { v: pct(afterPct) })],
             ]}
           />
           <ImpactBars
-            title="You can spend a day"
+            title={t("car.spendDay")}
             rows={[
-              ["Now", 100, "var(--ink-600)", "RM " + fmt(c.daily)],
-              ["After", c.daily ? (Math.max(0, dailyAfter) / c.daily) * 100 : 0, "var(--lime)", "RM " + fmt(Math.max(0, dailyAfter))],
+              ["now", 100, "var(--ink-600)", t("common.now", { v: "RM " + fmt(c.daily) })],
+              ["after", c.daily ? (Math.max(0, dailyAfter) / c.daily) * 100 : 0, "var(--lime)", t("common.after", { v: "RM " + fmt(Math.max(0, dailyAfter)) })],
             ]}
           />
           {transport > 0 && (
-            <label className="row cap" style={{ gap: 8, minHeight: 44 }}>
-              <input type="checkbox" checked={S.carSwap} onChange={(e) => setState({ carSwap: e.target.checked })} style={{ accentColor: "var(--lime)", width: 18, height: 18 }} />
-              Stop paying RM {fmt(transport)} for transport
-            </label>
+            <div className="row cap" style={{ gap: 10, minHeight: 44 }}>
+              <Toggle on={S.carSwap} onChange={(carSwap) => setState({ carSwap })} label={t("car.swapAria")} />
+              <span>{t("car.swap", { v: fmt(transport) })}</span>
+            </div>
           )}
         </div>
       ) : (
         <div className="card" style={{ marginTop: 16, gap: 8 }}>
-          <div className="lbl">See what this does to your month</div>
-          <p className="cap">Add your commitments to check the impact on your health and daily spend.</p>
+          <div className="lbl">{t("car.emptyTitle")}</div>
+          <p className="cap">{t("car.emptyBody")}</p>
           <button className="link" onClick={() => go("commit")} style={{ alignSelf: "flex-start" }}>
-            Add commitments <Icon name="arrow" className="svg-i ic-sm" />
+            {t("car.emptyLink")}
           </button>
         </div>
       )}

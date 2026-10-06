@@ -3,7 +3,8 @@ import { CommitmentRow } from "../components/CommitmentRow";
 import { Icon } from "../components/Icon";
 import { RollingNumber, useSettled } from "../components/RollingNumber";
 import { Navbar, toast } from "../components/ui";
-import { BUCKETS, calc, fmt, pct, PRESETS, QUICK, uid, verdict, type BucketDef, type Commitment, type Plan } from "../engine";
+import { BUCKETS, calc, fmt, PRESETS, QUICK, uid, verdict, type BucketDef, type Commitment, type Plan } from "../engine";
+import { itemName, useLang, useT, type MsgKey, type T } from "../i18n";
 import { go } from "../state/router";
 import { getState, setState, useApp } from "../state/store";
 
@@ -12,6 +13,8 @@ let editMode = false;
 /** F3 · Commitments */
 export function Commitments() {
   const S = useApp();
+  const t = useT();
+  const lang = useLang();
   const [edit, setEdit] = useState(editMode);
   const [openId, setOpenId] = useState<string | null>(null);
   const [newId, setNewId] = useState<string | null>(null);
@@ -29,7 +32,7 @@ export function Commitments() {
     const item = list[idx];
     setOpenId(null);
     setState({ commitments: list.filter((x) => x.id !== id) });
-    toast(`Deleted ${item.name || "commitment"}`, () =>
+    toast(t("commit.deleted", { name: itemName(lang, item.name, item.custom) || t("commit.fallbackName") }), () =>
       setState((s) => {
         const next = [...s.commitments];
         next.splice(Math.min(idx, next.length), 0, item);
@@ -70,7 +73,7 @@ export function Commitments() {
       }}
     >
       <Navbar
-        title="My commitments"
+        title={t("commit.title")}
         right={
           <button
             className="link"
@@ -81,15 +84,15 @@ export function Commitments() {
               setOpenId(null);
             }}
           >
-            {edit ? "Done" : "Edit"}
+            {t(edit ? "common.done" : "common.edit")}
           </button>
         }
       />
       <div className="section" style={{ gap: 6 }}>
-        <h2 className="h1">What do you pay every month?</h2>
-        <p className="body">Fixed amounts only, grouped by your 50/30/20 split. Swipe left on a row to delete it.</p>
+        <h2 className="h1">{t("commit.heading")}</h2>
+        <p className="body">{t("commit.body")}</p>
         <button className="link" onClick={fillExample} style={{ alignSelf: "flex-start", color: "var(--ink-400)" }}>
-          Fill with an example
+          {t("commit.example")}
         </button>
       </div>
 
@@ -98,10 +101,11 @@ export function Commitments() {
           key={b.key}
           b={b}
           c={c}
+          t={t}
           chips={QUICK[b.key].map((q, i) => (
             <button key={q.name} className="chip" style={{ minHeight: 36 }} onClick={() => add(b.key, i)}>
               <Icon name="plus" className="svg-i ic-sm" />
-              {q.name}
+              {itemName(lang, q.name)}
             </button>
           ))}
         >
@@ -121,7 +125,7 @@ export function Commitments() {
             ))}
           <button className="item add" onClick={() => add(b.key)}>
             <Icon name="plus" className="svg-i ic-sm" />
-            Add to {b.label.toLowerCase()}
+            {t(ADD[b.key])}
           </button>
         </BucketSection>
       ))}
@@ -130,8 +134,8 @@ export function Commitments() {
       <div className="sticky" style={{ borderTop: "1px solid var(--ink-800)" }}>
         <div className="row">
           <div className="grow">
-            <div className="lbl soft">Fixed commitments</div>
-            <div className="cap">{c.net ? `${pct(c.ratio)} of your RM ${fmt(c.net)} take-home · savings not included` : ""}</div>
+            <div className="lbl soft">{t("commit.fixed")}</div>
+            <div className="cap">{c.net ? t("commit.share", { pct: Math.round(c.ratio), net: fmt(c.net) }) : ""}</div>
           </div>
           <div className="mono" style={{ fontSize: 20, fontWeight: 500 }}>
             RM&nbsp;
@@ -150,26 +154,33 @@ export function Commitments() {
           <span style={{ position: "absolute", left: "50%", top: 0, bottom: 0, width: 2, background: "var(--ink-50)" }} />
         </div>
         <button className="btn btn-primary" disabled={!(c.commit || c.savC)} onClick={() => go("health")}>
-          Check my commitment health
+          {t("commit.cta")}
         </button>
       </div>
     </div>
   );
 }
 
-function BucketSection({ b, c, chips, children }: { b: BucketDef; c: Plan; chips: ReactNode; children: ReactNode }) {
+const ADD: Record<BucketDef["key"], MsgKey> = { needs: "commit.addNeeds", wants: "commit.addWants", savings: "commit.addSavings" };
+const HINT: Record<BucketDef["key"], MsgKey> = { needs: "commit.hintNeeds", wants: "commit.hintWants", savings: "commit.hintSavings" };
+
+function BucketSection({ b, c, t, chips, children }: { b: BucketDef; c: Plan; t: T; chips: ReactNode; children: ReactNode }) {
   const used = b.key === "needs" ? c.needsC : b.key === "wants" ? c.wantsC : c.savC;
   const budget = b.key === "needs" ? c.needs : b.key === "wants" ? c.wants : c.savings;
   const over = used > budget;
-  let note = b.hint;
+  let note = t(HINT[b.key]);
   let amber = false;
   if (used) {
-    if (b.key === "savings")
-      note = used >= budget ? "On track: you already save at least 20%." : `RM ${fmt(budget - used)} more goes to savings automatically to reach 20%.`;
+    const v = fmt(Math.abs(budget - used));
+    if (b.key === "savings") note = used >= budget ? t("commit.savingsOk") : t("commit.savingsMore", { v });
     else if (over) {
-      note = `Over by RM ${fmt(used - budget)}. ${b.key === "needs" ? "This comes out of your wants." : "Your daily spending money shrinks."} You can still add more.`;
+      note = t(b.key === "needs" ? "commit.overNeeds" : "commit.overWants", { v });
       amber = true;
-    } else note = `RM ${fmt(budget - used)} left in ${b.label.toLowerCase()}`;
+    } else {
+      // "Plenty of room!" while under half the bucket is used
+      const room = used < budget * 0.5;
+      note = t(b.key === "needs" ? (room ? "commit.leftNeedsRoom" : "commit.leftNeeds") : room ? "commit.leftWantsRoom" : "commit.leftWants", { v });
+    }
   }
   return (
     <section className="section" aria-labelledby={`b-${b.key}`} style={{ gap: 10 }}>
@@ -177,7 +188,7 @@ function BucketSection({ b, c, chips, children }: { b: BucketDef; c: Plan; chips
         <div className="row" style={{ gap: 8 }}>
           <span className="sw" style={{ background: b.color, width: 10, height: 10 }} />
           <h3 className="h3" id={`b-${b.key}`}>
-            {b.label}
+            {t(`bucket.${b.key}`)}
           </h3>
           <span className="cap">{b.share * 100}%</span>
         </div>
