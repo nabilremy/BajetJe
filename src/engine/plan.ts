@@ -9,6 +9,8 @@ export type PlanInput = {
   raw: string;
   payday: Payday | null;
   commitments: Commitment[];
+  /** Monthly total typed in Simple mode; used as one needs commitment until any item has an amount. */
+  simpleTotal?: number;
 };
 
 export type Plan = Payroll & {
@@ -23,6 +25,10 @@ export type Plan = Payroll & {
   needsC: number;
   wantsC: number;
   savC: number;
+  /** sum of every listed item (all buckets) */
+  listed: number;
+  /** Simple-mode total in use (0 once items are listed) */
+  lump: number;
   /** fixed commitments = needs + wants buckets */
   commit: number;
   debt: number;
@@ -46,7 +52,9 @@ export function calc(s: PlanInput, now: Date = new Date(), r: Rates = rates()): 
   const savings = net - needs - wants;
   const sumB = (b: Bucket) =>
     s.commitments.filter((c) => c.bucket === b).reduce((a, c) => a + (+c.amt || 0), 0);
-  const needsC = sumB("needs");
+  const listed = s.commitments.reduce((a, c) => a + (+c.amt || 0), 0);
+  const lump = listed ? 0 : +(s.simpleTotal ?? 0) || 0;
+  const needsC = sumB("needs") + lump;
   const wantsC = sumB("wants");
   const savC = sumB("savings");
   const commit = needsC + wantsC;
@@ -69,6 +77,8 @@ export function calc(s: PlanInput, now: Date = new Date(), r: Rates = rates()): 
     needsC,
     wantsC,
     savC,
+    listed,
+    lump,
     commit,
     debt,
     ratio,

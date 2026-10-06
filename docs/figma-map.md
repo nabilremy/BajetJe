@@ -4,7 +4,7 @@ Connect via the Figma MCP (.mcp.json), then use get_design_context / get_screens
 
 | What | Page (id) | Key nodes |
 |---|---|---|
-| All screens + flow arrows + spec cards | Duit · Salary Routine Flow (63:2) | F0 Splash, F0b Welcome 106:355, F1 Salary 64:2, F1 Loading, F2 Hub 76:13, F2 Hub BM, F3 Commitments 65:2, F4 Health 66:2, F5 Car 70:2, F6 Housing 71:13, F6b Full loan 90:350 |
+| All screens + flow arrows + spec cards | Duit · Salary Routine Flow (63:2) | F0 Splash, F0b Welcome 106:355, F1 Salary 64:2, F1 Loading, F2 Hub (Detailed) 76:13, F2s Simple 122:585, F2 Hub BM, F3 Commitments 65:2, F4 Health 66:2, F5 Car 70:2, F6 Housing 71:13, F6b Full loan 90:350 |
 | Logo + brand boards | BajetJe · Brand (105:2) | Logo set 105:55 |
 | Doodle kit | BajetJe · Doodles (113:2) | Doodle set |
 | Icons | Duit · Icon (86:2) | Icon set 86:72 |

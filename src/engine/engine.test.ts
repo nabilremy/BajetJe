@@ -80,6 +80,24 @@ describe("plan (golden)", () => {
   });
 });
 
+describe("simple mode total (lump rule)", () => {
+  const now = day("2026-10-06");
+  const base = { mode: "net" as const, raw: "3090", payday: "25" };
+  it("uses the typed total as one needs commitment when nothing is listed", () => {
+    const p = calc({ ...base, commitments: [], simpleTotal: 1410 }, now);
+    expect(p.lump).toBe(1410);
+    expect(p.needsC).toBe(1410);
+    expect(p.commit).toBe(1410);
+    expect(p.daily).toBe(Math.floor((3090 - 1410 - 618) / p.days));
+  });
+  it("ignores the typed total once any item has an amount", () => {
+    const p = calc({ ...base, commitments: exampleCommitments(), simpleTotal: 9999 }, now);
+    expect(p.lump).toBe(0);
+    expect(p.commit).toBe(1410);
+    expect(p.listed).toBe(1510);
+  });
+});
+
 describe("car (golden)", () => {
   for (const g of golden.car) {
     it(`${g.down * 100}% down`, () => {

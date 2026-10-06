@@ -266,6 +266,41 @@
   .doodle-svg .pie { transform-box: fill-box; transform-origin: 50% 50%; animation: spin-in 700ms var(--ease) 500ms both; }
   .doodle-svg .spark { animation: twinkle 2.2s ease-in-out infinite; }
   .disclaimer { display: flex; gap: 12px; align-items: flex-start; background: var(--ink-800); border-radius: 12px; padding: 14px; }
+
+  /* Welcome (F0b): 60 / 20 / 34 padding, sticky CTA (docs/WELCOME_TASK.md). Type follows the prototype and Figma
+     106:355 (Heading/M 24/30, Body/S 13/20); WELCOME_TASK.md says 28/34 and 15/22, flagged in README. */
+  .screen[data-screen="welcome"] { padding-top: calc(60px + env(safe-area-inset-top, 0px)); }
+  .welcome.stack { padding-bottom: 0; }
+  .welcome-title { font-size: 24px; line-height: 30px; font-weight: 600; letter-spacing: -0.01em; text-wrap: balance; }
+  .welcome-lede { font-size: 13px; line-height: 20px; color: var(--ink-400); text-wrap: pretty; }
+  .disclaimer-icon { color: var(--amber); flex: none; display: flex; }
+  .disclaimer-title { font-size: 13px; line-height: 18px; font-weight: 500; }
+  .welcome-cta {
+    position: sticky; bottom: 0; display: flex; flex-direction: column; gap: 12px;
+    /* bottom padding lives here so the 34 px holds whether or not the screen scrolls */
+    padding: 16px 0 calc(34px + env(safe-area-inset-bottom, 0px));
+    background: linear-gradient(transparent, var(--ink-900) 30%);
+  }
+  /* F2s Simple mode: equation card (take-home − commitments = left) */
+  .equation { background: var(--ink-800); border-radius: 16px; padding: 6px 18px; display: flex; flex-direction: column; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035); }
+  .equation .ln { display: flex; align-items: center; gap: 10px; padding: 14px 0; border-bottom: 1px solid var(--ink-700); }
+  .equation .ln:last-child { border-bottom: 0; }
+  .equation .ln.result { flex-direction: column; align-items: stretch; gap: 6px; padding: 18px 0 16px; }
+  .equation .op { width: 18px; font-family: var(--mono); font-size: 18px; color: var(--ink-500); text-align: center; flex: none; }
+  .amt-in { display: flex; align-items: baseline; gap: 4px; border-bottom: 1.5px dashed var(--ink-600); padding: 2px 0; transition: border-color 150ms; }
+  .amt-in:focus-within { border-bottom-color: var(--lime); }
+  .amt-in input { width: 92px; background: transparent; border: 0; outline: 0; text-align: right; font-family: var(--mono); font-size: 20px; font-weight: 500; color: var(--ink-50); }
+  .amt-in input::placeholder { color: var(--ink-600); }
+  .hero.simple-hero { font-size: 52px; line-height: 60px; }
+  .lbar { display: flex; gap: 3px; height: 12px; }
+  .lbar i { border-radius: 4px; transition: flex-grow 400ms var(--ease); }
+  /* Simple | Detailed (and EN | BM on the hub): header and switch stay, the rest fades up; bars grow from the left */
+  .look-swap [data-r]:not(.keep) { animation: swap-in 300ms var(--ease) both; animation-delay: calc(var(--i, 0) * 45ms); }
+  .look-swap .grow-x, .look-swap .lbar i { transform-origin: left; animation: grow-x 450ms var(--ease) both; animation-delay: 160ms; }
+  .look-swap .lbar i + i { animation-delay: 220ms; }
+
+  /* EN | BM change: top bar stays, everything else fades up in the new language */
+  .welcome.lang-swap [data-r]:not(.keep) { animation: swap-in 300ms var(--ease) both; animation-delay: calc(var(--i, 0) * 45ms); }
   .hr { height: 1px; background: var(--ink-700); }
   .sticky {
     position: sticky; bottom: 0; margin: 0 -20px;
@@ -466,6 +501,8 @@
   *, *::before, *::after { animation-duration: 150ms !important; animation-delay: 0ms !important; transition-duration: 0ms !important; }
   .screen.in-fwd, .screen.in-back, .reveal [data-r], .roll > .in, .rise, .rise-fast, .toast { animation-name: fade !important; }
   .reveal .grow-x, .reveal .grow-y, .reveal .today, .marker.sweep > b, .pop, .split-body.swap * { animation: none !important; }
+  .welcome [data-r] { animation: none !important; }
+  .look-swap * { animation: none !important; }
 }
 
 /* Frosted strip under the phone's status bar. Zero height where there is no inset (desktop browsers). */

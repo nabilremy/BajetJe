@@ -1,0 +1,59 @@
+/* Welcome screen styles + motion. Uses BajetJe tokens (brand/tokens/tokens.css). */
+.welcome { min-height: 100%; display: flex; flex-direction: column; gap: 24px; padding: 60px 20px 34px; background: var(--color-ink-900); color: var(--color-ink-50); }
+.welcome .top { display: flex; align-items: center; gap: 8px; }
+.welcome .wordmark { font: 600 17px/1 var(--font-sans); letter-spacing: -0.02em; color: var(--color-lime-100); }
+.welcome .wordmark b { font-weight: 600; color: var(--color-lime-300); }
+.welcome .grow { flex: 1; }
+.welcome .doodle { align-self: center; width: 100%; max-width: 330px; }
+.welcome h1 { font: 600 28px/34px var(--font-sans); letter-spacing: -0.01em; margin: 0; }
+.welcome .lede { font: 400 15px/22px var(--font-sans); color: var(--color-ink-400); margin: 8px 0 0; }
+.welcome .disclaimer { display: flex; gap: 12px; align-items: flex-start; background: var(--color-ink-800); border-radius: 12px; padding: 14px; }
+.welcome .disclaimer .title { font: 500 13px/18px var(--font-sans); }
+.welcome .disclaimer .body { font: 400 12px/16px var(--font-sans); color: var(--color-ink-400); margin-top: 4px; }
+.welcome .disclaimer svg { color: var(--color-amber-400); flex: none; width: 18px; height: 18px; }
+.welcome .cta { position: sticky; bottom: 0; display: flex; flex-direction: column; gap: 12px; padding-top: 16px; background: linear-gradient(transparent, var(--color-ink-900) 30%); }
+.welcome .btn-primary { height: 52px; border-radius: 14px; background: var(--color-lime-300); color: var(--color-ink-900); font: 500 15px/1 var(--font-sans); border: 0; transition: transform 120ms var(--ease-out-strong); }
+.welcome .btn-primary:active { transform: scale(.97); }
+.welcome .privacy { display: flex; justify-content: center; align-items: center; gap: 6px; font: 400 12px/16px var(--font-sans); color: var(--color-ink-500); }
+
+/* Language switch with sliding thumb (same as everywhere else) */
+.lang { position: relative; display: flex; gap: 2px; padding: 2px; border-radius: 999px; background: var(--color-ink-800); }
+.lang::before { content: ""; position: absolute; top: 2px; left: 2px; width: 40px; height: 32px; border-radius: 999px; background: var(--color-ink-700); transform: translateX(calc(var(--i, 0) * 42px)); transition: transform 260ms var(--ease-out-strong); }
+.lang button { position: relative; z-index: 1; min-width: 40px; height: 32px; border: 0; background: none; border-radius: 999px; font: 600 12px/1 var(--font-sans); color: var(--color-ink-500); transition: color 180ms ease, transform 120ms var(--ease-out-strong); }
+.lang button:active { transform: scale(.92); }
+.lang button[aria-pressed="true"] { color: var(--color-ink-50); }
+
+/* Entrance: blocks rise in sequence (once, on first mount) */
+.welcome [data-r] { animation: rise 400ms var(--ease-out-strong) both; animation-delay: calc(var(--i, 0) * 60ms); }
+/* On language change: header stays, the rest fades up */
+.welcome.lang-swap [data-r]:not(.keep) { animation: swap-in 300ms var(--ease-out-strong) both; animation-delay: calc(var(--i, 0) * 45ms); }
+.welcome.lang-swap .keep { animation: none; }
+
+/* Doodle motion (first-time delight; subtle, slow, out of sync) */
+.doodle-svg .ch { transform-box: fill-box; transform-origin: 50% 100%; animation: bob 3.2s ease-in-out infinite; }
+.doodle-svg .ch2 { animation-duration: 3.6s; animation-delay: -1.2s; }
+.doodle-svg .ch3 { animation-duration: 3.4s; animation-delay: -0.6s; }
+.doodle-svg .bubble { transform-box: fill-box; transform-origin: 50% 100%; animation: pop 420ms var(--ease-spring) 300ms both, float 3s ease-in-out 900ms infinite; }
+.doodle-svg .b3 { animation-delay: 500ms, 1100ms; }
+.doodle-svg .q { transform-box: fill-box; transform-origin: 50% 100%; animation: wiggle 2.4s ease-in-out 800ms infinite; }
+.doodle-svg .eyes { transform-box: fill-box; transform-origin: 50% 50%; animation: blink 4.6s linear infinite; }
+.doodle-svg .ch2 .eyes { animation-delay: 1.5s; } .doodle-svg .ch3 .eyes { animation-delay: 3s; }
+.doodle-svg .coin { transform-box: fill-box; animation: drop 600ms var(--ease-out-strong) 900ms both; }
+.doodle-svg .pie { transform-box: fill-box; transform-origin: 50% 50%; animation: spin-in 700ms var(--ease-out-strong) 500ms both; }
+.doodle-svg .spark { animation: twinkle 2.2s ease-in-out infinite; }
+
+@keyframes rise { from { opacity: 0; transform: translateY(10px); } }
+@keyframes swap-in { from { opacity: 0; transform: translateY(6px); } }
+@keyframes pop { from { opacity: 0; transform: scale(.9); } to { opacity: 1; transform: none; } }
+@keyframes bob { 0%, 100% { transform: none; } 50% { transform: translateY(-3px); } }
+@keyframes float { 0%, 100% { transform: none; } 50% { transform: translateY(-4px); } }
+@keyframes wiggle { 0%, 100% { transform: rotate(-7deg); } 50% { transform: rotate(7deg); } }
+@keyframes blink { 0%, 93%, 100% { transform: none; } 96% { transform: scaleY(.1); } }
+@keyframes drop { from { transform: translateY(-26px); opacity: 0; } 50% { opacity: 1; } to { transform: none; opacity: 1; } }
+@keyframes spin-in { from { transform: rotate(-120deg); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes twinkle { 0%, 100% { opacity: .35; } 50% { opacity: 1; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .welcome [data-r], .doodle-svg * { animation: none !important; }
+  .lang::before { transition: none; }
+}

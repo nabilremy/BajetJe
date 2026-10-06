@@ -91,6 +91,11 @@ export function Commitments() {
       <div className="section" style={{ gap: 6 }}>
         <h2 className="h1">{t("commit.heading")}</h2>
         <p className="body">{t("commit.body")}</p>
+        {!S.commitments.some((x) => x.amt > 0) && S.simpleTotal > 0 && (
+          <p className="cap" style={{ color: "var(--amber)" }}>
+            {t("commit.simpleNote", { v: fmt(S.simpleTotal) })}
+          </p>
+        )}
         <button className="link" onClick={fillExample} style={{ alignSelf: "flex-start", color: "var(--ink-400)" }}>
           {t("commit.example")}
         </button>

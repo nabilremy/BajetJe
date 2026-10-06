@@ -1,0 +1,8 @@
+{ "welcome.title": "Know what your gaji can do.",
+  "welcome.lede": "Enter your salary once. BajetJe works out your daily budget, checks your commitments, and shows what car or home fits.",
+  "welcome.disclaimer.title": "Estimates only, not financial advice",
+  "welcome.disclaimer.body": "BajetJe is a planning tool, not a licensed financial adviser. Numbers are estimates based on public guidelines (EPF, LHDN, BNM). Check big decisions with your bank or a licensed financial planner.",
+  "welcome.cta": "I understand, let's start",
+  "welcome.privacy": "Your salary never leaves this phone",
+  "welcome.doodle.alt": "Three young workers thinking about their salary, budget and savings",
+  "lang.label": "Language" }
