@@ -86,6 +86,26 @@ The prototype wins where it disagrees with a doc. Decisions so far:
     after a visit that wasn't Healthy. Marker yellow is decoration only, never a status. Both are off under reduced motion.
     Generators: `brand/generators/underline.js`, `brand/generators/confetti.js` (CommonJS, run like the others).
 
+### Commitments: beyond the prototype (requested, Oct 2026)
+Not in the prototype, `docs/screens.md` or Figma. Designed to fit the existing system; wording needs review.
+
+- **Folded sections**: Needs / Wants / Savings start folded. The header (used / budget), bar and note always show; tap the
+  header to unfold the rows (260 ms). Open sections are remembered until the app closes.
+- **Pick several to delete**: Edit shows a tick on every row, plus "Pick all" and a coral "Delete {n}" in the footer, with one
+  Undo for the batch. This replaces the red minus that `docs/screens.md` describes. Swipe to delete still works.
+- **Start fresh**: clears the list back to the empty starting rows (two taps within 3 s, Undo). Salary is untouched.
+- **Saved lists**: "Save this list" keeps a named copy on the phone (up to 12, encrypted with the rest of the plan). "Use" brings
+  one back; saving under an existing name updates it. Each can be deleted (Undo).
+- **Delete all my data**: with saved lists, the second tap is a choice between "Delete everything" and "Delete, but keep my
+  lists" (6 s to read).
+- **List tools**: "Fill with an example", "Save this list" and "Start fresh" are chips with doodle icons (sparkle, save, reset).
+- **Bucket containers**: each of Needs / Wants / Savings sits on its own ink/800 surface; rows inside are inset on ink/900.
+- **Debt tag removed from rows** (requested). `docs/screens.md` still lists it. Debt items are still counted for the
+  "Debt only" ratio and shown in coral on Commitment Health.
+- **Sticky footers**: no top line; rows soften and fade over the 44 px above the footer, which is solid behind its text.
+- **Icons**: `save` and `reset` were added to `brand/generators/icons.js` and `brand/icons/` (24 icons in code, 22 in Figma).
+- New EN + BM strings: `commit.select*`, `commit.delete*`, `commit.reset*`, `lists.*`, `hub.wipeAsk / wipeAll / wipeKeep`.
+
 ### BM strings written for this build (not in docs/strings-en-bm.json, please review)
 `afford.notYet` Belum lagi ·
 `car.emptyTitle` Tengok kesannya pada bulan awak · `car.emptyBody` · `car.emptyLink` Tambah komitmen → ·

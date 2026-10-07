@@ -2,8 +2,10 @@
 // Run: node scripts/gen-brand.mjs
 import fs from "node:fs";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 
-const root = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..");
+// fileURLToPath, not URL.pathname: the latter gives "/C:/..." on Windows
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const read = (p) => fs.readFileSync(path.join(root, p), "utf8").replace(/<metadata>[\s\S]*?<\/metadata>/g, "");
 const inner = (s) => s.match(/<svg[^>]*>([\s\S]*)<\/svg>/)[1].trim();
 const viewBox = (s) => s.match(/viewBox="([^"]+)"/)[1];

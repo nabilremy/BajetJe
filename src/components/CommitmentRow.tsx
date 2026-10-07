@@ -5,18 +5,23 @@ import { Icon } from "./Icon";
 
 const W = 84;
 
-/** Commitment row: inline amount, iOS-style swipe to delete (vertical drags still scroll). */
+/** Commitment row: inline amount, iOS-style swipe to delete (vertical drags still scroll), tick to pick in Edit mode. */
 export function CommitmentRow({
   c,
   edit,
+  selected,
   open,
   isNew,
   onOpen,
+  onSelect,
   onChange,
   onDelete,
 }: {
   c: Commitment;
+  /** Edit mode: each row shows a tick to pick several for deleting */
   edit: boolean;
+  selected: boolean;
+  onSelect: () => void;
   open: boolean;
   isNew: boolean;
   onOpen: (open: boolean) => void;
@@ -105,8 +110,8 @@ export function CommitmentRow({
       </button>
       <div ref={fg} className="item sw-fg" onPointerDown={down} onPointerMove={move} onPointerUp={up} onPointerCancel={up}>
         {edit && (
-          <button className="minus" onClick={() => onOpen(!open)} aria-label={t("commit.revealAria", { name: label })} aria-expanded={open}>
-            <i />
+          <button className={`pick${selected ? " on" : ""}`} role="checkbox" aria-checked={selected} aria-label={t("commit.selectAria", { name: label })} onClick={onSelect}>
+            {selected && <Icon name="check" className="svg-i ic-sm" />}
           </button>
         )}
         <span className="ico">
@@ -124,10 +129,7 @@ export function CommitmentRow({
             maxLength={28}
             onChange={(e) => onChange({ name: e.target.value.slice(0, 28), custom: true })}
           />
-          <div className="row" style={{ gap: 6 }}>
-            <span className="cap">{categoryName(lang, c.cat)}</span>
-            {c.debt && <span className="tag">{t("commit.debt")}</span>}
-          </div>
+          <div className="cap">{categoryName(lang, c.cat)}</div>
         </div>
         <label className="amt">
           <span className="cap">RM</span>

@@ -23,6 +23,9 @@ const I={
  vledger:[S([[8,6],[20,6]]),S([[8,12],[20,12]]),S([[8,18],[20,18]]),{dot:[4.4,6,1.2]},{dot:[4.4,12,1.2]},{dot:[4.4,18,1.2]}],
  check:[S([[5,12.6],[9.6,17],[19,7]],{w:1.9})],
  sparkle:[S([[12,3],[12.6,10.8],[21,12],[12.6,13.2],[12,21],[11.4,13.2],[3,12],[11.4,10.8],[12,3]],{n:60,t:0.2})],
+ // Commitments list tools: save (bookmark), reset (start fresh). Appended so earlier seeds stay the same.
+ save:[S([[6.8,3.8],[6.5,20.4],[12,15.8],[17.5,20.4],[17.2,3.8],[6.8,3.8]],{n:50,t:0.25})],
+ reset:[R(arc(12,12.6,7.4,-50,250,26)),S([[16.9,10.5],[16.8,6.7],[20.6,6.3]],{w:1.9})],
 };
 const out={}; let k=11; for (const [n,st] of Object.entries(I)) out[n]=draw(st,{w:1.65,amp:0.22,seedv:(k+=13)});
 module.exports=out;
