@@ -196,6 +196,12 @@ export const M = {
   ],
   "hub.wipe": ["Delete all my data from this phone", "Padam semua data saya dari telefon ni"],
   "hub.wipeArmed": ["Tap again to delete everything", "Tekan lagi sekali untuk padam semua"],
+  "hub.wipeAsk": [
+    "You have {n, plural, one {# saved list. Want to keep it} other {# saved lists. Want to keep them}} for next time?",
+    "Awak ada {n} senarai tersimpan. Nak simpan untuk lain kali?",
+  ],
+  "hub.wipeAll": ["Delete everything", "Padam semua"],
+  "hub.wipeKeep": ["Delete, but keep my lists", "Padam, tapi simpan senarai"],
 
   /* ---------- F2s Simple mode ---------- */
   "look.label": ["View mode", "Mod paparan"],
@@ -267,10 +273,33 @@ export const M = {
   "commit.nameAria": ["Commitment name", "Nama komitmen"],
   "commit.amountAria": ["{name} monthly amount", "Jumlah bulanan {name}"],
   "commit.deleteAria": ["Delete {name}", "Padam {name}"],
-  "commit.revealAria": ["Show delete for {name}", "Tunjuk padam untuk {name}"],
   "commit.deleted": ["Deleted {name}", "{name} dah dipadam"],
+  /* Pick several to delete (Edit mode) */
+  "commit.selectAria": ["Pick {name}", "Pilih {name}"],
+  "commit.selectAll": ["Pick all", "Pilih semua"],
+  "commit.selectNone": ["Unpick all", "Batal pilihan"],
+  "commit.deleteNone": ["Pick what to delete", "Pilih yang nak dipadam"],
+  "commit.deleteN": ["Delete {n}", "Padam {n}"],
+  "commit.deletedN": ["{n, plural, one {# commitment} other {# commitments}} deleted. Lighter already!", "{n} komitmen dah dipadam. Ringan sikit!"],
+  /* Start fresh (two taps) */
+  "commit.reset": ["Start fresh", "Mula semula"],
+  "commit.resetArmed": ["Tap again to clear the list", "Tekan lagi sekali untuk kosongkan"],
+  "commit.resetDone": ["Fresh start! Your list is cleared.", "Mula baru! Senarai dah kosong."],
+  /* Saved lists */
+  "lists.title": ["Saved lists", "Senarai tersimpan"],
+  "lists.save": ["Save this list", "Simpan senarai ni"],
+  "lists.nameAria": ["Name for this list", "Nama untuk senarai ni"],
+  "lists.namePlaceholder": ["Give it a name", "Bagi nama"],
+  "lists.defaultName": ["List {n}", "Senarai {n}"],
+  "lists.saveCta": ["Save", "Simpan"],
+  "lists.saved": ["Saved as {name}. It's here whenever you need it!", "Dah simpan sebagai {name}. Ada je bila awak perlukan!"],
+  "lists.meta": ["{n, plural, one {# item} other {# items}} · RM {v}", "{n} perkara · RM {v}"],
+  "lists.use": ["Use", "Guna"],
+  "lists.useAria": ["Use {name}", "Guna {name}"],
+  "lists.used": ["{name} is back on your list!", "{name} dah masuk balik!"],
+  "lists.deleteAria": ["Delete saved list {name}", "Padam senarai tersimpan {name}"],
+  "lists.full": ["That's {n} saved lists, the most we keep. Delete one to save another.", "Dah ada {n} senarai tersimpan, itu had kami. Padam satu untuk simpan yang baru."],
   "commit.fallbackName": ["commitment", "komitmen"],
-  "commit.debt": ["Debt", "Hutang"],
 
   /* ---------- F4 Health ---------- */
   "health.title": ["Commitment health", "Kesihatan komitmen"],

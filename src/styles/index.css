@@ -332,8 +332,19 @@
   .sticky {
     position: sticky; bottom: 0; margin: 0 -20px;
     padding: 16px 20px calc(20px + env(safe-area-inset-bottom, 0px));
-    background: linear-gradient(to bottom, rgba(30, 30, 30, 0), var(--ink-900) 22%);
-    display: flex; flex-direction: column; gap: 12px;
+    /* z-index (not isolation) makes the stacking context: an isolated group would hide the page from the blur */
+    display: flex; flex-direction: column; gap: 12px; z-index: 1;
+  }
+  /* Progressive frost edge, like the status bar strip: rows soften and fade over the 44 px above the footer, and the
+     footer itself is solid so nothing underneath reads through its text. No line.
+     (A see-through blur behind the text was tried: inside the scroller the phone's WebView leaves text unblurred.) */
+  .sticky::before {
+    content: ""; position: absolute; inset: -44px 0 0; z-index: -1; pointer-events: none;
+    background: linear-gradient(to bottom, rgba(30, 30, 30, 0), var(--ink-900) 44px);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    -webkit-mask-image: linear-gradient(to bottom, transparent, #000 36px);
+    mask-image: linear-gradient(to bottom, transparent, #000 36px);
   }
   .note-amber {
     background: rgba(255, 187, 51, 0.12); border-radius: 10px; padding: 12px 14px;
@@ -371,12 +382,38 @@
     font-size: 13px; font-weight: 600; color: var(--ink-900);
   }
   .sw-fg { position: relative; transition: transform 220ms var(--ease); touch-action: pan-y; will-change: transform; }
-  .minus {
-    width: 24px; height: 24px; border-radius: 99px; background: var(--coral); display: grid; place-items: center;
-    flex: none; transition: transform 120ms var(--ease);
+  /* Edit mode tick: pick several rows to delete. Selected = ink-50 fill, like a selected chip. */
+  .pick {
+    position: relative; width: 24px; height: 24px; border-radius: 99px; display: grid; place-items: center; flex: none;
+    box-shadow: inset 0 0 0 1.5px var(--ink-500); color: var(--ink-900);
+    transition: transform 120ms var(--ease), background 180ms var(--ease), box-shadow 180ms var(--ease);
+    animation: sel-pop 260ms var(--spring) both;
   }
-  .minus:active { transform: scale(0.9); }
-  .minus i { width: 10px; height: 2px; border-radius: 1px; background: var(--ink-900); }
+  .pick::after { content: ""; position: absolute; inset: -10px; }
+  .pick:active { transform: scale(0.9); }
+  .pick.on { background: var(--ink-50); box-shadow: none; }
+  .pick.on .svg-i { animation: sel-pop 340ms var(--spring) both; }
+  .btn-danger { background: var(--coral); color: var(--ink-900); }
+  .btn-danger:disabled { background: var(--ink-700); color: var(--ink-400); pointer-events: none; }
+
+  /* Needs / Wants / Savings fold: header, bar and note always show; rows fold away (260 ms) */
+  .fold-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%; text-align: left; transition: transform 120ms var(--ease); }
+  .fold-head:active { transform: scale(0.99); }
+  .fold-head .chev { width: 16px; height: 16px; color: var(--ink-500); transform: rotate(-90deg); transition: transform 260ms var(--ease); }
+  .fold-head[aria-expanded="true"] .chev { transform: rotate(90deg); }
+  /* Folded: the negative margin takes back the section gap, so a closed card has even padding */
+  .fold { display: grid; grid-template-rows: 0fr; margin-top: -10px; transition: grid-template-rows 260ms var(--ease), margin-top 260ms var(--ease); }
+  .fold.open { grid-template-rows: 1fr; margin-top: 0; }
+  /* Side padding keeps focus rings inside the clip */
+  .fold > div { min-height: 0; overflow: hidden; display: flex; flex-direction: column; gap: 10px; padding: 0 4px; margin: 0 -4px; opacity: 0; transition: opacity 200ms var(--ease); }
+  .fold.open > div { opacity: 1; }
+
+  /* Saved lists */
+  .savebar { display: flex; align-items: center; gap: 8px; padding: 8px 8px 8px 14px; border-radius: 12px; background: var(--ink-800); box-shadow: inset 0 0 0 1px var(--ink-700); animation: rise 250ms var(--ease) both; }
+  .savebar:focus-within { box-shadow: inset 0 0 0 1.5px var(--lime); }
+  .savebar input { flex: 1; min-width: 0; background: none; border: 0; outline: 0; font-size: 15px; font-weight: 500; padding: 8px 0; }
+  .savebar input::placeholder { color: var(--ink-600); }
+  .iconbtn.ghost { background: none; color: var(--ink-500); }
 
   /* View toggle */
   .vt { position: relative; display: flex; gap: 2px; padding: 2px; border-radius: 10px; background: var(--ink-800); }
@@ -474,7 +511,10 @@
   .list { display: flex; flex-direction: column; gap: 8px; }
   .item { display: flex; align-items: center; gap: 12px; padding: 10px 14px 10px 12px; border-radius: 12px; background: var(--ink-800); }
   .ico { width: 34px; height: 34px; border-radius: 9px; background: var(--ink-700); display: grid; place-items: center; flex: none; }
-  .tag { font-size: 11px; padding: 0 6px; border-radius: 999px; background: var(--coral); color: var(--ink-900); font-weight: 500; }
+  /* Needs / Wants / Savings container: one surface per bucket, rows sit inset on the base colour */
+  .bucket { background: var(--ink-800); border-radius: 14px; padding: 16px; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035); }
+  .bucket .swipe:not(.live), .bucket .item:not(.add) { background: var(--ink-900); }
+  .bucket .chip { background: var(--ink-700); }
   .add { gap: 6px; border: 1px dashed var(--ink-600); background: transparent; justify-content: center; color: var(--ink-50); font-size: 13px; font-weight: 500; min-height: 48px; }
   .legend { display: flex; flex-direction: column; gap: 8px; }
   .legend .row { font-size: 12px; }

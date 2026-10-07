@@ -250,24 +250,44 @@ function AffordTile(p: { icon: IconName; title: string; pre: string; val: ReactN
   );
 }
 
-/** Wipe everything on this phone (two taps within 3 s), then back to Welcome. */
+/** Wipe everything on this phone (two taps within 3 s), then back to Welcome. With saved commitment lists, the second
+ *  tap is a choice: delete everything, or delete but keep the lists (6 s to read it). */
 function DataControls() {
   const t = useT();
+  const lists = useApp().savedLists.length;
   const [armed, setArmed] = useState(false);
 
   useEffect(() => {
     if (!armed) return;
-    const id = setTimeout(() => setArmed(false), 3000);
+    const id = setTimeout(() => setArmed(false), lists ? 6000 : 3000);
     return () => clearTimeout(id);
-  }, [armed]);
+  }, [armed, lists]);
 
-  const wipe = async () => {
-    if (!armed) return setArmed(true);
-    await wipeAll();
+  const wipeNow = async (keepLists: boolean) => {
+    await wipeAll(keepLists);
     document.documentElement.lang = "en";
     resetReveal();
     go("welcome", "reset");
   };
+  const wipe = () => (armed ? wipeNow(false) : setArmed(true));
+
+  if (armed && lists)
+    return (
+      <div className="section rise-fast" style={{ alignItems: "center", gap: 20 }} role="group" aria-label={t("hub.wipe")}>
+        <p className="cap" style={{ textAlign: "center", color: "var(--ink-300)" }}>
+          {t("hub.wipeAsk", { n: lists })}
+        </p>
+        <div className="row" style={{ flexWrap: "wrap", justifyContent: "center", gap: "24px 20px" }}>
+          <button className="link" onClick={() => wipeNow(true)} style={{ fontSize: 12 }}>
+            {t("hub.wipeKeep")}
+          </button>
+          <button className="link" onClick={() => wipeNow(false)} style={{ color: "var(--coral)", fontSize: 12 }}>
+            <Icon name="trash" />
+            <span> {t("hub.wipeAll")}</span>
+          </button>
+        </div>
+      </div>
+    );
 
   return (
     <button className="link" onClick={wipe} style={{ alignSelf: "center", color: armed ? "var(--coral)" : "var(--ink-500)", fontSize: 12 }}>
