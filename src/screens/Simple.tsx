@@ -2,6 +2,7 @@ import type { CSSProperties } from "react";
 import { Icon } from "../components/Icon";
 import { RollingNumber, useSettled } from "../components/RollingNumber";
 import { savingsTip } from "../components/savingsTip";
+import { SplitCard } from "../components/SplitCard";
 import { Reaction, StatusPill } from "../components/ui";
 import { fmt, verdict, type Plan } from "../engine";
 import { useT, type MsgKey } from "../i18n";
@@ -13,7 +14,7 @@ const VERDICT_KEY = { Healthy: "common.healthy", Caution: "common.caution", High
 const dailyReaction = (d: number): MsgKey => (d >= 100 ? "react.daily100" : d >= 40 ? "react.daily40" : d >= 20 ? "react.daily20" : "react.dailyLow");
 
 /**
- * F2s · My Plan, Simple mode (default): Take-home − Commitments (− Savings you listed) = Extra money.
+ * F2s · My Plan, Simple mode (default): Take-home − Commitments (− Savings you listed) = Extra money, then the 50/30/20 split.
  * Unfilled savings stay in extra money; the 20% target is a tip, never a silent deduction.
  */
 export function Simple({ c, lookN }: { c: Plan; lookN: number }) {
@@ -131,7 +132,11 @@ export function Simple({ c, lookN }: { c: Plan; lookN: number }) {
         </button>
       )}
 
-      <div className="disclaimer" {...r(5)}>
+      <div {...r(5)}>
+        <SplitCard c={c} />
+      </div>
+
+      <div className="disclaimer" {...r(6)}>
         <span style={{ color: "var(--lime)", flex: "none", display: "flex" }}>
           <Icon name="sparkle" />
         </span>
@@ -140,7 +145,7 @@ export function Simple({ c, lookN }: { c: Plan; lookN: number }) {
         </p>
       </div>
 
-      <button className="btn btn-quiet" onClick={() => setState({ look: "detailed" })} {...r(6)}>
+      <button className="btn btn-quiet" onClick={() => setState({ look: "detailed" })} {...r(7)}>
         {t("simple.full")}
       </button>
       <p className="cap" style={{ textAlign: "center", fontSize: 11, padding: "4px 12px 0" }}>
