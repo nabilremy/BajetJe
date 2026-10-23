@@ -12,8 +12,11 @@ const VIEWS = [
 
 const reduced = () => typeof matchMedia !== "undefined" && matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-/** 50/30/20 split: one container for every view; only the body changes. `boxed` puts it on its own surface (Simple). */
-export function SplitCard({ c, boxed }: { c: Plan; boxed?: boolean }) {
+/**
+ * 50/30/20 split: one container for every view; only the body changes.
+ * My Plan V2: `inCard` (empty state, header inside the card) or `headOut` (filled state, header above the card).
+ */
+export function SplitCard({ c, layout }: { c: Plan; layout: "inCard" | "headOut" }) {
   const S = useApp();
   const t = useT();
   const [how, setHow] = useState(false);
@@ -38,8 +41,8 @@ export function SplitCard({ c, boxed }: { c: Plan; boxed?: boolean }) {
     el.animate([{ height: h0 + "px" }, { height: el.offsetHeight + "px" }], { duration: 260, easing: "cubic-bezier(0.23,1,0.32,1)" });
   }, [swap]);
 
-  return (
-    <div className={`section split${boxed ? " split-boxed" : ""}`}>
+  const head = (
+    <>
       <div className="row between">
         <div className="row" style={{ gap: 6 }}>
           <h2 className="over">{t("split.title")}</h2>
@@ -60,9 +63,25 @@ export function SplitCard({ c, boxed }: { c: Plan; boxed?: boolean }) {
           {t("split.howBody")}
         </p>
       )}
-      <div ref={body} key={swap} className={`split-body${swap ? " swap" : ""}`}>
-        <SplitBody c={c} view={S.variant} t={t} />
+    </>
+  );
+  const splitBody = (
+    <div ref={body} key={swap} className={`split-body${swap ? " swap" : ""}`}>
+      <SplitBody c={c} view={S.variant} t={t} />
+    </div>
+  );
+
+  if (layout === "inCard")
+    return (
+      <div className="card split">
+        {head}
+        {splitBody}
       </div>
+    );
+  return (
+    <div className="section split" style={{ gap: 12 }}>
+      {head}
+      <div className="card">{splitBody}</div>
     </div>
   );
 }

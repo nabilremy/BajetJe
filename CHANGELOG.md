@@ -1,5 +1,23 @@
 # Changelog (what changed since the first handoff pack)
 
+## Latest: Commitments breakdown (24 Oct)
+- Commitments card gets "See breakdown": read-only list by Needs, Wants and Savings set aside, inline on the dashboard.
+  Editing stays on the pencil (F3). Spec: docs/commitments-breakdown.md. New icon brand/icons/chev.svg.
+
+## Extra money polish (24 Oct)
+- **Pill hop**: on collapse/expand the health pill fades out in place and pops in at its new place (100 ms out, 260 ms spring in),
+  instead of sliding across the number. Chips and split bar now glide with the card. Spec: docs/extra-money-motion.md.
+- **Tooltip no longer cut off**: card clips only while animating and sits above the next section. Collapsing closes an open tooltip.
+- Figma: stage 2 of the flow page rebuilt on V2 with all states, arrows and specs (docs/figma-map.md).
+
+## V2 dashboard (replaces Simple and Detailed)
+- One My Plan layout for everyone with clear hierarchy: pay-cycle strip, then a connected money flow
+  (Take-home -> Commitments -> **Extra money**), then 50/30/20, afford tiles, tip. Spec: docs/screens.md "F2 · My Plan (V2)".
+- Empty state (salary only) shows 50/30/20 and the commitment-health invitation inside the flow.
+- **Extra money** card: health pill, big lime number, week / till-payday chips with tooltips, 3-part split bar.
+- **Collapse** button makes the number smaller with a FLIP shrink, height ease and icon turn; remembered.
+- Removed: Simple | Detailed switch, daily-budget hero, reaction chip on the hub, KL warning card. New icons: brand/icons/shrink.svg, grow.svg.
+
 Newest first. If you built from an earlier pack, apply everything below; TASKS.md turns it into steps.
 
 ## Brand and identity

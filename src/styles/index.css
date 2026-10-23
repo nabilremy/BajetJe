@@ -308,24 +308,43 @@
   .disclose-body > .disclose-inner { overflow: hidden; min-height: 0; display: flex; flex-direction: column; gap: 18px; padding: 0 18px; opacity: 0; transition: opacity 200ms ease, padding 260ms var(--ease); }
   .disclose.open .disclose-body > .disclose-inner { opacity: 1; padding: 2px 18px 18px; }
 
-  /* F2s Simple mode: equation card (take-home − commitments = left) */
-  .equation { background: var(--ink-800); border-radius: 16px; padding: 6px 18px; display: flex; flex-direction: column; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035); }
-  .equation .ln { display: flex; align-items: center; gap: 10px; padding: 14px 0; border-bottom: 1px solid var(--ink-700); }
-  .equation .ln:last-child { border-bottom: 0; }
-  .equation .ln.result { flex-direction: column; align-items: stretch; gap: 6px; padding: 18px 0 16px; }
-  .equation .op { width: 18px; font-family: var(--mono); font-size: 18px; color: var(--ink-500); text-align: center; flex: none; }
-  .amt-in { display: flex; align-items: baseline; gap: 4px; border-bottom: 1.5px dashed var(--ink-600); padding: 2px 0; transition: border-color 150ms; }
-  .amt-in:focus-within { border-bottom-color: var(--lime); }
-  .amt-in input { width: 92px; background: transparent; border: 0; outline: 0; text-align: right; font-family: var(--mono); font-size: 20px; font-weight: 500; color: var(--ink-50); }
-  .amt-in input::placeholder { color: var(--ink-600); }
-  .hero.simple-hero { font-size: 52px; line-height: 60px; }
-  .equation .lbar-wrap { margin-top: 12px; }
-/* Simple, before commitments are listed: the bar closes the salary card */
-.equation .ln.ln-bar { flex-direction: column; align-items: stretch; padding: 14px 0 16px; }
-.equation .ln-bar .lbar-wrap { margin-top: 0; }
-/* Simple: the 50/30/20 split on its own surface, same shape as the salary card */
-.split-boxed { background: var(--ink-800); border-radius: 16px; padding: 18px; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035); }
-.split-boxed .jar .glass { background: var(--ink-900); }
+  /* F2 My Plan V2: the money flow. Cards joined by a spine 44 px in from the card edge, visible in the 20 px gaps. */
+  .flow { position: relative; display: flex; flex-direction: column; gap: 20px; }
+  .flow::before { content: ""; position: absolute; left: 44px; top: 28px; bottom: 28px; width: 5px; border-radius: 3px; background: var(--ink-800); transform-origin: top; }
+  .flow > * { position: relative; z-index: 1; }
+  .reveal .flow::before { animation: spine 700ms var(--ease) 180ms both; }
+  .mcard { display: flex; align-items: center; gap: 12px; padding: 14px 12px 14px 16px; border-radius: 14px; background: var(--ink-800); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035); }
+  /* Commitments card with its inline breakdown */
+  .ccard { flex-direction: column; align-items: stretch; gap: 0; }
+  .disc {
+    display: inline-flex; align-items: center; gap: 6px; margin: 2px 0 -10px -2px; padding: 10px 2px; min-height: 44px;
+    color: var(--ink-300); font-size: 13px; transition: transform 120ms var(--ease), opacity 120ms;
+  }
+  .disc:active { transform: scale(0.96); opacity: 0.7; }
+  .disc .disc-n { color: var(--ink-500); }
+  .disc .disc-n::before { content: "·"; margin-right: 6px; color: var(--ink-600); }
+  .disc .svg-i { width: 16px; height: 16px; transition: transform 240ms var(--ease); }
+  .ccard.open .disc .svg-i { transform: rotate(180deg); }
+  .cbody { display: flex; flex-direction: column; gap: 14px; margin-top: 12px; padding-top: 14px; border-top: 1px solid var(--ink-700); }
+  .cbody[hidden] { display: none; }
+  .cgrp { display: flex; flex-direction: column; gap: 8px; }
+  .crow { display: flex; align-items: center; gap: 10px; }
+  .crow .mono { font-size: 13px; color: var(--ink-300); }
+  .chead .mono { color: var(--ink-50); font-weight: 500; }
+  .citem { padding-left: 18px; font-size: 13px; color: var(--ink-300); }
+  .cdot { width: 8px; height: 8px; border-radius: 2px; flex: none; }
+  .cnote { padding-left: 18px; }
+  /* Extra money card: clips only while it animates, and sits above the next section so its tooltip floats over it */
+  .xcard { gap: 12px; padding: 16px; border-radius: 16px; overflow: visible; position: relative; z-index: 3; }
+  .xcard .tip { z-index: 20; }
+  .xhead { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
+  .xamt { font-family: var(--mono); font-size: 52px; line-height: 60px; font-weight: 700; letter-spacing: -0.03em; color: var(--lime); transform-origin: left top; white-space: nowrap; }
+  .xcard.small .xhead { flex-direction: row-reverse; justify-content: flex-end; align-items: center; gap: 10px; }
+  .xcard.small .xamt { font-size: 28px; line-height: 34px; letter-spacing: -0.02em; }
+  .xbtn { background: var(--ink-700) !important; transition: transform 120ms var(--ease); }
+  .xbtn:active { transform: scale(0.94); }
+  .xop { width: 18px; font-family: var(--mono); font-size: 20px; color: var(--ink-500); text-align: center; flex: none; }
+.split.card .jar .glass, .split .card .jar .glass { background: var(--ink-900); }
 .lbar { display: flex; gap: 3px; height: 12px; }
   .lbar i { border-radius: 4px; transition: flex-grow 400ms var(--ease); }
   /* Simple | Detailed (and EN | BM on the hub): header and switch stay, the rest fades up; bars grow from the left */
@@ -576,6 +595,7 @@
 @keyframes spin-in { from { transform: rotate(-120deg); opacity: 0; } to { transform: none; opacity: 1; } }
 @keyframes scr-ltr { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
 @keyframes scr-rtl { from { clip-path: inset(0 0 0 100%); } to { clip-path: inset(0 0 0 0); } }
+@keyframes spine { from { transform: scaleY(0); } }
 @keyframes twinkle { 0%, 100% { opacity: 0.35; } 50% { opacity: 1; } }
 
 /* Reduced motion: fades only */
@@ -591,6 +611,7 @@
   .welcome [data-r] { animation: none !important; }
   .look-swap * { animation: none !important; }
   .scribble .scr { animation: none !important; }
+  .reveal .flow::before { animation: none !important; }
 }
 
 /* Frosted strip under the phone's status bar. Zero height where there is no inset (desktop browsers). */

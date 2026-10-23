@@ -4,6 +4,9 @@ Read CLAUDE.md first. Work one task at a time; after each, compare with prototyp
 If the project is new, do all tasks. If you already built from an earlier pack, also do the "Migration" items marked (M).
 
 ## Priority fix
+- [x] **Commitments card: inline breakdown** (S): docs/commitments-breakdown.md, tick its acceptance criteria.
+- [x] **Extra money: pill hop + unclipped tooltip** (S): follow docs/extra-money-motion.md exactly, tick its acceptance criteria.
+- [x] **Rebuild My Plan as the V2 dashboard** (M): docs/screens.md "F2 · My Plan (V2)", calculation-rules.md "V2 dashboard". Remove Simple/Detailed.
 - [ ] **Welcome screen (F0b) is missing**: follow docs/WELCOME_TASK.md (routing, layout, motion, acceptance checklist).
       Reference code in reference/welcome/.
 
