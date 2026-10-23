@@ -446,6 +446,10 @@
 
   /* Hero numbers */
   .hero { font-family: var(--mono); font-weight: 700; font-size: 64px; line-height: 72px; letter-spacing: -0.03em; }
+  /* Detailed hero size button: the number eases between hero and normal text size (thumb / toggle timing, 260 ms) */
+  .hero.sizable { transition: font-size 260ms var(--ease), line-height 260ms var(--ease), letter-spacing 260ms var(--ease); }
+  .hero.sizable.small { font-size: 20px; line-height: 26px; letter-spacing: 0; }
+  .swap-ico { display: grid; place-items: center; animation: sel-pop 340ms var(--spring) both; }
   .hero-md { font-family: var(--mono); font-weight: 700; font-size: 48px; line-height: 56px; letter-spacing: -0.03em; }
 
   /* Digit roll */
@@ -571,7 +575,7 @@
 @media (prefers-reduced-motion: reduce) {
   /* No pops, slides or loops; thumbs and knobs jump; press feedback stays */
   .seg::before, .lang::before, .tgl i { transition: none !important; }
-  .chip.just, .btn.loading .spin, .doodle-svg * { animation: none !important; }
+  .chip.just, .btn.loading .spin, .doodle-svg *, .swap-ico, .pick, .pick.on .svg-i { animation: none !important; }
   .note { animation: none !important; transform: rotate(-6deg); }
   .splash .sk-line, .splash .sk-wipe, .sp-word, .sp-tag, .sp-priv { animation: none !important; }
   *, *::before, *::after { animation-duration: 150ms !important; animation-delay: 0ms !important; transition-duration: 0ms !important; }

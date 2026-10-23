@@ -5,7 +5,7 @@ export type Payday = string;
 
 /** Doodle icon set (brand/icons) */
 export type IconName =
-  | "back" | "bus" | "car" | "card" | "check" | "grad" | "heart" | "home" | "info" | "loader" | "pen"
+  | "back" | "bus" | "car" | "card" | "check" | "grad" | "grow" | "shrink" | "heart" | "home" | "info" | "loader" | "pen"
   | "phone" | "plus" | "reset" | "save" | "shield" | "sparkle" | "trash" | "tv" | "vbars" | "vjars" | "vledger" | "x" | "zap";
 
 export type Commitment = {

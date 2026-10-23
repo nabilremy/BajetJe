@@ -86,6 +86,15 @@ The prototype wins where it disagrees with a doc. Decisions so far:
     after a visit that wasn't Healthy. Marker yellow is decoration only, never a status. Both are off under reduced motion.
     Generators: `brand/generators/underline.js`, `brand/generators/confetti.js` (CommonJS, run like the others).
 
+### Detailed hub hero (requested, Oct 2026)
+- The headline is "After your commitments, you have RM {extra} left" (the same extra money as Simple), not "RM x a day".
+  The daily figure moves to the line under it, with the maths (take-home − commitments − savings listed). The pay-cycle
+  strip and budget chips stay below as secondary information.
+- With no commitments entered there is no spend number, strip or budget chips: Detailed goes straight from take-home to the
+  50/30/20 split. `docs/screens.md` and the prototype still describe the daily hero.
+- A size button on the label row shrinks the headline number to normal text size and back (font size eases 260 ms,
+  ease-out strong; jumps with reduced motion). The choice is remembered on the phone.
+
 ### Commitments: beyond the prototype (requested, Oct 2026)
 Not in the prototype, `docs/screens.md` or Figma. Designed to fit the existing system; wording needs review.
 
@@ -103,7 +112,7 @@ Not in the prototype, `docs/screens.md` or Figma. Designed to fit the existing s
 - **Debt tag removed from rows** (requested). `docs/screens.md` still lists it. Debt items are still counted for the
   "Debt only" ratio and shown in coral on Commitment Health.
 - **Sticky footers**: no top line; rows soften and fade over the 44 px above the footer, which is solid behind its text.
-- **Icons**: `save` and `reset` were added to `brand/generators/icons.js` and `brand/icons/` (24 icons in code, 22 in Figma).
+- **Icons**: `save` and `reset` were added to `brand/generators/icons.js` and `brand/icons/` (with shrink and grow for the hero size button: 26 icons in code, 22 in Figma).
 - New EN + BM strings: `commit.select*`, `commit.delete*`, `commit.reset*`, `lists.*`, `hub.wipeAsk / wipeAll / wipeKeep`.
 
 ### BM strings written for this build (not in docs/strings-en-bm.json, please review)

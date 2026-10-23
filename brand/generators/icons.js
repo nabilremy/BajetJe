@@ -26,6 +26,9 @@ const I={
  // Commitments list tools: save (bookmark), reset (start fresh). Appended so earlier seeds stay the same.
  save:[S([[6.8,3.8],[6.5,20.4],[12,15.8],[17.5,20.4],[17.2,3.8],[6.8,3.8]],{n:50,t:0.25})],
  reset:[R(arc(12,12.6,7.4,-50,250,26)),S([[16.9,10.5],[16.8,6.7],[20.6,6.3]],{w:1.9})],
+ // Hero number size button: shrink (arrows point in) and grow (arrows point out)
+ shrink:[S([[19.4,4.6],[13.8,10.2]]),S([[13.6,5.4],[13.7,10.3],[18.6,10.4]],{w:1.9}),S([[4.6,19.4],[10.2,13.8]]),S([[5.4,13.6],[10.3,13.7],[10.4,18.6]],{w:1.9})],
+ grow:[S([[13.6,10.4],[19.2,4.8]]),S([[14.4,4.6],[19.4,4.6],[19.4,9.6]],{w:1.9}),S([[10.4,13.6],[4.8,19.2]]),S([[4.6,14.4],[4.6,19.4],[9.6,19.4]],{w:1.9})],
 };
 const out={}; let k=11; for (const [n,st] of Object.entries(I)) out[n]=draw(st,{w:1.65,amp:0.22,seedv:(k+=13)});
 module.exports=out;

@@ -29,6 +29,8 @@ export type AppState = {
   lang: Lang;
   /** My Plan view: Simple (default) or Detailed */
   look: Look;
+  /** Detailed hero: the "left after commitments" number shown at normal text size instead of hero size */
+  heroSmall: boolean;
   /** Commitments total typed in Simple mode */
   simpleTotal: number;
   /** saw the Welcome screen (first launch only) */
@@ -53,6 +55,7 @@ export const fresh = (): AppState => ({
   eligOpen: false,
   lang: "en",
   look: "simple",
+  heroSmall: false,
   simpleTotal: 0,
   welcomed: false,
 });
@@ -76,6 +79,7 @@ export function normalise(x: unknown): AppState {
   s.elig = { ...fresh().elig, ...s.elig };
   if (s.lang !== "ms") s.lang = "en";
   if (s.look !== "detailed") s.look = "simple";
+  s.heroSmall = s.heroSmall === true;
   s.simpleTotal = Math.max(0, Math.floor(+s.simpleTotal || 0));
   return s;
 }

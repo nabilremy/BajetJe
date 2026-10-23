@@ -17,8 +17,9 @@ A calm, honest older sibling who's good with money, with a doodler's sense of hu
 - UI rule 60/30/10: ink/900 base, ink/800-700 surfaces, lime/300 accent.
 
 ## Doodles
-- icons/: 24 UI icons on a 24 grid (fill currentColor), including loader (spinning), sparkle (reactions), and
-  save + reset (Commitments list tools, added in code from generators/icons.js; not yet in Figma).
+- icons/: 26 UI icons on a 24 grid (fill currentColor), including loader (spinning), sparkle (reactions), and
+  save + reset (Commitments list tools) and shrink + grow (hero number size), added in code from
+  generators/icons.js; not yet in Figma.
 - doodles/: welcome-doodle, commitment-health-empty, note-arrow, and the kit (coins, rm-note, jar, tingkat, payday, car, house,
   gauge, receipt, idea, sparkle, swirl, arrow, banner, speech, thinking).
 - Rules: white ink on dark, one lime accent or hatch per drawing. New doodles must come from generators/engine.js so the hand matches.

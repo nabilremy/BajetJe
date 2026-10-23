@@ -121,37 +121,52 @@ function Detailed({ c, lookN }: { c: PlanNumbers; lookN: number }) {
         </button>
       </div>
 
-      <div className="section" style={{ gap: 6 }}>
-        <div className="over" {...r(2)}>
-          {t(has ? "hub.canSpendAfter" : "hub.canSpend")}
+      {/* The headline is what is left after commitments; the daily figure is secondary. With nothing entered yet
+          there is no spend number at all: the 50/30/20 split below is the plan. */}
+      {anyAmount && (
+        <div className="section" style={{ gap: 6 }}>
+          <div className="row between" {...r(2)}>
+            <div className="over">{t("hub.leftAfter")}</div>
+            {/* Shrinks the number to normal text size and back (260 ms); remembered on this phone.
+                It sits on the label row because a long amount fills the hero row at full size. */}
+            <button className="iconbtn" aria-pressed={S.heroSmall} aria-label={t(S.heroSmall ? "hub.heroGrow" : "hub.heroShrink")} onClick={() => setState({ heroSmall: !S.heroSmall })}>
+              <span key={String(S.heroSmall)} className="swap-ico">
+                <Icon name={S.heroSmall ? "grow" : "shrink"} />
+              </span>
+            </button>
+          </div>
+          <div className="row" {...r(2, { alignItems: "baseline", gap: 10, flexWrap: "wrap" })}>
+            <span className={`hero sizable lime${S.heroSmall ? " small" : ""}`} style={c.extra < 0 ? { color: "var(--coral)" } : undefined}>
+              <RollingNumber key={lookN} value={"RM " + fmt(Math.max(0, c.extra))} anchor="end" stagger={30} animateOnMount={lookN > 0} />
+            </span>
+            <span className="h2">{t("hub.left")}</span>
+          </div>
+          {c.extra >= 0 && <Reaction {...r(3)}>{t(dailyReaction(c.daily))}</Reaction>}
+          <div className="row body" {...r(3, { alignItems: "flex-start" })}>
+            <span className="sw" style={{ background: "var(--amber)", borderRadius: 99, marginTop: 6 }} />
+            <span>
+              {t(c.savC > 0 ? "hub.mathsLeftSav" : "hub.mathsLeft", { net: fmt(c.net), commit: fmt(c.commit), sav: fmt(c.savC) })}
+              <br />
+              {c.extra >= 0 ? t("hub.leftNote", { v: fmt(c.daily), days: c.days }) : t("simple.overTakeHome")}
+            </span>
+          </div>
+          <div className="strip" {...r(4)} role="img" aria-label={t("hub.stripAria", { today: c.today, days: c.days })}>
+            {Array.from({ length: c.days }, (_, i) => (
+              <i key={i} className={i + 1 < c.today ? "" : i + 1 === c.today ? "t today" : "f"} />
+            ))}
+            <span className="tl" style={{ left: `${((c.today - 0.5) / c.days) * 100}%` }}>
+              {t("common.today")}
+            </span>
+          </div>
+          <div className="row between cap" {...r(4)}>
+            <span>{t("hub.paid", { date: fmtD(c.cy.prev) })}</span>
+            <span>{t("hub.nextPayday", { date: fmtD(c.cy.next) })}</span>
+          </div>
+          <div {...r(5)}>
+            <BudgetChips c={c} style={{ paddingTop: 6 }} />
+          </div>
         </div>
-        <div className="row" {...r(2, { alignItems: "baseline", gap: 10 })}>
-          <span className="hero lime">
-            <RollingNumber key={lookN} value={"RM " + fmt(Math.max(0, c.daily))} anchor="end" stagger={30} animateOnMount={lookN > 0} />
-          </span>
-          <span className="h2">{t("common.aDay")}</span>
-        </div>
-        <Reaction {...r(3)}>{t(dailyReaction(c.daily))}</Reaction>
-        <div className="row body" {...r(3)}>
-          <span className="sw" style={{ background: "var(--amber)", borderRadius: 99 }} />
-          {anyAmount ? t("hub.formulaLeft", { left: fmt(c.extra) }) : t("hub.formulaWants", { wants: fmt(c.wants), days: c.days })}
-        </div>
-        <div className="strip" {...r(4)} role="img" aria-label={t("hub.stripAria", { today: c.today, days: c.days })}>
-          {Array.from({ length: c.days }, (_, i) => (
-            <i key={i} className={i + 1 < c.today ? "" : i + 1 === c.today ? "t today" : "f"} />
-          ))}
-          <span className="tl" style={{ left: `${((c.today - 0.5) / c.days) * 100}%` }}>
-            {t("common.today")}
-          </span>
-        </div>
-        <div className="row between cap" {...r(4)}>
-          <span>{t("hub.paid", { date: fmtD(c.cy.prev) })}</span>
-          <span>{t("hub.nextPayday", { date: fmtD(c.cy.next) })}</span>
-        </div>
-        <div {...r(5)}>
-          <BudgetChips c={c} style={{ paddingTop: 6 }} />
-        </div>
-      </div>
+      )}
 
       <div {...r(6)}>
         <SplitCard c={c} />
