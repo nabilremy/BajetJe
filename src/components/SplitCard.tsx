@@ -12,8 +12,8 @@ const VIEWS = [
 
 const reduced = () => typeof matchMedia !== "undefined" && matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-/** 50/30/20 split: one container for every view; only the body changes. */
-export function SplitCard({ c }: { c: Plan }) {
+/** 50/30/20 split: one container for every view; only the body changes. `boxed` puts it on its own surface (Simple). */
+export function SplitCard({ c, boxed }: { c: Plan; boxed?: boolean }) {
   const S = useApp();
   const t = useT();
   const [how, setHow] = useState(false);
@@ -39,7 +39,7 @@ export function SplitCard({ c }: { c: Plan }) {
   }, [swap]);
 
   return (
-    <div className="section split">
+    <div className={`section split${boxed ? " split-boxed" : ""}`}>
       <div className="row between">
         <div className="row" style={{ gap: 6 }}>
           <h2 className="over">{t("split.title")}</h2>
