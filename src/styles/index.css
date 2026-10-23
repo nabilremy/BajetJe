@@ -602,7 +602,7 @@
 @media (prefers-reduced-motion: reduce) {
   /* No pops, slides or loops; thumbs and knobs jump; press feedback stays */
   .seg::before, .lang::before, .tgl i { transition: none !important; }
-  .chip.just, .btn.loading .spin, .doodle-svg *, .swap-ico, .pick, .pick.on .svg-i { animation: none !important; }
+  .chip.just, .btn.loading .spin, .doodle-svg *, .swap-ico, .pick, .pick.on .svg-i, .day.just { animation: none !important; }
   .note { animation: none !important; transform: rotate(-6deg); }
   .splash .sk-line, .splash .sk-wipe, .sp-word, .sp-tag, .sp-priv { animation: none !important; }
   *, *::before, *::after { animation-duration: 150ms !important; animation-delay: 0ms !important; transition-duration: 0ms !important; }
@@ -630,3 +630,17 @@
 .afford:active { transform: scale(0.97); }
 /* The rounded clip lives on .swipe; a second radius on the row leaves a coral fringe */
 .swipe > .sw-fg { border-radius: 0; }
+
+/* Payday "Other": in-app day grid (unfolds under the chips with the shared .fold) */
+.pd-other .svg-i { transition: transform 260ms var(--ease); }
+.pd-other[aria-expanded="true"] .svg-i { transform: rotate(180deg); }
+.daypick { background: var(--ink-800); border-radius: 14px; padding: 14px; display: flex; flex-direction: column; gap: 12px; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035); }
+.days { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+.day {
+  height: 44px; border-radius: 10px; background: var(--ink-900); color: var(--ink-300);
+  font-family: var(--mono); font-size: 14px; font-variant-numeric: tabular-nums;
+  transition: transform 120ms var(--ease), background 180ms var(--ease), color 180ms var(--ease);
+}
+.day:active { transform: scale(0.94); }
+.day.on { background: var(--ink-50); color: var(--ink-900); }
+.day.just { animation: sel-pop 340ms var(--spring) both; }

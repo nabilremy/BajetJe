@@ -16,6 +16,12 @@ const PAYDAYS: [string, MsgKey][] = [
   ["last", "salary.pdLast"],
 ];
 const PRESET_DAYS = PAYDAYS.map(([v]) => v);
+/** 9 -> "9th" (EN) or "9hb" (BM) */
+const ordinal = (d: number, lang: string) => {
+  if (lang === "ms") return `${d}hb`;
+  const s = d % 100 >= 11 && d % 100 <= 13 ? "th" : ({ 1: "st", 2: "nd", 3: "rd" } as Record<number, string>)[d % 10] ?? "th";
+  return d + s;
+};
 const reduced = () => typeof matchMedia !== "undefined" && matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 /** F1 · Salary (required, no skip) */
@@ -36,6 +42,8 @@ export function Salary() {
   const settledNet = calc({ ...S, raw: settledRaw }).net;
   // Submit: loading button + handwritten note, then the plan
   const [note, setNote] = useState<string | null>(null);
+  // The "Other" payday day grid
+  const [picking, setPicking] = useState(false);
 
   useEffect(() => {
     if (!S.raw) {
@@ -139,28 +147,46 @@ export function Salary() {
               {t(l)}
             </button>
           ))}
-          <label key={pop.key("other")} className={`chip${other ? " on" : ""}${pop.cls("other")}`} style={{ minHeight: 40, padding: "0 6px 0 14px", fontSize: 13, ...(other ? {} : { color: "var(--ink-300)" }) }}>
-            {t("common.other")}
-            <select
-              aria-label={t("salary.otherPayday")}
-              value={other ? (S.payday ?? "") : ""}
-              onChange={(e) => {
-                if (!e.target.value) return;
-                pop.pop("other");
-                setState({ payday: e.target.value });
-              }}
-              style={{ background: "transparent", border: 0, color: "inherit", font: "inherit", padding: "8px 4px", outline: 0 }}
-            >
-              <option value="">{t("salary.dayPlaceholder")}</option>
-              {Array.from({ length: 31 }, (_, i) => i + 1)
-                .filter((d) => ![1, 7, 15, 25].includes(d))
-                .map((d) => (
-                  <option key={d} value={String(d)}>
+          {/* "Other" unfolds an in-app day grid (no system picker), and shows the chosen day once picked */}
+          <button
+            key={pop.key("other")}
+            className={`chip pd-other${other ? " on" : ""}${pop.cls("other")}`}
+            aria-expanded={picking}
+            aria-controls="pd-days"
+            onClick={() => setPicking(!picking)}
+            style={{ minHeight: 40, padding: "0 10px 0 14px", fontSize: 13, ...(other ? {} : { color: "var(--ink-300)" }) }}
+          >
+            {other ? t("salary.otherDay", { day: ordinal(+S.payday!, lang) }) : t("common.other")}
+            <Icon name="chev" className="svg-i ic-sm" />
+          </button>
+        </div>
+        <div className={`fold${picking ? " open" : ""}`} id="pd-days" inert={!picking}>
+          <div>
+            <div className="daypick" role="group" aria-label={t("salary.otherPayday")}>
+              <p className="cap">{t("salary.pickDay")}</p>
+              <div className="days">
+                {Array.from({ length: 31 }, (_, i) => String(i + 1)).map((d) => (
+                  <button
+                    key={pop.key("d" + d)}
+                    className={`day${S.payday === d ? " on" : ""}${pop.cls("d" + d)}`}
+                    aria-pressed={S.payday === d}
+                    aria-label={t("salary.dayAria", { day: ordinal(+d, lang) })}
+                    onClick={() => {
+                      pop.pop("d" + d);
+                      setState({ payday: d });
+                      // Let the pick pop, then fold away and pop the chip that now holds the day
+                      setTimeout(() => {
+                        setPicking(false);
+                        pop.pop(PRESET_DAYS.includes(d) ? d : "other");
+                      }, reduced() ? 0 : 260);
+                    }}
+                  >
                     {d}
-                  </option>
+                  </button>
                 ))}
-            </select>
-          </label>
+              </div>
+            </div>
+          </div>
         </div>
         <p className="cap">{t("salary.cycleNote")}</p>
       </div>
