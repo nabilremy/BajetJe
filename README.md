@@ -88,6 +88,15 @@ The prototype wins where it disagrees with a doc. Decisions so far:
 16. **50/30/20 in Simple mode (requested)**: the prototype's Simple view hides the split; Simple now shows the same
     split card as Detailed (view choice shared), between the bar and the savings tip.
 
+### Simple mode hierarchy (requested, Oct 2026)
+The order follows what the person has told us so far:
+- **Commitments not listed** (nothing, or a typed total): 1 salary card (take-home, commitments total, and once there is a
+  total, the commitments / extra bar), 2 the 50/30/20 split on its own card, 3 extra money in its own card ("Add your
+  commitments to see what is left." until a total exists), then "List them one by one".
+- **Commitments listed**: the equation card leads (take-home − commitments − savings = extra money, with the bar inside),
+  then the 50/30/20 split card. Extra money is the answer now, so it comes first.
+- `docs/screens.md` (F2s) still describes the single equation card with the bar below it.
+
 ### Detailed hub hero (requested, Oct 2026)
 - The headline is "After your commitments, you have RM {extra} left" (the same extra money as Simple), not "RM x a day".
   The daily figure moves to the line under it, with the maths (take-home − commitments − savings listed). The pay-cycle

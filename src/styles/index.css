@@ -319,7 +319,14 @@
   .amt-in input { width: 92px; background: transparent; border: 0; outline: 0; text-align: right; font-family: var(--mono); font-size: 20px; font-weight: 500; color: var(--ink-50); }
   .amt-in input::placeholder { color: var(--ink-600); }
   .hero.simple-hero { font-size: 52px; line-height: 60px; }
-  .lbar { display: flex; gap: 3px; height: 12px; }
+  .equation .lbar-wrap { margin-top: 12px; }
+/* Simple, before commitments are listed: the bar closes the salary card */
+.equation .ln.ln-bar { flex-direction: column; align-items: stretch; padding: 14px 0 16px; }
+.equation .ln-bar .lbar-wrap { margin-top: 0; }
+/* Simple: the 50/30/20 split on its own surface, same shape as the salary card */
+.split-boxed { background: var(--ink-800); border-radius: 16px; padding: 18px; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035); }
+.split-boxed .jar .glass { background: var(--ink-900); }
+.lbar { display: flex; gap: 3px; height: 12px; }
   .lbar i { border-radius: 4px; transition: flex-grow 400ms var(--ease); }
   /* Simple | Detailed (and EN | BM on the hub): header and switch stay, the rest fades up; bars grow from the left */
   .look-swap [data-r]:not(.keep) { animation: swap-in 300ms var(--ease) both; animation-delay: calc(var(--i, 0) * 45ms); }
