@@ -4,7 +4,6 @@ import { loadEncrypted, saveEncrypted, wipeStorage } from "./storage";
 
 export type SplitView = "bars" | "jars" | "ledger";
 export type Lang = "en" | "ms";
-export type Look = "simple" | "detailed";
 
 /** A named copy of the commitment list, kept on the phone so it can be brought back later. */
 export type SavedList = { id: string; name: string; items: Commitment[] };
@@ -27,11 +26,11 @@ export type AppState = {
   elig: Elig;
   eligOpen: boolean;
   lang: Lang;
-  /** My Plan view: Simple (default) or Detailed */
-  look: Look;
-  /** Detailed hero: the "left after commitments" number shown at normal text size instead of hero size */
-  heroSmall: boolean;
-  /** Commitments total typed in Simple mode */
+  /** My Plan: Extra money number shown small (28 px) instead of big (52 px) */
+  xsmall: boolean;
+  /** My Plan: Commitments card breakdown open */
+  cbOpen: boolean;
+  /** Commitments total typed as one lump (older Simple mode); used until items are listed */
   simpleTotal: number;
   /** saw the Welcome screen (first launch only) */
   welcomed: boolean;
@@ -54,8 +53,8 @@ export const fresh = (): AppState => ({
   elig: { first: null, citizen: null, age: null },
   eligOpen: false,
   lang: "en",
-  look: "simple",
-  heroSmall: false,
+  xsmall: false,
+  cbOpen: false,
   simpleTotal: 0,
   welcomed: false,
 });
@@ -78,8 +77,12 @@ export function normalise(x: unknown): AppState {
     .map((l) => ({ id: l.id, name: String(l.name ?? "").slice(0, 24), items: tidy(l.items) }));
   s.elig = { ...fresh().elig, ...s.elig };
   if (s.lang !== "ms") s.lang = "en";
-  if (s.look !== "detailed") s.look = "simple";
-  s.heroSmall = s.heroSmall === true;
+  // Older builds stored the hub number size as heroSmall
+  const old = s as AppState & { heroSmall?: boolean; look?: string };
+  s.xsmall = s.xsmall === true || old.heroSmall === true;
+  s.cbOpen = s.cbOpen === true;
+  delete old.heroSmall;
+  delete old.look;
   s.simpleTotal = Math.max(0, Math.floor(+s.simpleTotal || 0));
   return s;
 }

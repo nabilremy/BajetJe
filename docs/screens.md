@@ -31,34 +31,33 @@ Screen transition: push 28 px + fade, 280 ms ease-out strong. Back reverses. All
   handwritten note (Caveat Bold 26, doodle arrow) springs up from behind the button to sit fully above it, rotated -6 deg.
   Line = random from the take-home tier pool, never the same twice in a row. Navigate to F2 after 1.3 s (0.5 s reduced motion).
 
-## F2s · My Plan, Simple mode (default)
-- For people who just want three numbers. Header + EN|BM switch, then a Simple | Detailed segmented (sliding thumb, remembered).
-- Switching Simple <-> Detailed moves like the chart view toggle: the thumb slides (also when using "See the full breakdown"),
-  header and switch stay still, everything below fades up 6 px with a 45 ms stagger, bars grow from the left, and the hero
-  number rolls in digit by digit. Scroll returns to top. Reduced motion: instant swap.
-- Equation card: Take-home (edit -> F1)  −  Commitments  =  Left after commitments.
-  - Commitments: if no items are listed, an inline "RM ___" field for the monthly total (updates live); if items exist,
-    shows their total with an edit icon -> F3. A typed total is used until the user lists items (then the list wins).
-  - Result: big lime "RM x" (rolling digits; coral if negative), "≈ RM y a day for N days", health pill "46% committed · Healthy",
-    reaction chip (same tiers as the hub).
-- One bar: commitments vs left (%), labels under it. "List them one by one →" (when no items).
-- 50/30/20 split card (same component as Detailed: Bars / Jars / List, choice shared with Detailed). Tip card: save 20% first
-  ("You'd still have about RM z a day"). Secondary button "See the full breakdown" -> Detailed. Legal line.
-- Figma: F2s 122:585. BM strings included.
-
-## F2 · My Plan, Detailed mode
-- Same Simple | Detailed switch under the header (Detailed selected).
-- Header: "Hey there!" + "Pay cycle {start} to {end} · N days to payday"; EN | BM switch right.
-- Take-home card with Edit (chip) -> F1.
-- Hero "RM {daily} a day" (lime) + reaction chip with doodle sparkle (tiers in voice-and-tone.md), formula line, pay-cycle month strip.
-- Budget chips "RM x a week" / "RM y budget till payday" with info tooltips (breakdown + "A plan, not your bank balance").
-- 50/30/20 split: one container for all views; header = title + info + View toggle (Bars / Jars / List, sliding thumb).
-  Switching: body height eases 260 ms, new view fades up 6 px, bars/jars grow in (50 ms stagger). Choice remembered.
-- KL warning (amber) when needs < RM 1,930.
-- Commitment health card: empty = doodle illustration (receipts -> gauge with "?" -> jar) + primary "Add my commitments";
-  filled = % + verdict pill + gauge + "RM x left in your needs budget" / "Needs over by RM x".
-- Afford tiles Car / Home (press state). Footer legal + "Delete all my data from this phone" (two taps within 3 s).
-- Reveal animation once per session.
+## F2 · My Plan (V2 dashboard: one layout, replaces Simple and Detailed)
+Figma: empty 150:1724, filled 150:1985, number-small 169:887. The Simple | Detailed switch is gone; this layout serves both.
+Reading order (top to bottom): header -> pay-cycle strip -> the money flow -> 50/30/20 -> what can I afford -> tip -> legal.
+- Header: "Hey there!" + "Pay cycle {start} to {end} · N days to payday", EN|BM switch right.
+- Pay-cycle strip: one bar per day of the cycle, past ink/700, today lime and taller with "Today" above it, future amber 55%.
+  Labels: cycle start (left), "Payday {date}" (right).
+- The money flow: cards stacked with 20 px gaps, joined by a 5 px ink/800 spine at 44 px from the card edge (visible in the gaps),
+  so the eye reads salary -> where it goes. The spine draws down once on first reveal (scaleY 0 to 1, 700 ms).
+  - Take-home card: overline, RM x / month, helper, pencil (-> F1).
+  - EMPTY (no amounts listed): 50/30/20 card (header inside the card with info + view toggle), then the commitment-health empty
+    card (doodle + "Add my commitments" primary).
+  - FILLED (any commitment or savings amount): Commitments card (RM fixed commitments, pencil -> F3) with an inline
+    breakdown (spec: docs/commitments-breakdown.md), then the Extra money card:
+    - "=" operator + "Extra money" + circular collapse button (ink/700, doodle shrink icon).
+    - Health pill (Healthy / Caution / High from commitments ÷ take-home; "Over" in coral when extra < 0).
+    - Hero: Extra money = take-home − fixed commitments − listed savings, JetBrains Mono Bold 52/60, lime (coral with "−" if negative),
+      digits roll in.
+    - Stat chips with tooltips: "RM x a week" and "RM y till payday" from floor(extra ÷ cycle days); tooltip shows
+      Extra money ÷ days = daily × 7 (or × days left) and "A plan, not your bank balance. Save part of it first...".
+    - Split bar: Commitments (ink/400) | Savings (ink/600, only if listed) | Extra (lime), with % labels.
+  - 50/30/20 section moves BELOW the flow in the filled state, with its header outside the card.
+- What can I afford? Car and Home tiles. Tip card: "save RM x more to reach 20%... You'd still have about RM y a day"
+  (y = floor((take-home − commitments − 20% savings) ÷ days)), or a well-done line when savings >= 20%. Legal line, delete-all.
+- Collapse ("make the number smaller"): tapping the collapse button shrinks the hero 52 -> 28 px and moves the pill beside it.
+  Motion: FLIP on transform only (translate + scale from the old box, 380 ms ease-out strong), card height eases 320 ms,
+  icon swaps shrink <-> grow with a turn-in (rotate -90 deg + scale 0.6 to 1, 240 ms spring). Choice remembered on device
+  (xsmall). aria-pressed + label "Make the number smaller / bigger". Reduced motion: instant.
 
 ## F3 · Commitments
 - Sections Needs 50% / Wants 30% / Savings 20%: used / budget, meter, note, rows, "+ Add to x", quick-add chips.

@@ -1,15 +1,15 @@
 import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import { HEALTH_EMPTY } from "../brand/assets";
-import { BudgetChips } from "../components/BudgetChips";
+import { CommitCard, MoneyCard } from "../components/CommitCard";
+import { ExtraCard } from "../components/ExtraCard";
 import { BrandSvg, Icon } from "../components/Icon";
-import { RollingNumber } from "../components/RollingNumber";
+import { savingsTip } from "../components/savingsTip";
 import { SplitCard } from "../components/SplitCard";
-import { Gauge, LangSwitch, Reaction, Segmented, StatusPill } from "../components/ui";
-import { calc, carLimit, DAY, fmt, fmtD, isKlShort, k, pct, rates, verdict, type IconName, type Plan as PlanNumbers } from "../engine";
-import { calling, useLang, useT, type MsgKey } from "../i18n";
+import { LangSwitch } from "../components/ui";
+import { calc, carLimit, DAY, fmt, fmtD, k, rates, type IconName } from "../engine";
+import { calling, useLang, useT } from "../i18n";
 import { go } from "../state/router";
-import { setState, useApp, wipeAll, type Look } from "../state/store";
-import { Simple } from "./Simple";
+import { useApp, wipeAll } from "../state/store";
 
 /** Hub reveal plays once per session */
 let revealed = false;
@@ -17,45 +17,38 @@ export const resetReveal = () => {
   revealed = false;
 };
 
-const VERDICT_KEY = { Healthy: "common.healthy", Caution: "common.caution", High: "common.high" } as const;
-
-/** Daily budget reaction tiers: >= 100 / >= 40 / >= 20 / below */
-const dailyReaction = (d: number): MsgKey => (d >= 100 ? "react.daily100" : d >= 40 ? "react.daily40" : d >= 20 ? "react.daily20" : "react.dailyLow");
-
 type R = (i: number, extra?: CSSProperties) => { "data-r": string; style: CSSProperties };
 const r: R = (i, extra) => ({ "data-r": "", style: { "--i": i, ...extra } as CSSProperties });
 
 /**
- * F2 · My Plan (hub). Simple mode by default, Detailed on demand.
- * The header and the Simple | Detailed switch stay mounted so the thumb slides; on a view or language change
- * everything below them fades up (45 ms stagger) and, for a view change, the hero number rolls in.
+ * F2 · My Plan (V2 dashboard, one layout for everyone). Reading order: header, pay-cycle strip, the money flow
+ * (Take-home -> Commitments -> Extra money, joined by a spine), 50/30/20, what can I afford, tip, legal.
+ * With nothing listed yet the flow holds the 50/30/20 card and the commitment-health invitation instead.
+ * On a language change the header stays and everything below fades up.
  */
 export function Plan() {
   const S = useApp();
   const t = useT();
   const lang = useLang();
   const c = calc(S);
+  const has = c.commit + c.savC > 0;
   const [reveal] = useState(() => !revealed);
   const [revealing, setRevealing] = useState(reveal);
   const [swapping, setSwapping] = useState(false);
-  const [lookN, setLookN] = useState(0);
-  const prev = useRef({ look: S.look, lang });
+  const prevLang = useRef(lang);
+  const carSafe = carLimit(c.net, rates().car.comfortableShare, S.carDown);
+  const rent = c.net * rates().home.share;
 
   useEffect(() => {
     revealed = true;
     if (!reveal) return;
-    const id = setTimeout(() => setRevealing(false), 1400);
+    const id = setTimeout(() => setRevealing(false), 1600);
     return () => clearTimeout(id);
   }, [reveal]);
 
   useLayoutEffect(() => {
-    const p = prev.current;
-    if (p.look === S.look && p.lang === lang) return;
-    if (p.look !== S.look) {
-      setLookN((n) => n + 1);
-      document.querySelector(".screen")?.scrollTo(0, 0);
-    }
-    prev.current = { look: S.look, lang };
+    if (prevLang.current === lang) return;
+    prevLang.current = lang;
     setRevealing(false);
     setSwapping(false);
     const raf = requestAnimationFrame(() => setSwapping(true));
@@ -64,7 +57,7 @@ export function Plan() {
       cancelAnimationFrame(raf);
       clearTimeout(id);
     };
-  }, [S.look, lang]);
+  }, [lang]);
 
   return (
     <div className={`stack${revealing ? " reveal" : ""}${swapping ? " look-swap" : ""}`}>
@@ -75,150 +68,62 @@ export function Plan() {
         </div>
         <LangSwitch />
       </div>
-      <div className="keep" {...r(1)}>
-        <Segmented<Look>
-          label={t("look.label")}
-          value={S.look}
-          options={[
-            ["simple", t("look.simple")],
-            ["detailed", t("look.detailed")],
-          ]}
-          onChange={(look) => setState({ look })}
+
+      <div className="section" {...r(1, { gap: 8 })}>
+        <div className="strip" role="img" aria-label={t("hub.stripAria", { today: c.today, days: c.days })}>
+          {Array.from({ length: c.days }, (_, i) => (
+            <i key={i} className={i + 1 < c.today ? "" : i + 1 === c.today ? "t today" : "f"} />
+          ))}
+          <span className="tl" style={{ left: `${((c.today - 0.5) / c.days) * 100}%` }}>
+            {t("common.today")}
+          </span>
+        </div>
+        <div className="row between cap">
+          <span>{fmtD(c.cy.prev)}</span>
+          <span>{t("hub.payday", { date: fmtD(c.cy.next) })}</span>
+        </div>
+      </div>
+
+      <div className="flow">
+        <MoneyCard
+          over={t("hub.takeHomePay")}
+          value={"RM " + fmt(c.net)}
+          perMonth={t("common.perMonth")}
+          helper={t(S.mode === "gross" ? "hub.afterDeductions" : "hub.enteredNet")}
+          editLabel={t("simple.editSalary")}
+          onEdit={() => go("salary")}
+          i={2}
         />
-      </div>
-      {S.look === "detailed" ? <Detailed c={c} lookN={lookN} /> : <Simple c={c} lookN={lookN} />}
-    </div>
-  );
-}
-
-/** F2 · Detailed: the full breakdown */
-function Detailed({ c, lookN }: { c: PlanNumbers; lookN: number }) {
-  const S = useApp();
-  const t = useT();
-  const has = c.commit > 0;
-  const anyAmount = c.commit + c.savC > 0;
-  const [vName, vCol] = verdict(c.ratio, 50, 65);
-  const kl = isKlShort(c.needs);
-  const carSafe = carLimit(c.net, rates().car.comfortableShare, S.carDown);
-  const rent = c.net * rates().home.share;
-
-  return (
-    <>
-      <div className="card" {...r(1, { flexDirection: "row", alignItems: "center", padding: "14px 12px 14px 16px" })}>
-        <div className="grow">
-          <div className="over">{t("hub.takeHomePay")}</div>
-          <div className="row" style={{ alignItems: "baseline", gap: 4 }}>
-            <span className="mono" style={{ fontSize: 20, fontWeight: 500 }}>
-              RM {fmt(c.net)}
-            </span>
-            <span className="body">{t("common.perMonth")}</span>
-          </div>
-          <div className="cap">{t(S.mode === "gross" ? "hub.afterDeductions" : "hub.enteredNet")}</div>
-        </div>
-        <button className="btn btn-quiet" style={{ width: "auto", minHeight: 44, padding: "0 16px", borderRadius: 999, gap: 6 }} onClick={() => go("salary")}>
-          <Icon name="pen" />
-          {t("common.edit")}
-        </button>
+        {has ? (
+          <>
+            <CommitCard c={c} i={3} />
+            <ExtraCard c={c} i={4} />
+          </>
+        ) : (
+          <>
+            <div {...r(3)}>
+              <SplitCard c={c} layout="inCard" />
+            </div>
+            <div className="card" {...r(4)}>
+              <h2 className="over">{t("health.card")}</h2>
+              <div className="h3">{t("health.emptyTitle")}</div>
+              <p className="body">{t("health.emptyBody", { needs: fmt(c.needs) })}</p>
+              <BrandSvg svg={HEALTH_EMPTY} style={{ width: "100%", maxWidth: 314, height: 96, alignSelf: "center" }} />
+              <button className="btn btn-primary" onClick={() => go("commit")}>
+                {t("health.add")}
+              </button>
+            </div>
+          </>
+        )}
       </div>
 
-      {/* The headline is what is left after commitments; the daily figure is secondary. With nothing entered yet
-          there is no spend number at all: the 50/30/20 split below is the plan. */}
-      {anyAmount && (
-        <div className="section" style={{ gap: 6 }}>
-          <div className="row between" {...r(2)}>
-            <div className="over">{t("hub.leftAfter")}</div>
-            {/* Shrinks the number to normal text size and back (260 ms); remembered on this phone.
-                It sits on the label row because a long amount fills the hero row at full size. */}
-            <button className="iconbtn" aria-pressed={S.heroSmall} aria-label={t(S.heroSmall ? "hub.heroGrow" : "hub.heroShrink")} onClick={() => setState({ heroSmall: !S.heroSmall })}>
-              <span key={String(S.heroSmall)} className="swap-ico">
-                <Icon name={S.heroSmall ? "grow" : "shrink"} />
-              </span>
-            </button>
-          </div>
-          <div className="row" {...r(2, { alignItems: "baseline", gap: 10, flexWrap: "wrap" })}>
-            <span className={`hero sizable lime${S.heroSmall ? " small" : ""}`} style={c.extra < 0 ? { color: "var(--coral)" } : undefined}>
-              <RollingNumber key={lookN} value={"RM " + fmt(Math.max(0, c.extra))} anchor="end" stagger={30} animateOnMount={lookN > 0} />
-            </span>
-            <span className="h2">{t("hub.left")}</span>
-          </div>
-          {c.extra >= 0 && <Reaction {...r(3)}>{t(dailyReaction(c.daily))}</Reaction>}
-          <div className="row body" {...r(3, { alignItems: "flex-start" })}>
-            <span className="sw" style={{ background: "var(--amber)", borderRadius: 99, marginTop: 6 }} />
-            <span>
-              {t(c.savC > 0 ? "hub.mathsLeftSav" : "hub.mathsLeft", { net: fmt(c.net), commit: fmt(c.commit), sav: fmt(c.savC) })}
-              <br />
-              {c.extra >= 0 ? t("hub.leftNote", { v: fmt(c.daily), days: c.days }) : t("simple.overTakeHome")}
-            </span>
-          </div>
-          <div className="strip" {...r(4)} role="img" aria-label={t("hub.stripAria", { today: c.today, days: c.days })}>
-            {Array.from({ length: c.days }, (_, i) => (
-              <i key={i} className={i + 1 < c.today ? "" : i + 1 === c.today ? "t today" : "f"} />
-            ))}
-            <span className="tl" style={{ left: `${((c.today - 0.5) / c.days) * 100}%` }}>
-              {t("common.today")}
-            </span>
-          </div>
-          <div className="row between cap" {...r(4)}>
-            <span>{t("hub.paid", { date: fmtD(c.cy.prev) })}</span>
-            <span>{t("hub.nextPayday", { date: fmtD(c.cy.next) })}</span>
-          </div>
-          <div {...r(5)}>
-            <BudgetChips c={c} style={{ paddingTop: 6 }} />
-          </div>
+      {has && (
+        <div {...r(5)}>
+          <SplitCard c={c} layout="headOut" />
         </div>
       )}
 
-      <div {...r(6)}>
-        <SplitCard c={c} />
-      </div>
-
-      {kl && (
-        <div {...r(7, { background: "rgba(255,187,51,.12)", borderRadius: 10, padding: "12px 14px", display: "flex", flexDirection: "column", gap: 4 })}>
-          <div className="lbl amber">{t("kl.title")}</div>
-          <p className="cap" style={{ color: "var(--ink-400)" }}>
-            {t("kl.body", { basics: fmt(rates().split.klNeedsBasics), needs: fmt(c.needs) })}
-          </p>
-          <button className="link" onClick={() => go("commit")} style={{ alignSelf: "flex-start" }}>
-            {t("kl.link")}
-          </button>
-        </div>
-      )}
-
-      {has ? (
-        <div className="card" {...r(8)}>
-          <div className="row between">
-            <h2 className="over">{t("health.card")}</h2>
-            <StatusPill tone={vCol}>{t(VERDICT_KEY[vName])}</StatusPill>
-          </div>
-          <div className="row" style={{ alignItems: "baseline", gap: 6 }}>
-            <span className="mono" style={{ fontSize: 20, fontWeight: 500 }}>
-              {pct(c.ratio)}
-            </span>
-            <span className="cap">{t("health.cardAmount", { amt: fmt(c.commit) })}</span>
-          </div>
-          <Gauge p={c.ratio} stops={[50, 65]} max={100} />
-          <div className="row between">
-            <span className="cap" style={{ color: "var(--ink-400)" }}>
-              {c.needsC <= c.needs ? t("health.needsLeft", { v: fmt(c.needs - c.needsC) }) : t("health.needsOver", { v: fmt(c.needsC - c.needs) })}
-            </span>
-            <button className="link" onClick={() => go("health")}>
-              {t("health.details")}
-            </button>
-          </div>
-        </div>
-      ) : (
-        <div className="card" {...r(8)}>
-          <h2 className="over">{t("health.card")}</h2>
-          <div className="h3">{t("health.emptyTitle")}</div>
-          <p className="body">{t("health.emptyBody", { needs: fmt(c.needs) })}</p>
-          <BrandSvg svg={HEALTH_EMPTY} style={{ width: "100%", maxWidth: 314, height: 96, alignSelf: "center" }} />
-          <button className="btn btn-primary" onClick={() => go("commit")}>
-            {t("health.add")}
-          </button>
-        </div>
-      )}
-
-      <div className="section" {...r(9, { gap: 12 })}>
+      <div className="section" {...r(6, { gap: 12 })}>
         <h2 className="over">{t("afford.title")}</h2>
         <div className="row" style={{ gap: 12, alignItems: "stretch" }}>
           <AffordTile icon="car" title={t("afford.car")} pre={t("afford.carPre")} val={carSafe ? "RM " + k(carSafe) : t("afford.notYet")} unit="" meta={t("afford.carMeta", { v: fmt(c.net * 0.2) })} share={0.2} cta={t("afford.seeCars")} onClick={() => go("car")} />
@@ -226,11 +131,20 @@ function Detailed({ c, lookN }: { c: PlanNumbers; lookN: number }) {
         </div>
       </div>
 
+      <div className="disclaimer" {...r(7)}>
+        <span style={{ color: "var(--lime)", flex: "none", display: "flex" }}>
+          <Icon name="sparkle" />
+        </span>
+        <p className="cap" style={{ color: "var(--ink-300)" }}>
+          {savingsTip(c, t)}
+        </p>
+      </div>
+
       <p className="cap" style={{ textAlign: "center", fontSize: 11, padding: "4px 12px 0" }}>
         {t("hub.legal")}
       </p>
       <DataControls />
-    </>
+    </div>
   );
 }
 

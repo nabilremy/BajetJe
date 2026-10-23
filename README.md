@@ -31,9 +31,9 @@ src/engine/      Pure TS engine ported from the prototype (payroll, cycle, plan,
 src/i18n/        EN + BM catalogue (messages.ts, ICU-style placeholders), formatter, useT() hook
 src/brand/       assets.ts generated from brand/ by `node scripts/gen-brand.mjs` (doodle icons, doodles, logo)
 src/state/       store.ts (app state), storage.ts (encrypted IndexedDB), router.ts
-src/components/  RollingNumber, SplitCard, BudgetChips, CommitmentRow, EligibilityCheck, shared ui
+src/components/  RollingNumber, SplitCard, ExtraCard, CommitCard (+ MoneyCard), CommitmentRow, EligibilityCheck, shared ui
                  (Segmented, LangSwitch, Toggle, ChoiceChips with pop, Reaction, Gauge, Toast)
-src/screens/     F0 Splash, F0b Welcome, F1 Salary, F2 Plan (Simple.tsx = F2s, Detailed in Plan.tsx),
+src/screens/     F0 Splash, F0b Welcome, F1 Salary, F2 Plan (V2 dashboard),
                  F3 Commitments, F4 Health, F5 Car, F6 House
 src/styles/      Tokens (brand/tokens, Tailwind @theme) + component CSS and motion
 brand/           Handover brand kit (logo, doodles, icons, tokens, generators)
@@ -66,8 +66,7 @@ The prototype wins where it disagrees with a doc. Decisions so far:
    Figma use 24/30 and 13/20, so those are used. Figma also draws the doodle 350 wide, the info icon white and the privacy
    line left aligned; the prototype and the task doc both say doodle max 330, amber icon, centred privacy, so those stay.
 
-10. **Simple mode (F2s)**: the default hub view, as in the prototype. Like the prototype, "Delete all my data" is only
-    in Detailed, and the prototype's "Replay intro" link is not shipped (screens.md says so).
+10. **Replay intro**: the prototype's "Replay intro (splash + welcome)" link is not shipped (screens.md says so).
 11. **Rolling digits**: a re-render during a roll used to strip the animation (the prototype redraws by hand, so it never
     hit this). RollingNumber now compares against the previous value, so rolls always finish.
 
@@ -85,26 +84,16 @@ The prototype wins where it disagrees with a doc. Decisions so far:
     the verdict pill (40 pieces, about 2 s, never blocks taps): on the first Healthy visit per session, and again only
     after a visit that wasn't Healthy. Marker yellow is decoration only, never a status. Both are off under reduced motion.
     Generators: `brand/generators/underline.js`, `brand/generators/confetti.js` (CommonJS, run like the others).
-16. **50/30/20 in Simple mode (requested)**: the prototype's Simple view hides the split; Simple now shows the same
-    split card as Detailed (view choice shared), between the bar and the savings tip.
-
-### Simple mode hierarchy (requested, Oct 2026)
-The order follows what the person has told us so far:
-- **Commitments not listed** (nothing, or a typed total): 1 salary card (take-home, commitments total, and once there is a
-  total, the commitments / extra bar), 2 the 50/30/20 split on its own card, 3 extra money in its own card ("Add your
-  commitments to see what is left." until a total exists), then "List them one by one".
-- **Commitments listed**: the equation card leads (take-home − commitments − savings = extra money, with the bar inside),
-  then the 50/30/20 split card. Extra money is the answer now, so it comes first.
-- `docs/screens.md` (F2s) still describes the single equation card with the bar below it.
-
-### Detailed hub hero (requested, Oct 2026)
-- The headline is "After your commitments, you have RM {extra} left" (the same extra money as Simple), not "RM x a day".
-  The daily figure moves to the line under it, with the maths (take-home − commitments − savings listed). The pay-cycle
-  strip and budget chips stay below as secondary information.
-- With no commitments entered there is no spend number, strip or budget chips: Detailed goes straight from take-home to the
-  50/30/20 split. `docs/screens.md` and the prototype still describe the daily hero.
-- A size button on the label row shrinks the headline number to normal text size and back (font size eases 260 ms,
-  ease-out strong; jumps with reduced motion). The choice is remembered on the phone.
+16. **V2 dashboard (24 Oct handover)**: one My Plan layout replaces Simple and Detailed
+    (their old notes are removed). Built from `docs/screens.md` "F2 · My Plan (V2)", `docs/extra-money-motion.md` and
+    `docs/commitments-breakdown.md`. Older saved settings carry over (`heroSmall` becomes `xsmall`). Checked against the prototype:
+    - Tooltip: the prototype draws a darker panel behind the tooltip maths. It comes from the old Simple card's `.eq` class
+      leaking onto the tooltip's `.eq` grid (a name clash, not a design), so the app keeps the flat tooltip. Say if you want the panel.
+    - `docs/calculation-rules.md` V2 example says take-home 3,089 for RM 3,500 gross; the engine and the prototype both give
+      3,090 (PCB 0.94, net 3,089.91 rounded), so extra money is 1,580, not 1,579. Golden values unchanged.
+    - Savings tip when extra money is negative keeps the "needs over 50%" line instead of "you'd still have RM 0 a day".
+    - BM strings written for V2 (please review): `x.over` Terlebih, `x.tillPayday` sampai gaji, `x.weekTitle`,
+      `x.leftTitle`, `x.note`, `hub.payday`, `simple.tipSaved`.
 
 ### Commitments: beyond the prototype (requested, Oct 2026)
 Not in the prototype, `docs/screens.md` or Figma. Designed to fit the existing system; wording needs review.

@@ -27,3 +27,8 @@ daily budget, commitment health, safe car and home budget. No tracking, no login
 ## How to work
 - Plan first, get approval, then build in TASKS.md order. One screen per session. After each screen, compare with the prototype
   side by side and list differences. Ask before adding dependencies, a backend, analytics, or anything that sends data off device.
+
+
+## Latest instruction
+Also build docs/commitments-breakdown.md (See breakdown on the Commitments card).
+Build docs/extra-money-motion.md (pill hop on collapse, tooltip never clipped). Match the prototype frame by frame.
