@@ -85,6 +85,8 @@ The prototype wins where it disagrees with a doc. Decisions so far:
     the verdict pill (40 pieces, about 2 s, never blocks taps): on the first Healthy visit per session, and again only
     after a visit that wasn't Healthy. Marker yellow is decoration only, never a status. Both are off under reduced motion.
     Generators: `brand/generators/underline.js`, `brand/generators/confetti.js` (CommonJS, run like the others).
+16. **50/30/20 in Simple mode (requested)**: the prototype's Simple view hides the split; Simple now shows the same
+    split card as Detailed (view choice shared), between the bar and the savings tip.
 
 ### Detailed hub hero (requested, Oct 2026)
 - The headline is "After your commitments, you have RM {extra} left" (the same extra money as Simple), not "RM x a day".

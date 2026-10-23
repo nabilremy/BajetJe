@@ -41,7 +41,8 @@ Screen transition: push 28 px + fade, 280 ms ease-out strong. Back reverses. All
     shows their total with an edit icon -> F3. A typed total is used until the user lists items (then the list wins).
   - Result: big lime "RM x" (rolling digits; coral if negative), "≈ RM y a day for N days", health pill "46% committed · Healthy",
     reaction chip (same tiers as the hub).
-- One bar: commitments vs left (%), labels under it. "List them one by one →" (when no items). Tip card: save 20% first
+- One bar: commitments vs left (%), labels under it. "List them one by one →" (when no items).
+- 50/30/20 split card (same component as Detailed: Bars / Jars / List, choice shared with Detailed). Tip card: save 20% first
   ("You'd still have about RM z a day"). Secondary button "See the full breakdown" -> Detailed. Legal line.
 - Figma: F2s 122:585. BM strings included.
 
