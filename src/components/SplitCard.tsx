@@ -81,16 +81,16 @@ export function SplitCard({ c, layout }: { c: Plan; layout: "inCard" | "headOut"
   return (
     <div className="section split" style={{ gap: 12 }}>
       {head}
-      <div className="card">{splitBody}</div>
+      <div className="open-sec">{splitBody}</div>
     </div>
   );
 }
 
 function SplitBody({ c, view, t }: { c: Plan; view: SplitView; t: T }) {
   const B: [string, string, number, number, string][] = [
-    [t("bucket.needs"), "var(--ink-400)", c.needs, 50, t("split.needsDesc")],
-    [t("bucket.wants"), "var(--amber)", c.wants, 30, t("split.wantsDesc")],
-    [t("bucket.savings"), "var(--lime)", c.savingsOut, 20, t("split.savingsDesc")],
+    [t("bucket.needs"), "var(--bucket-needs)", c.needs, 50, t("split.needsDesc")],
+    [t("bucket.wants"), "var(--bucket-wants)", c.wants, 30, t("split.wantsDesc")],
+    [t("bucket.savings"), "var(--bucket-savings)", c.savingsOut, 20, t("split.savingsDesc")],
   ];
   if (view === "jars")
     return (

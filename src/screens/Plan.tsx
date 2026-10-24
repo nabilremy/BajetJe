@@ -131,8 +131,8 @@ export function Plan() {
         </div>
       </div>
 
-      <div className="disclaimer" {...r(7)}>
-        <span style={{ color: "var(--lime)", flex: "none", display: "flex" }}>
+      <div className="disclaimer tipline" {...r(7)}>
+        <span style={{ color: "var(--ink-400)", flex: "none", display: "flex" }}>
           <Icon name="sparkle" />
         </span>
         <p className="cap" style={{ color: "var(--ink-300)" }}>

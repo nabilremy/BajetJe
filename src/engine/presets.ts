@@ -39,9 +39,9 @@ export const QUICK: Record<Bucket, Quick[]> = {
 export type BucketDef = { key: Bucket; label: string; color: string; share: number; hint: string };
 
 export const BUCKETS: BucketDef[] = [
-  { key: "needs", label: "Needs", color: "var(--color-ink-400)", share: 0.5, hint: "Rent, transport, bills, loans, family" },
-  { key: "wants", label: "Wants", color: "var(--color-amber-400)", share: 0.3, hint: "Subscriptions, gym, hobbies" },
-  { key: "savings", label: "Savings", color: "var(--color-lime-300)", share: 0.2, hint: "ASB, Tabung Haji, emergency fund" },
+  { key: "needs", label: "Needs", color: "var(--bucket-needs)", share: 0.5, hint: "Rent, transport, bills, loans, family" },
+  { key: "wants", label: "Wants", color: "var(--bucket-wants)", share: 0.3, hint: "Subscriptions, gym, hobbies" },
+  { key: "savings", label: "Savings", color: "var(--bucket-savings)", share: 0.2, hint: "ASB, Tabung Haji, emergency fund" },
 ];
 
 export const freshCommitments = (): Commitment[] =>
