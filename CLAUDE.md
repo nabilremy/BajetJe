@@ -17,7 +17,7 @@ daily budget, commitment health, safe car and home budget. No tracking, no login
 
 ## Non-negotiables
 - No expense tracking. Warn, never block. Show the maths. Malaysian rules. All data on device (encrypted), no account.
-- One lime accent per screen; amber/coral only for status. Doodle style for every icon and illustration (use brand assets or
+- Colour: follow docs/colour-rules.md (lime = money you can spend + primary button; data keeps hue: needs grey, wants amber, savings blue). Doodle style for every icon and illustration (use brand assets or
   brand/generators, never generic icon sets).
 - Every control moves (press, slide, pop); respect reduced motion.
 - Two languages (EN, BM santai) with proper i18n keys.
@@ -30,5 +30,6 @@ daily budget, commitment health, safe car and home budget. No tracking, no login
 
 
 ## Latest instruction
+Also apply docs/colour-rules.md (60/30/10 pass, savings is now blue, Healthy pill is a lime tint).
 Also build docs/commitments-breakdown.md (See breakdown on the Commitments card).
 Build docs/extra-money-motion.md (pill hop on collapse, tooltip never clipped). Match the prototype frame by frame.

@@ -124,9 +124,9 @@ export function CommitCard({ c, i }: { c: Plan; i: number }) {
         </button>
       </div>
       <div ref={body} className="cbody" id="cbody" hidden={!open}>
-        {group("needs", t("bucket.needs"), "var(--ink-400)", c.needsC - c.lump)}
-        {group("wants", t("bucket.wants"), "var(--amber)", c.wantsC)}
-        {group("savings", t("cb.savings"), "var(--lime)", c.savC, t("cb.savNote"))}
+        {group("needs", t("bucket.needs"), "var(--bucket-needs)", c.needsC - c.lump)}
+        {group("wants", t("bucket.wants"), "var(--bucket-wants)", c.wantsC)}
+        {group("savings", t("cb.savings"), "var(--bucket-savings)", c.savC, t("cb.savNote"))}
       </div>
     </div>
   );

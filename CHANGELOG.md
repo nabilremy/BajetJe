@@ -1,6 +1,10 @@
 # Changelog (what changed since the first handoff pack)
 
-## Latest: Commitments breakdown (24 Oct)
+## Latest: Colour 60/30/10 pass (24 Oct)
+- Lime now means "money you can spend" + primary button only. Savings bucket is **blue**, Healthy pill is a **lime tint**,
+  today marker is white, tip and filled-state 50/30/20 lose their card. Spec: docs/colour-rules.md. Figma variables updated.
+
+## Commitments breakdown (24 Oct)
 - Commitments card gets "See breakdown": read-only list by Needs, Wants and Savings set aside, inline on the dashboard.
   Editing stays on the pencil (F3). Spec: docs/commitments-breakdown.md. New icon brand/icons/chev.svg.
 

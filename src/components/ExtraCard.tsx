@@ -147,7 +147,7 @@ export function ExtraCard({ c, i }: { c: Plan; i: number }) {
         </button>
       </div>
       <div className="xhead">
-        <span ref={pill} className="pill" style={{ background: extra < 0 ? "var(--coral)" : toneVar(vCol), color: "var(--ink-900)" }}>
+        <span ref={pill} className={`pill${extra >= 0 && vCol === "lime" ? " tint" : ""}`} style={extra < 0 || vCol !== "lime" ? { background: extra < 0 ? "var(--coral)" : toneVar(vCol), color: "var(--ink-900)" } : undefined}>
           {extra < 0 ? t("x.over") : t(vKey)}
         </span>
         <div ref={amt} className="xamt" style={extra < 0 ? { color: "var(--coral)" } : undefined}>
@@ -184,8 +184,8 @@ export function ExtraCard({ c, i }: { c: Plan; i: number }) {
       </div>
       <div ref={bar} className="section xbar" style={{ gap: 8, paddingTop: 6 }}>
         <div className="lbar" role="img" aria-label={[t("simple.barCommit", { pct: Math.round(pC) }), c.savC ? t("simple.barSave", { pct: Math.round(pS) }) : "", t("simple.barLeft", { pct: Math.round(pX) })].filter(Boolean).join(", ")}>
-          <i className="grow-x" style={{ flexGrow: pC || 0.001, background: "var(--ink-400)" }} />
-          <i className="grow-x" style={{ flexGrow: pS || 0.001, background: "var(--ink-600)" }} />
+          <i className="grow-x" style={{ flexGrow: pC || 0.001, background: "var(--bucket-needs)" }} />
+          <i className="grow-x" style={{ flexGrow: pS || 0.001, background: "var(--bucket-savings)" }} />
           <i className="grow-x" style={{ flexGrow: pX || 0.001, background: "var(--lime)" }} />
         </div>
         <div className="row between cap">

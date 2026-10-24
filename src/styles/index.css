@@ -29,6 +29,7 @@
   --color-lime-700: #588a16;
   --color-lime-800: #406312;
   --color-lime-900: #2b420d;
+  --color-blue-300: #7fadff;
   --color-amber-300: #ffd066;
   --color-amber-400: #ffbb33;
   --color-coral-400: #ff775c;
@@ -58,7 +59,14 @@
   --ink-900: var(--color-ink-900);
   --ink-950: var(--color-ink-950);
   --lime: var(--color-lime-300);
+  /* Healthy pill tint (colour pass 24 Oct): lime/900 fill, lime/300 text and dot */
+  --lime-900: var(--color-lime-900);
+  --blue: var(--color-blue-300);
   --amber: var(--color-amber-400);
+  /* Data keeps hue: needs grey, wants amber, savings blue (docs/colour-rules.md) */
+  --bucket-needs: var(--color-ink-400);
+  --bucket-wants: var(--color-amber-400);
+  --bucket-savings: var(--color-blue-300);
   /* Marker yellow: decoration only (sketched underline, confetti), never a status */
   --marker: var(--color-amber-300);
   --coral: var(--color-coral-400);
@@ -165,6 +173,8 @@
     display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px;
     font-size: 12px; font-weight: 500; white-space: nowrap;
   }
+  .pill.tint { background: var(--lime-900); color: var(--lime); }
+  .pill.tint::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; flex: none; }
   .chip {
     display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 999px;
     background: var(--ink-800); font-size: 12px; color: var(--ink-400);
@@ -344,7 +354,11 @@
   .xbtn { background: var(--ink-700) !important; transition: transform 120ms var(--ease); }
   .xbtn:active { transform: scale(0.94); }
   .xop { width: 18px; font-family: var(--mono); font-size: 20px; color: var(--ink-500); text-align: center; flex: none; }
-.split.card .jar .glass, .split .card .jar .glass { background: var(--ink-900); }
+.split.card .jar .glass { background: var(--ink-900); }
+/* Filled dashboard: the 50/30/20 below the flow is an open section, no card */
+.open-sec { display: flex; flex-direction: column; padding: 4px 0; }
+/* Dashboard tip: a line, not a card */
+.disclaimer.tipline { background: none; border-radius: 0; padding: 16px 0 4px; border-top: 1px solid var(--ink-700); box-shadow: none; }
 .lbar { display: flex; gap: 3px; height: 12px; }
   .lbar i { border-radius: 4px; transition: flex-grow 400ms var(--ease); }
   /* Simple | Detailed (and EN | BM on the hub): header and switch stay, the rest fades up; bars grow from the left */
@@ -534,8 +548,8 @@
   .strip { position: relative; display: flex; align-items: flex-end; gap: 3px; height: 52px; padding-top: 20px; }
   .strip i { flex: 1; height: 20px; border-radius: 2px; background: var(--ink-700); transform-origin: bottom; }
   .strip i.f { background: var(--amber); opacity: 0.55; }
-  .strip i.t { height: 32px; background: var(--lime); opacity: 1; }
-  .strip .tl { position: absolute; top: 0; font-size: 13px; font-weight: 500; color: var(--lime); transform: translateX(-50%); }
+  .strip i.t { height: 32px; background: var(--ink-50); opacity: 1; }
+  .strip .tl { position: absolute; top: 0; font-size: 13px; font-weight: 500; color: var(--ink-50); transform: translateX(-50%); }
 
   /* Lists */
   .list { display: flex; flex-direction: column; gap: 8px; }

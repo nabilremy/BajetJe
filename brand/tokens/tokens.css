@@ -23,6 +23,7 @@
   --color-lime-700: #588a16;
   --color-lime-800: #406312;
   --color-lime-900: #2b420d;
+  --color-blue-300: #7fadff;
   --color-amber-50: #fff8e6;
   --color-amber-100: #ffefc2;
   --color-amber-200: #ffe195;
@@ -73,7 +74,7 @@
   --on-primary: var(--color-ink-900);
   --bucket-needs: var(--color-ink-400);
   --bucket-wants: var(--color-amber-400);
-  --bucket-savings: var(--color-lime-300);
+  --bucket-savings: var(--color-blue-300);
   --health-healthy: var(--color-lime-300);
   --health-caution: var(--color-amber-400);
   --health-high: var(--color-coral-400);
