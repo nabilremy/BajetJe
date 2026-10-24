@@ -21,6 +21,7 @@ const asset = (p) => {
 };
 
 const mark = asset("brand/logo/bajetje-mark-on-dark.svg");
+const greyLime = (svg) => ({ ...svg, body: svg.body.replace(/#C5FF73/gi, "#BCBCB9") });
 const scribble = read("brand/doodles/underline-scribble.svg");
 const confetti = [...read("brand/doodles/confetti.svg").matchAll(/<g id="c\d+">([\s\S]*?)<\/g>/g)].map((m) => m[1]);
 const underline = { viewBox: viewBox(scribble), paths: [...scribble.matchAll(/ d="([^"]+)"/g)].map((m) => m[1]) };
@@ -30,7 +31,8 @@ export type Svg = { viewBox: string; body: string };
 export const ICONS = ${JSON.stringify(icons, null, 0)} as const;
 
 export const WELCOME_DOODLE: Svg = ${JSON.stringify(asset("brand/doodles/welcome-doodle.svg"))};
-export const HEALTH_EMPTY: Svg = ${JSON.stringify(asset("brand/doodles/commitment-health-empty.svg"))};
+/** Colour pass (docs/colour-rules.md): the empty-state doodle's lime hatching is ink/300, so the button is the only lime. */
+export const HEALTH_EMPTY: Svg = ${JSON.stringify(greyLime(asset("brand/doodles/commitment-health-empty.svg")))};
 /** Scribble underline (brand/generators/underline.js): [main swipe, return pass], drawn on one after the other. */
 export const UNDERLINE = ${JSON.stringify(underline)};
 /** Doodle confetti pieces (brand/generators/confetti.js), 16 x 16 each, coloured with currentColor. */

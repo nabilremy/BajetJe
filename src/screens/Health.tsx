@@ -62,7 +62,7 @@ export function Health() {
     [t("common.commitments"), pct(c.ratio), "− " + fmt(c.commit), c.net - c.commit, c.net, "var(--ink-300)", false],
   );
   // Savings appear only as what was actually listed; unfilled savings stay in extra money
-  if (c.savC > 0) steps.push([t("wf.savings"), pct((c.savC / (c.net || 1)) * 100), "− " + fmt(c.savC), extra, extra + c.savC, "var(--ink-500)", false]);
+  if (c.savC > 0) steps.push([t("wf.savings"), pct((c.savC / (c.net || 1)) * 100), "− " + fmt(c.savC), extra, extra + c.savC, "var(--bucket-savings)", false]);
   steps.push([t("wf.yourself"), t("wf.yourselfSub"), fmt(extra), 0, extra, "var(--lime)", true]);
   const yourself = t("wf.yourself");
 
@@ -123,7 +123,7 @@ export function Health() {
       </div>
 
       <div className="disclaimer">
-        <span style={{ color: "var(--lime)", flex: "none", display: "flex" }}>
+        <span style={{ color: "var(--ink-400)", flex: "none", display: "flex" }}>
           <Icon name="sparkle" />
         </span>
         <p className="cap" style={{ color: "var(--ink-300)" }}>

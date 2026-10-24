@@ -6,8 +6,11 @@ page and component names; the product is BajetJe.
 
 ## Colour: 60 / 30 / 10
 - 60 base: ink/900 background. 30 surface: ink/800 and ink/700 plus neutral text. 10 accent: lime/300.
-- Lime only for: one hero number per screen, the primary button, "you are here" markers, healthy status.
-- Amber and coral only for status (Wants, Caution, High, Debt). No blue in the UI.
+- Full rules and token table: docs/colour-rules.md (24 Oct). Short version:
+  - Lime = "yours to spend" (Extra money, its bar segment, For yourself) + the primary button. Healthy status = lime TINT pill.
+  - Data keeps hue: Needs grey (ink/400), Wants amber (amber/400), Savings blue (blue/300). Status: healthy lime tint,
+    caution amber, high/over coral. Days left in the pay cycle amber; today marker white.
+  - Never lime: icons, tips, doodles, today marker, legends of non-money data.
 - Brand (logo, splash) uses lime shades only: lime/900 tile, lime/100 lines, lime/500 hatching.
 
 ## Type

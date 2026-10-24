@@ -94,6 +94,14 @@ The prototype wins where it disagrees with a doc. Decisions so far:
     - Savings tip when extra money is negative keeps the "needs over 50%" line instead of "you'd still have RM 0 a day".
     - BM strings written for V2 (please review): `x.over` Terlebih, `x.tillPayday` sampai gaji, `x.weekTitle`,
       `x.leftTitle`, `x.note`, `hub.payday`, `simple.tipSaved`.
+17. **Colour 60/30/10 pass (24 Oct handover, `docs/colour-rules.md`)**: savings is blue (`--bucket-savings`, blue/300) in every
+    chart, legend, breakdown dot, the Commitments screen and the Health waterfall; Healthy (and Comfortable, Likely eligible) is a
+    lime tint pill with a dot; today marker white; dashboard tip and filled 50/30/20 have no card; tip icons grey; the empty-state
+    doodle's lime hatching is drawn ink/300 at build time (`scripts/gen-brand.mjs`, the brand SVG is unchanged).
+    - `docs/design-system.md` used to say "No blue in the UI"; the colour pass replaces that rule.
+    - The car and home afford tiles keep their lime "comfortable" track, as in the prototype and Figma, although the acceptance
+      criterion says only the Extra money number and bar segment are solid lime on the filled dashboard.
+    - Confetti and the Health underline keep their lime / marker-yellow pieces (earlier product decision).
 
 ### Commitments: beyond the prototype (requested, Oct 2026)
 Not in the prototype, `docs/screens.md` or Figma. Designed to fit the existing system; wording needs review.

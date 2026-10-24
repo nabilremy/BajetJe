@@ -26,3 +26,8 @@ Connect via the Figma MCP (.mcp.json), then use get_design_context / get_screens
 - Reference cards (Rules colour / UX laws / motion, digit-roll storyboard) moved right of the flow (x 5000).
 - Old F2 hub, F2 BM, F2s Simple frames and their specs moved to the "Archive" page (170:2511).
 - Pill layers: "Status Pill · top" / "Status Pill · inline" so Smart Animate fades instead of sliding.
+
+## Colour pass (24 Oct)
+- Variables: bucket/savings -> blue/300 (dark) / blue/500 (light). bucket/needs and bucket/wants unchanged (ink/400, amber/400).
+- Status Pill component (86:109), variant Healthy: fill lime/900, text lime/300, dot lime/300. Instances on the dashboard show the dot.
+- Rules card "Colour · 60/30/10" (80:13) rewritten with the rules.

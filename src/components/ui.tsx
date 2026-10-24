@@ -22,10 +22,12 @@ export function Navbar({ title, right }: { title: string; right?: ReactNode }) {
 
 /** Status pill: Healthy / Caution / High / Debt / Neutral, or any verdict label. */
 export function StatusPill({ tone, children, big, pop, style }: { tone: Tone | "neutral"; children: ReactNode; big?: boolean; pop?: boolean; style?: CSSProperties }) {
-  const bg = tone === "neutral" ? "var(--ink-800)" : toneVar(tone);
-  const fg = tone === "neutral" ? "var(--ink-400)" : "var(--ink-900)";
+  // Healthy (lime) is a tint with a dot, so solid lime stays for money you can spend; caution and high stay solid
+  const tint = tone === "lime";
+  const bg = tone === "neutral" ? "var(--ink-800)" : tint ? undefined : toneVar(tone);
+  const fg = tone === "neutral" ? "var(--ink-400)" : tint ? undefined : "var(--ink-900)";
   return (
-    <span className={`pill${pop ? " pop" : ""}`} style={{ background: bg, color: fg, ...(big ? { fontSize: 15, padding: "6px 12px" } : {}), ...style }}>
+    <span className={`pill${tint ? " tint" : ""}${pop ? " pop" : ""}`} style={{ background: bg, color: fg, ...(big ? { fontSize: 15, padding: "6px 12px" } : {}), ...style }}>
       {children}
     </span>
   );
