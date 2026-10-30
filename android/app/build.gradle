@@ -1,5 +1,15 @@
 apply plugin: 'com.android.application'
 
+def uploadSecret = { String name -> project.findProperty(name) ?: System.getenv(name) }
+def uploadSigningReady = ["BAJETJE_UPLOAD_STORE_FILE", "BAJETJE_UPLOAD_STORE_PASSWORD", "BAJETJE_UPLOAD_KEY_ALIAS", "BAJETJE_UPLOAD_KEY_PASSWORD"].every { uploadSecret(it) }
+
+// A release build without the upload key would give Play an unsigned bundle: stop with a clear message instead
+gradle.taskGraph.whenReady { graph ->
+    if (!uploadSigningReady && graph.allTasks.any { it.project == project && it.name.toLowerCase().contains("release") }) {
+        throw new GradleException("Release signing is not set up. Add the BAJETJE_UPLOAD_* values to ~/.gradle/gradle.properties (see RELEASING.md).")
+    }
+}
+
 android {
     namespace = "com.bajetje.app"
     compileSdk = rootProject.ext.compileSdkVersion
@@ -7,8 +17,9 @@ android {
         applicationId "com.bajetje.app"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
+        // Bump versionCode by 1 for every Play upload (see RELEASING.md); versionName is what people see
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
              // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
@@ -16,8 +27,21 @@ android {
             ignoreAssetsPattern = '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
     }
+    // Upload key for Play. The keystore and its passwords never live in this repo: they come from
+    // ~/.gradle/gradle.properties (or environment variables with the same names). See RELEASING.md.
+    signingConfigs {
+        release {
+            if (uploadSigningReady) {
+                storeFile file(uploadSecret("BAJETJE_UPLOAD_STORE_FILE"))
+                storePassword uploadSecret("BAJETJE_UPLOAD_STORE_PASSWORD")
+                keyAlias uploadSecret("BAJETJE_UPLOAD_KEY_ALIAS")
+                keyPassword uploadSecret("BAJETJE_UPLOAD_KEY_PASSWORD")
+            }
+        }
+    }
     buildTypes {
         release {
+            if (uploadSigningReady) signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
