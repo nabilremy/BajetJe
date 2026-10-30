@@ -14,6 +14,8 @@ npm run build      # static build in dist/, deploy to any static host
 npx cap sync android  # copy the build into the Android app (Capacitor), then open android/ in Android Studio
 ```
 
+Publishing to Google Play (signed `.aab`, upload key, version bumps): see `RELEASING.md`.
+
 Optional: set `VITE_RATES_URL` to a static URL serving a newer `rates.json` (same shape as
 `src/engine/rates.json`). Rates only come down; nothing personal goes up.
 
