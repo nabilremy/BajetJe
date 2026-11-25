@@ -2,12 +2,14 @@ import { useEffect, useRef, type ReactElement } from "react";
 import { ToastHost } from "./components/ui";
 import { Car } from "./screens/Car";
 import { Commitments } from "./screens/Commitments";
+import { Feedback } from "./screens/Feedback";
 import { Health } from "./screens/Health";
 import { House } from "./screens/House";
 import { Plan } from "./screens/Plan";
 import { Salary } from "./screens/Salary";
 import { Splash } from "./screens/Splash";
 import { Welcome } from "./screens/Welcome";
+import { useKeyboardAware } from "./state/keyboard";
 import { useRouter, type ScreenName } from "./state/router";
 
 const SCREENS: Record<ScreenName, () => ReactElement> = {
@@ -18,6 +20,7 @@ const SCREENS: Record<ScreenName, () => ReactElement> = {
   health: Health,
   car: Car,
   house: House,
+  feedback: Feedback,
 };
 
 const TITLES: Record<ScreenName, string> = {
@@ -28,6 +31,7 @@ const TITLES: Record<ScreenName, string> = {
   health: "Commitment health",
   car: "Car",
   house: "Housing",
+  feedback: "Send feedback",
 };
 
 export function App() {
@@ -35,6 +39,7 @@ export function App() {
   const name = stack[stack.length - 1] ?? "salary";
   const Screen = SCREENS[name];
   const ref = useRef<HTMLElement>(null);
+  useKeyboardAware();
 
   useEffect(() => {
     document.title = `${TITLES[name]} · BajetJe`;

@@ -38,6 +38,25 @@ You need Android Studio (it ships the Java tools) and Node.
 
 `*.jks`, `*.keystore` and `keystore.properties` are in `.gitignore`. Never commit them.
 
+## One time: the feedback key
+
+"Send feedback" in the app posts the message to Web3Forms, which emails it to the BajetJe inbox.
+
+1. Go to web3forms.com, enter the BajetJe feedback address (for example `bajetje.feedback@gmail.com`) and create an
+   access key. It arrives by email. The key decides which inbox gets the feedback; the address is not in the app.
+2. In the project root, create `.env.local` with the key (Windows PowerShell, in the BajetJe folder):
+
+   ```
+   Set-Content .env.local "VITE_FEEDBACK_KEY=your-access-key"
+   ```
+
+   `.env.local` is in `.gitignore`. Without it, the app still builds and the feedback screen says feedback is not set up.
+3. Rebuild (below). Test once: send a feedback from the app and check the inbox (and its spam folder the first time).
+
+Play Console: because the app now sends feedback, update **App content → Data safety** (App activity: "Other
+user-generated content"; Personal info: "Email address", optional; both collected, not shared, encrypted in transit) and
+make sure the app has a **privacy policy** URL that mentions feedback.
+
 ## Build the bundle
 
 From the repo root:

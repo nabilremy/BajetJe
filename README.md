@@ -104,6 +104,12 @@ The prototype wins where it disagrees with a doc. Decisions so far:
     - The car and home afford tiles keep their lime "comfortable" track, as in the prototype and Figma, although the acceptance
       criterion says only the Extra money number and bar segment are solid lime on the filled dashboard.
     - Confetti and the Health underline keep their lime / marker-yellow pieces (earlier product decision).
+18. **Keyboard (tester feedback, Nov 2026)**: on the phone the Commitments footer covered the field being typed in.
+    While the keyboard is up, sticky footers hide and the field scrolls to the middle (`src/state/keyboard.ts`).
+19. **Send feedback (requested, Nov 2026)**: F7, in-app, through Web3Forms to the BajetJe inbox. This is the one place
+    BajetJe sends data off the phone, only when the person taps Send, and only the message, topic, optional email, app
+    version and language. Key in `.env.local` (RELEASING.md). New doodle icon `chat` (brand/generators/icons.js).
+    BM strings written for this build (please review): all `fb.*` keys in `src/i18n/messages.ts`.
 
 ### Commitments: beyond the prototype (requested, Oct 2026)
 Not in the prototype, `docs/screens.md` or Figma. Designed to fit the existing system; wording needs review.

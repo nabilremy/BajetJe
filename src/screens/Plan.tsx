@@ -140,6 +140,10 @@ export function Plan() {
         </p>
       </div>
 
+      <button className="link" onClick={() => go("feedback")} style={{ alignSelf: "center", color: "var(--ink-300)", fontSize: 13 }}>
+        <Icon name="chat" />
+        <span> {t("fb.open")}</span>
+      </button>
       <p className="cap" style={{ textAlign: "center", fontSize: 11, padding: "4px 12px 0" }}>
         {t("hub.legal")}
       </p>

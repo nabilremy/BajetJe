@@ -37,6 +37,7 @@ export const HEALTH_EMPTY: Svg = ${JSON.stringify(greyLime(asset("brand/doodles/
 export const UNDERLINE = ${JSON.stringify(underline)};
 /** Doodle confetti pieces (brand/generators/confetti.js), 16 x 16 each, coloured with currentColor. */
 export const CONFETTI: string[] = ${JSON.stringify(confetti)};
+export const SPEECH_DOODLE: Svg = ${JSON.stringify(asset("brand/doodles/speech.svg"))};
 export const NOTE_ARROW: Svg = ${JSON.stringify(asset("brand/doodles/note-arrow.svg"))};
 /** Sketch B mark on dark. Its clipPath id is "d"; give each use its own id with markBody(). */
 export const MARK: Svg = ${JSON.stringify(mark)};
