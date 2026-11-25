@@ -96,7 +96,8 @@ Play rejects a bundle whose `versionCode` it has seen before.
 | Upload | versionCode | versionName |
 |---|---|---|
 | First internal test | 1 | 1.0.0 |
-| Next fix | 2 | 1.0.1 |
+| Feedback, keyboard fix, Gradle 9.5 | 2 | 1.0.1 |
+| Payday day grid | 3 | 1.0.2 |
 
 ## Requirements to recheck each year
 
