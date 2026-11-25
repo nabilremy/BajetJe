@@ -8,6 +8,7 @@ import { Plan } from "./screens/Plan";
 import { Salary } from "./screens/Salary";
 import { Splash } from "./screens/Splash";
 import { Welcome } from "./screens/Welcome";
+import { useKeyboardAware } from "./state/keyboard";
 import { useRouter, type ScreenName } from "./state/router";
 
 const SCREENS: Record<ScreenName, () => ReactElement> = {
@@ -35,6 +36,7 @@ export function App() {
   const name = stack[stack.length - 1] ?? "salary";
   const Screen = SCREENS[name];
   const ref = useRef<HTMLElement>(null);
+  useKeyboardAware();
 
   useEffect(() => {
     document.title = `${TITLES[name]} · BajetJe`;

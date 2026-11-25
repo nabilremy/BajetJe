@@ -378,6 +378,8 @@
   /* Progressive frost edge, like the status bar strip: rows soften and fade over the 44 px above the footer, and the
      footer itself is solid so nothing underneath reads through its text. No line.
      (A see-through blur behind the text was tried: inside the scroller the phone's WebView leaves text unblurred.) */
+  /* Keyboard open (src/state/keyboard.ts): the footer steps aside so the field being typed in stays in view */
+  .kb .sticky { display: none; }
   .sticky::before {
     content: ""; position: absolute; inset: -44px 0 0; z-index: -1; pointer-events: none;
     background: linear-gradient(to bottom, rgba(30, 30, 30, 0), var(--ink-900) 44px);
