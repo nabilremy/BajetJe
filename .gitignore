@@ -18,3 +18,6 @@ keystore.properties
 
 # Local build settings (feedback key): see RELEASING.md
 .env.local
+
+# Android Studio project settings (opened at the repo root)
+.idea/

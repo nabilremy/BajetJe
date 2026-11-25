@@ -59,6 +59,14 @@ make sure the app has a **privacy policy** URL that mentions feedback.
 
 ## Build the bundle
 
+Gradle needs a Java to run on: use the one inside Android Studio (its `jbr` folder, Java 25). The project uses Gradle 9.5.1,
+which runs on Java 17 to 25. Windows PowerShell (adjust the folder if Android Studio is installed elsewhere, for example
+`Android Studio2` after a reinstall):
+
+```powershell
+$env:JAVA_HOME = "C:\Program Files\Android\Android Studio\jbr"
+```
+
 From the repo root:
 
 ```bash
@@ -91,6 +99,11 @@ Play rejects a bundle whose `versionCode` it has seen before.
 | Next fix | 2 | 1.0.1 |
 
 ## Requirements to recheck each year
+
+- Gradle and Java: Gradle 9.5.1 (`android/gradle/wrapper/gradle-wrapper.properties`) with the Android Gradle Plugin 8.13
+  (`android/build.gradle`). Do not move to Gradle 9.6 or newer while the plugin is 8.x: Gradle 9.6 removed an API the 8.x
+  plugin uses ("relies on InternalProblems"). Gradle 8.14 cannot run on Java 25 or newer ("Unsupported class file major
+  version 69"), which is why it was upgraded once Android Studio started shipping Java 25.
 
 - Target API: Google Play raises the minimum `targetSdkVersion` every August. It is set in `android/variables.gradle`
   (`targetSdkVersion = 36`, the minimum for new apps and updates since 31 August 2026).
