@@ -83,6 +83,18 @@ Reading order (top to bottom): header -> pay-cycle strip -> the money flow -> 50
 - Full loan (0%) opens Eligibility Check (first home, Malaysian, aged 40 or below; income from salary).
   Eligible -> 0% maths, price cap RM 500k, timeline hidden, conditions note. Not eligible -> stays 10% with reason.
 
+## F7 · Send feedback (requested, Nov 2026; not in the prototype or Figma)
+- Entry: "Send feedback" link with a doodle chat icon in the My Plan footer, above the legal line.
+- Navbar, "Tell us anything" + one line, topic chips (Idea / Something's wrong / Confusing / Other, optional),
+  message (required, 3 to 2,000 characters, counter), email (optional, for a reply, checked on blur),
+  privacy note (only what you type + app version + language; salary and plan never leave the phone), Send (loading state).
+- Sent: speech doodle, "Thanks! We got it.", "Back to my plan", "Send another". Offline / failed: amber note, text kept.
+- Sending: Web3Forms (key in `.env.local`, see RELEASING.md). The only data BajetJe sends off the phone, and only on tap.
+
+## Keyboard (global rule)
+While a text field is focused and the on-screen keyboard has shrunk the screen, sticky footers hide and the field scrolls
+to the middle of the screen (src/state/keyboard.ts), so what you type is always visible.
+
 ## Every control moves (global rule)
 Implementation note for sliding thumbs when a tap re-renders the screen (Simple|Detailed, EN|BM, Gross|Take-home, Rent|Buy, toggle):
 render the new state, then place the thumb at the OLD position with transitions disabled, commit one frame, re-enable

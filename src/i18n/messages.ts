@@ -182,6 +182,42 @@ export const M = {
   "hub.wipeKeep": ["Delete, but keep my lists", "Padam, tapi simpan senarai"],
 
   /* ---------- F2s Simple mode ---------- */
+  // F7 Send feedback
+  "fb.open": ["Send feedback", "Hantar maklum balas"],
+  "fb.title": ["Send feedback", "Hantar maklum balas"],
+  "fb.heading": ["Tell us anything", "Cakap je apa-apa"],
+  "fb.lede": [
+    "Found a bug, got an idea, or something felt confusing? We read every message.",
+    "Jumpa bug, ada idea, atau ada yang mengelirukan? Kami baca setiap mesej.",
+  ],
+  "fb.topic": ["What is it about?", "Pasal apa?"],
+  "fb.idea": ["Idea", "Idea"],
+  "fb.problem": ["Something's wrong", "Ada masalah"],
+  "fb.confusing": ["Confusing", "Mengelirukan"],
+  "fb.other": ["Other", "Lain-lain"],
+  "fb.message": ["Your message", "Mesej awak"],
+  "fb.placeholder": ["What's on your mind?", "Apa yang awak nak cakap?"],
+  "fb.email": ["Your email (optional)", "Emel awak (tak wajib)"],
+  "fb.emailPh": ["name@example.com", "nama@contoh.com"],
+  "fb.emailHelp": ["Only if you'd like a reply.", "Kalau nak kami balas je."],
+  "fb.emailBad": ["Check your email address, or leave it empty.", "Semak alamat emel awak, atau biarkan kosong."],
+  "fb.privacy": [
+    "We send only what you type here, plus the app version and language. Your salary and plan never leave this phone.",
+    "Kami hantar apa yang awak taip di sini je, berserta versi app dan bahasa. Gaji dan plan awak tak pernah keluar dari telefon ni.",
+  ],
+  "fb.send": ["Send feedback", "Hantar maklum balas"],
+  "fb.sending": ["Sending...", "Menghantar..."],
+  "fb.thanksTitle": ["Thanks! We got it.", "Terima kasih! Dah sampai."],
+  "fb.thanksBody": [
+    "Your feedback goes straight to the BajetJe team. It helps us make the app better for everyone.",
+    "Maklum balas awak terus sampai ke team BajetJe. Ia bantu kami baiki app ni untuk semua.",
+  ],
+  "fb.another": ["Send another", "Hantar lagi"],
+  "fb.errOfflineTitle": ["You're offline", "Awak tiada internet"],
+  "fb.errOffline": ["Connect to the internet and tap Send again. Your message is still here.", "Sambung ke internet dan tekan Hantar lagi. Mesej awak masih ada."],
+  "fb.errTitle": ["Couldn't send", "Tak dapat hantar"],
+  "fb.errFailed": ["Something went wrong on our side. Try again in a bit; your message is still here.", "Ada masalah di pihak kami. Cuba lagi sekejap; mesej awak masih ada."],
+  "fb.errNotSetUp": ["Feedback isn't set up in this version yet.", "Maklum balas belum disediakan dalam versi ni."],
   // My Plan V2: money flow, Extra money card, commitments breakdown
   "hub.payday": ["Payday {date}", "Hari gaji {date}"],
   "x.over": ["Over", "Terlebih"],

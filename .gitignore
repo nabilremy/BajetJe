@@ -15,3 +15,6 @@ android/capacitor-cordova-android-plugins
 *.jks
 *.keystore
 keystore.properties
+
+# Local build settings (feedback key): see RELEASING.md
+.env.local
